@@ -1,5 +1,5 @@
-function outputSummaryStructs = RunAndPlotLightnessDecodeExtracted(varargin)
-% outputSummaryStructs = RunAndPlotLightnessDecodeExtracted(varargin)
+function outputSummaryStructs = ExtractedRunAndPlotLightnessDecode(varargin)
+% outputSummaryStructs = ExtractedRunAndPlotLightnessDecode(varargin)
 %
 % Make plots based on the data extracted by the main pass through the data.
 %
@@ -22,7 +22,7 @@ summaryRootDir = '../../PennOutput/xSummaryExtracted';
 if (~exist(summaryRootDir))
     mkdir(summaryRootDir);
 end
-
+    
 %% Set up file names
 condStr = MakePopDecodeConditionStr(decodeInfoIn);
 titleStr = strrep(condStr,'_',' ');
@@ -43,20 +43,17 @@ if (~exist(extractedDataRootDir,'dir'))
 end
 
 %% Get all the files and run whatever we want to do on them
+%
+% Save after each call so we can recover from partial runs.
 if (COMPUTE)
     curDir = pwd; cd(extractedDataRootDir);
     theDirs = dir('*00*');
     cd(curDir);
     for runIndex = 1:length(theDirs)
         theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        decodeInfoOut{runIndex} = RunAndPlotLightnessDecodeExtracted(theDir,decodeInfoIn);
+        decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
+        save(saveFile,'-v7.3');
     end
-    
-    %% Save the returned analyses
-    if (~exist(summaryDir,'file'))
-        mkdir(summaryDir);
-    end
-    save(saveFile,'-v7.3');
 end
 
 %% Load the saved analyses
