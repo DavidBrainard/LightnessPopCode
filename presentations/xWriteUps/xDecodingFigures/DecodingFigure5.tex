@@ -1,0 +1,83 @@
+% Setup
+\documentclass[16pt]{article}
+\usepackage{graphicx}
+\usepackage{fullpage}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\setlength{\textwidth}{9in}
+\setlength{\evensidemargin}{-0.8in}
+\setlength{\oddsidemargin}{-0.8in}
+
+% Font
+\usepackage[scaled]{helvet}				% Helvetica
+\renewcommand*\familydefault{\sfdefault}        % Only if the base font of the document is to be sans serif
+\usepackage[T1]{fontenc}
+
+% Variables for our figure
+\newcommand{\figPath}[2]{../../../popdecode/xSummary/#1/#2}
+\newcommand{\panelWidth}{0.40\textwidth}
+\newcommand{\figWidth}{0.80\textwidth}
+\newcommand{\panelFont}[1]{{\fontsize{16pt}{14pt}\selectfont #1}}
+\newcommand{\fignameFont}[1]{{\fontsize{18pt}{14pt}\selectfont #1}}
+
+
+
+
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{figure}
+        \centering
+        
+      % First two subpanels
+        \begin{subfigure}[b]{\panelWidth}
+        		\begin{minipage}{\figWidth}	
+		\panelFont{A}
+		
+                \includegraphics[width=\figWidth]{\figPath{decd-affine_class-none_rf-none_pca-none_decduse-bothbestsingle_notrialshuffle_nopaintshadowshuffle_loo-none_fit-intercept_2_1}{DecodedRangePlot_spikesorted_intercept}}
+                
+                \end{minipage}
+        \end{subfigure} 
+        ~ 
+        \begin{subfigure}[b]{\panelWidth}
+                \begin{minipage}{\figWidth}          
+		\panelFont{B}
+		
+                \includegraphics[width=\figWidth]{\figPath{decd-affine_class-none_rf-none_pca-none_decduse-bothbestsingle_notrialshuffle_nopaintshadowshuffle_loo-none_fit-intercept_2_1}{InferredMatchDecodeDifference_spikesorted_intercept}}
+                
+                \end{minipage}
+      \end{subfigure}
+
+       % Vertical space
+       \vspace{0.3in}
+       
+       % Next two subpanels
+        \begin{subfigure}[b]{\panelWidth}
+                \begin{minipage}{\figWidth}        
+		\panelFont{C}
+		
+		\includegraphics[width=\figWidth]{\figPath{decd-affine_class-none_rf-none_pca-none_decduse-bothbestdouble_notrialshuffle_nopaintshadowshuffle_loo-none_fit-intercept_2_1}{DecodedRangePlot_spikesorted_intercept}}
+                
+                 \end{minipage}
+       \end{subfigure}
+        ~
+        \begin{subfigure}[b]{\panelWidth}
+                \begin{minipage}{\figWidth}         
+		\panelFont{D}	
+					
+                \includegraphics[width=\figWidth]{\figPath{decd-affine_class-none_rf-none_pca-none_decduse-bothbestdouble_notrialshuffle_nopaintshadowshuffle_loo-none_fit-intercept_2_1}{InferredMatchDecodeDifference_spikesorted_intercept}}
+                
+                \end{minipage}
+        \end{subfigure}
+ 
+
+\end{figure}
+
+% Figure number
+\vspace{0.6in}
+\centering
+\fignameFont{Decoding Figure 5}
+        
+\end{document}

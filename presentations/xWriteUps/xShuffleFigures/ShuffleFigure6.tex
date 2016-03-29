@@ -1,0 +1,57 @@
+% Setup
+\documentclass[16pt]{article}
+\usepackage{graphicx}
+\usepackage{fullpage}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\setlength{\textwidth}{9in}
+\setlength{\evensidemargin}{-0.8in}
+\setlength{\oddsidemargin}{-0.8in}
+
+% Font
+\usepackage[scaled]{helvet}				% Helvetica
+\renewcommand*\familydefault{\sfdefault}        % Only if the base font of the document is to be sans serif
+\usepackage[T1]{fontenc}
+
+% Variables for our figure
+\newcommand{\figPath}[2]{../../../popdecode/xSummary/affine_#1_nopaintshadowshuffle_onetrial_2_1/#2}
+\newcommand{\panelWidth}{0.40\textwidth}
+\newcommand{\figWidth}{0.9\textwidth}
+\newcommand{\panelFont}[1]{{\fontsize{16pt}{14pt}\selectfont #1}}
+\newcommand{\fignameFont}[1]{{\fontsize{18pt}{14pt}\selectfont #1}}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{figure}
+        \centering
+        
+      % First two subpanels
+        \begin{subfigure}[b]{\panelWidth}
+        		\begin{minipage}{\figWidth}	
+		\panelFont{A}
+		
+                \includegraphics[width=\figWidth]{\figPath{nopca_both_notrialshuffle}{DecodedRangePlot_spikesorted_intercept}}
+                
+                \end{minipage}
+        \end{subfigure} 
+        ~ 
+        \begin{subfigure}[b]{\panelWidth}
+                \begin{minipage}{\figWidth}            
+		\panelFont{B}
+		
+                \includegraphics[width=\figWidth]{\figPath{both_intensitytrialshuffle}{DecodedRangePlot_spikesorted_intercept}}
+                
+                \end{minipage}
+      \end{subfigure}
+
+\end{figure}
+
+% Figure number
+\vspace{0.6in}
+\centering
+\fignameFont{Shuffle Figure 6}
+        
+\end{document}
