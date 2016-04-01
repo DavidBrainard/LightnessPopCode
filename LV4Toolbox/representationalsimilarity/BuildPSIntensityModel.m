@@ -1,5 +1,5 @@
-function model = BuildPSIntensityModel(uniqueIntensities,theShadowIntensityShift)
-% model = BuildPSIntensityModel(uniqueIntensities,theShadowIntensityShift)
+function model = BuildPSIntensityModel(uniqueIntensities,theShadowIntensityShift,exponent)
+% model = BuildPSIntensityModel(uniqueIntensities,theShadowIntensityShift,exponent)
 % 
 % Build a model of a dissimilarity matrix expected if all that matters is
 % intensity.  Coding convention is paint then shadow along the
@@ -10,6 +10,9 @@ function model = BuildPSIntensityModel(uniqueIntensities,theShadowIntensityShift
 % Allocate
 nIntensities = length(uniqueIntensities);
 model = zeros(2*nIntensities,2*nIntensities);
+
+% Apply exponent to intensiteis
+uniqueIntensities = uniqueIntensities.^exponent;
 
 % Build paint/paint quandrant
 for ii = 1:nIntensities
