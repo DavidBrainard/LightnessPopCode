@@ -67,6 +67,9 @@ if (OVERRIDE_FIGINFO)
     loadedData.decodeInfoIn = SetFigParams(loadedData.decodeInfoIn,'popdecode');
 end
 
+%% Test filtering
+theTestArray = FilterAndGetFieldFromStructArray([loadedData.decodeInfoOut{:}],'bestTausFit',{'subjectStr' 'lineWidth'},{'ST' 4});
+
 %% Collect up and plot some summary statistics
 rmseLower = 0.20;
 

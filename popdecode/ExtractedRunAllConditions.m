@@ -21,7 +21,7 @@ cd(myDir);
 SetAnalysisPath;
 
 %% Compute or just plot?
-runAllCompute = true;
+runAllCompute = false;
 
 %% Original paint/shadow
 ExtractedRunOneCondition(...
