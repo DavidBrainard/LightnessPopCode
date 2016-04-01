@@ -518,7 +518,7 @@ for nn1 = 1:length(useSizes)
     %% PCA if desired.
     [paintResponses,shadowResponses,decodeInfoIn] = PaintShadowPCA(decodeInfoIn,paintResponses,shadowResponses);
     
-    %% Save what we want to save
+    %% Save what we want to save for second pass analyses
     decodeInfoOutTemp.paintIntensities = paintIntensities;
     decodeInfoOutTemp.paintResponses = paintResponses;
     decodeInfoOutTemp.shadowIntensities = shadowIntensities;
