@@ -19,11 +19,22 @@ for jj = 1:decodeInfo.nUnits
     useUnits = jj;
     [~,~,paintPredsLOO,shadowPredsLOO] = PaintShadowDecode(decodeInfoTemp, ...
         theData.paintIntensities,theData.paintResponses(:,useUnits),theData.shadowIntensities,theData.shadowResponses(:,useUnits));
-    oneLOORMSE(jj) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPredsLOO(:) ; shadowPredsLOO(:)]).^2));
-    whichOneRMSEUnits(jj) = useUnits;
+    decodeInfo.oneLOORMSE(jj) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPredsLOO(:) ; shadowPredsLOO(:)]).^2));
+    decodeInfo.whichOneRMSEUnits(jj) = useUnits;
 end
-[decodeInfo.bestOneLOORMSE,index] = min(oneLOORMSE);
-decodeInfo.bestOneRMSEUnit = whichOneRMSEUnits(index);
+[decodeInfo.bestOneLOORMSE,oneLOORMSEIndex] = min(decodeInfo.oneLOORMSE);
+decodeInfo.bestOneRMSEUnit = whichOneRMSEUnits(oneLOORMSEIndex(1));
+
+%% Get RMSE as a function of number of units
+%
+% When we add them in according to how well they do one at a time
+for uu = 1:decodeInfo.nUnits
+    useUnits = oneLOORMSEIndex(1:uu);
+    [~,~,paintPredsLOO,shadowPredsLOO] = PaintShadowDecode(decodeInfoTemp, ...
+        theData.paintIntensities,theData.paintResponses(:,useUnits),theData.shadowIntensities,theData.shadowResponses(:,useUnits));
+    theOrderedLOORMSE(uu) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPredsLOO(:) ; shadowPredsLOO(:)]).^2));
+    theOrderedUnits(uu) = uu;
+end
 
 %% Get RMSE as a function of number of units
 theLOORMSE = zeros(decodeInfo.nNUnitsToStudy ,decodeInfo.nRepeatsPerNUnits);
@@ -133,16 +144,16 @@ for uu = 1:length(nUnitsToUseList)
     synthesizedShadowData = zeros(nShadowStimuli,nBestSynthesizedUnitsToUse);
     for ii = 1:nPaintStimuli
         theIntensity = theData.paintIntensities(ii);
-        index = find(decodeInfo.uniqueIntensities == theIntensity);
+        oneLOORMSEIndex = find(decodeInfo.uniqueIntensities == theIntensity);
         for jj = 1:nBestSynthesizedUnitsToUse
-            synthesizedPaintData(ii,jj) = normrnd(meanBestRMSEPaintResponses(index),stdBestRMSEPaintResponses(index));
+            synthesizedPaintData(ii,jj) = normrnd(meanBestRMSEPaintResponses(oneLOORMSEIndex),stdBestRMSEPaintResponses(oneLOORMSEIndex));
         end
     end
     for ii = 1:nShadowStimuli
         theIntensity = theData.shadowIntensities(ii);
-        index = find(decodeInfo.uniqueIntensities == theIntensity);
+        oneLOORMSEIndex = find(decodeInfo.uniqueIntensities == theIntensity);
         for jj = 1:nBestSynthesizedUnitsToUse
-            synthesizedShadowData(ii,jj) = normrnd(meanBestRMSEShadowResponses(index),stdBestRMSEShadowResponses(index));
+            synthesizedShadowData(ii,jj) = normrnd(meanBestRMSEShadowResponses(oneLOORMSEIndex),stdBestRMSEShadowResponses(oneLOORMSEIndex));
         end
     end
     
@@ -171,7 +182,8 @@ hold on;
 h = plot(theUnits(:),theLOORMSE(:),'ro','MarkerFaceColor','r','MarkerSize',4);
 h = plot(theBestSynthesizedUnits,theBestSynthesizedLOORMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
 h = plot(minShuffledLOORMSEUnits,minShuffledLOORMSE,'co','MarkerFaceColor','c','MarkerSize',4);
-
+h = plot(theOrderedUnits,theOrderedLOORMSE,'rx','MarkerSize',4)
+    
 % The fits to lower envelopes
 smoothX = (1:decodeInfo.nUnits)';
 h = plot(smoothX,decodeInfo.rmseVersusNUnitsFit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
