@@ -67,65 +67,15 @@ if (OVERRIDE_FIGINFO)
     loadedData.decodeInfoIn = SetFigParams(loadedData.decodeInfoIn,'popdecode');
 end
 
-%% Test filtering
-theTestArray = FilterAndGetFieldFromStructArray([loadedData.decodeInfoOut{:}],'bestTausFit',{'subjectStr' 'lineWidth'},{'ST' 4});
-
-%% Collect up and plot some summary statistics
+%% Summary plots
 rmseLower = 0.20;
 
-figure; clf; hold on
-
-% V4 data for JD
-filter.titleInfoStr = 'V4';
-filter.subjectStr = 'JD';
-filter.rmseLower = rmseLower;
-filter.plotSymbol = 'o';
-filter.plotColor = 'r';
-filter.outlineColor = 'r';
-filter.bumpSizeForMean = 6;
-[decodeInfoFilter_JD_V4,outputSummaryTextStructs_JD_V4] = FilterDecodedSessionDataExtracted(loadedData.decodeInfoOut,filter);
-[rmse, rmseVersusNUnitsFitScale] = ExtractDecodedSummaryStatsExtracted(decodeInfoFilter_JD_V4);
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',loadedData.decodeInfoIn.markerSize);
-
-% V4 data for SY
-filter.titleInfoStr = 'V4';
-filter.subjectStr = 'SY';
-filter.rmseLower = rmseLower;
-filter.plotSymbol = 's';
-filter.plotColor = 'r';
-filter.outlineColor = 'r';
-filter.bumpSizeForMean = 6;
-[decodeInfoFilter_SY_V4,outputSummaryTextStructs_SY_V4] = FilterDecodedSessionDataExtracted(loadedData.decodeInfoOut,filter);
-[rmse, rmseVersusNUnitsFitScale] = ExtractDecodedSummaryStatsExtracted(decodeInfoFilter_SY_V4);
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',loadedData.decodeInfoIn.markerSize);
-
-% V1 data for BR
-filter.titleInfoStr = 'V1';
-filter.subjectStr = 'BR';
-filter.rmseLower = rmseLower;
-filter.plotSymbol = 's';
-filter.plotColor = 'k';
-filter.outlineColor = 'k';
-filter.bumpSizeForMean = 6;
-[decodeInfoFilter_BR_V1,outputSummaryTextStructs_BR_V1] = FilterDecodedSessionDataExtracted(loadedData.decodeInfoOut,filter);
-[rmse, rmseVersusNUnitsFitScale] = ExtractDecodedSummaryStatsExtracted(decodeInfoFilter_BR_V1);
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',loadedData.decodeInfoIn.markerSize);
-
-% V1 data for ST
-filter.titleInfoStr = 'V1';
-filter.subjectStr = 'ST';
-filter.rmseLower = rmseLower;
-filter.plotSymbol = '^';
-filter.plotColor = 'k';
-filter.outlineColor = 'k';
-filter.bumpSizeForMean = 6;
-[decodeInfoFilter_ST_V1,outputSummaryTextStructs_ST_V1] = FilterDecodedSessionDataExtracted(loadedData.decodeInfoOut,filter);
-[rmse, rmseVersusNUnitsFitScale] = ExtractDecodedSummaryStatsExtracted(decodeInfoFilter_ST_V1);
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',loadedData.decodeInfoIn.markerSize);
+% RMSE Versus Fit Scale
+ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,loadedData.decodeInfoIn,loadedData.decodeInfoOut);
 
 %% Write out summary text file
-outputSummaryStructs = [outputSummaryTextStructs_BR_V1 outputSummaryTextStructs_ST_V1 outputSummaryTextStructs_JD_V4 outputSummaryTextStructs_SY_V4];
-summaryFilename =  fullfile(summaryDir,['Summary'  '_' loadedData.decodeInfoIn.dataType '_' loadedData.decodeInfoIn.paintShadowFitType '.txt'],'');
-WriteStructsToText(summaryFilename,outputSummaryStructs);
+% outputSummaryStructs = [outputSummaryTextStructs_BR_V1 outputSummaryTextStructs_ST_V1 outputSummaryTextStructs_JD_V4 outputSummaryTextStructs_SY_V4];
+% summaryFilename =  fullfile(summaryDir,['Summary'  '_' loadedData.decodeInfoIn.dataType '_' loadedData.decodeInfoIn.paintShadowFitType '.txt'],'');
+% WriteStructsToText(summaryFilename,outputSummaryStructs);
 
 
