@@ -1,6 +1,6 @@
 % ExtractedRunAllConditions
 %
-% Do the whole kit and kaboodle of decoding analyses.
+% Do the whole kit and kaboodle of extracted analyses.
 %
 % This is the "Extracted" version, which runs on the .mat files that are
 % dumped out by the original pass through the data.  This version exists

@@ -79,21 +79,21 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nNUnitsToStudy = 3;
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
-            decodeInfoOut.ndecodeLOOType = 'no';
+            decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.classifyLOOType = 'no';
         case 'SLOWER'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 50;
             decodeInfoOut.nRandomVectorRepeats = 50;
-            decodeInfoOut.ndecodeLOOType = 'no';
+            decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.classifyLOOType = 'no';
         case 'REAL'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
-            decodeInfoOut.ndecodeLOOType = 'ot';
+            decodeInfoOut.decodeLOOType = 'ot';
             decodeInfoOut.classifyLOOType = 'foo';
     end
     

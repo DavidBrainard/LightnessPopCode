@@ -11,7 +11,7 @@ function [theArray,index] = FilterAndGetFieldFromStructArray(theStructArray,theF
 %% Get some basic info
 nParams = length(theStructArray);
 
-%% Filtering (or not
+%% Filtering (or not)
 %
 % No filtering
 if (nargin < 3 | isempty(filterFieldNames) | isempty(filterFieldVals))

@@ -3,52 +3,65 @@ function decodeInfo = ExtractedRMSEVersusNPCA(decodeInfo,theData)
 %
 % Study decoding performance as a function of number of PCA dimensions
 %
-%
 % 3/29/16  dhb  Pulled it out.
+% 4/5/16   dhb  Cleaned up to use new conventions.  Not debugged.
 
 %% Get info about what to do
 nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);
 uniqueNUnitsToStudy = length(nUnitsToUseList);
 
-% Get PCA
-dataForPCA = [theData.paintResponses ; theData.shadowResponses];
-meanDataForPCA = mean(dataForPCA,1);
-[pcaBasis,paintShadowPCAResponsesTrans] = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-paintPCAResponses = (pcaBasis\(theData.paintResponses-meanDataForPCA(ones(size(theData.paintResponses,1),1),:))')';
-shadowPCAResponses = (pcaBasis\(theData.shadowResponses-meanDataForPCA(ones(size(theData.shadowResponses,1),1),:))')';
-
-% Get RMSE as a function of number of PCA components
-thePCAUnits = zeros(uniqueNUnitsToStudy,1);
-thePCALOORMSE = zeros(uniqueNUnitsToStudy,1);
+%% Set up needed parameters
 clear decodeInfoTemp
+decodeInfoTemp.verbose = decodeInfo.verbose;
+decodeInfoTemp.nUnits = decodeInfo.nUnits;
+decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
+decodeInfoTemp.nNUnitsToStudy = decodeInfo.nNUnitsToStudy;
+decodeInfoTemp.nRepeatsPerNUnits = decodeInfo.nRepeatsPerNUnits;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = decodeInfo.ndecodeLOOType;
+decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
+
+%% Shuffle if desired
+[paintIntensities,paintResponses,shadowIntensities,shadowResponses] = ...
+    PaintShadowShuffle(decodeInfo,theData.paintIntensities,theData.paintResponses,theData.shadowIntensities,theData.shadowResponses);
+
+%% Get PCA
+dataForPCA = [paintResponses ; shadowResponses];
+meanDataForPCA = mean(dataForPCA,1);
+[pcaBasis,paintShadowPCAResponsesTrans] = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
+paintPCAResponses = (pcaBasis\(paintResponses-meanDataForPCA(ones(size(paintResponses,1),1),:))')';
+shadowPCAResponses = (pcaBasis\(shadowResponses-meanDataForPCA(ones(size(shadowResponses,1),1),:))')';
+
+% Get RMSE as a function of number of PCA components
+decodeInfoTemp.theUnits = zeros(uniqueNUnitsToStudy,1);
+decodeInfoTemp.theRMSE = zeros(uniqueNUnitsToStudy,1);
 for uu = 1:uniqueNUnitsToStudy
     decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
-    [~,~,paintPCAPredsLOO,shadowPCAPredsLOO] = PaintShadowDecode(decodeInfoTemp, ...
-        theData.paintIntensities,paintPCAResponses(:,1:decodeInfo.nUnitsToUse),theData.shadowIntensities,shadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
-    thePCALOORMSE(uu) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPCAPredsLOO(:) ; shadowPCAPredsLOO(:)]).^2));
-    thePCAUnits(uu) = decodeInfo.nUnitsToUse;
+    [~,~,paintPCAPreds,shadowPCAPreds] = PaintShadowDecode(decodeInfoTemp, ...
+        paintIntensities,paintPCAResponses(:,1:decodeInfo.nUnitsToUse),shadowIntensities,shadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
+    decodeInfoTemp.theRMSE(uu) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPCAPreds(:) ; shadowPCAPreds(:)]).^2));
+    decodeInfoTemp.theUnits(uu) = decodeInfo.nUnitsToUse;
 end
 
 % Fit an exponential
-a0 = max(thePCALOORMSE); b0 = 5; c0 = min(thePCALOORMSE);
-decodeInfo.rmseVersusNPCAFit = fit(thePCAUnits,thePCALOORMSE,'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
-decodeInfo.rmseVersusNPCAFitScale = decodeInfo.rmseVersusNPCAFit.b;
-decodeInfo.rmseVersusNPCAFitAsymp = decodeInfo.rmseVersusNPCAFit.c;
+a0 = max(decodeInfoTemp.theRMSE); b0 = 5; c0 = min(decodeInfoTemp.theRMSE);
+index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
+decodeInfoTemp.fit = fit(decodeInfoTemp.theUnits(index),decodeInfoTemp.theRMSE(index),'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
+decodeInfoTemp.rmse = c0;
+decodeInfoTemp.fitScale = decodeInfoTemp.fit.b;
+decodeInfoTemp.fitAsymp = decodeInfoTemp.fit.c;
 
 % PLOT: RMSE versus number of PCA components used to decode
-rmseVersusNPCAfig = figure; clf;
+RMSEVersusNPCAfig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 smoothX = (1:decodeInfo.nUnits)';
-h = plot(smoothX,decodeInfo.rmseVersusNPCAFit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
-h = plot(thePCAUnits,thePCALOORMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-h = plot(decodeInfo.rmseVersusNPCAFitScale,decodeInfo.rmseVersusNPCAFit(decodeInfo.rmseVersusNPCAFitScale),'go','MarkerFaceColor','g','MarkerSize',8);
+h = plot(smoothX,decodeInfoTemp.fit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
+h = plot(decodeInfoTemp.theUnits,decodeInfoTemp.theRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
+h = plot(decodeInfoTemp.fitScale,decodeInfoTemp.fit(decodeInfoTemp.fitScale),'go','MarkerFaceColor','g','MarkerSize',8);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
@@ -57,10 +70,13 @@ ylim([0,0.5]);
 axis square
 figName = [decodeInfo.figNameRoot '_extRmseVersusNPCA'];
 drawnow;
-FigureSave(figName,rmseVersusNPCAfig,decodeInfo.figType);
+FigureSave(figName,RMSEVersusNPCAfig,decodeInfo.figType);
 
 % PLOT: paint/shadow mean responses on PCA 1 and 2, where we compute
-% the PCA on the mean responses
+% the PCA on the mean responses.
+%
+% I am not sure whether this is a useful figure, and if it is whether
+% the pca should be computed on the mean responses or the raw responses.
 for dc = 1:length(decodeInfo.uniqueIntensities)
     theIntensity = decodeInfo.uniqueIntensities(dc);
     paintIndex = find(theData.paintIntensities == theIntensity);
@@ -71,8 +87,8 @@ end
 dataForPCA = [meanPaintResponses ; meanShadowResponses];
 meanDataForPCA = mean(dataForPCA,1);
 pcaBasis = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-decodeInfo.meanPaintPCAResponses = (pcaBasis\(meanPaintResponses-meanDataForPCA(ones(size(meanPaintResponses,1),1),:))')';
-decodeInfo.meanShadowPCAResponses = (pcaBasis\(meanShadowResponses-meanDataForPCA(ones(size(meanShadowResponses,1),1),:))')';
+decodeInfoTemp.meanPaintPCAResponses = (pcaBasis\(meanPaintResponses-meanDataForPCA(ones(size(meanPaintResponses,1),1),:))')';
+decodeInfoTemp.meanShadowPCAResponses = (pcaBasis\(meanShadowResponses-meanDataForPCA(ones(size(meanShadowResponses,1),1),:))')';
 
 paintShadowOnPCAFig = figure; clf; hold on;
 set(gcf,'Position',decodeInfo.sqPosition);
@@ -94,5 +110,8 @@ decodeInfo.titleStr = decodeInfo.titleStr;
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
 drawnow;
-figName = [decodeInfo.figNameRoot '_extPaintShadowOnPCA'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowOnMeanPCA'];
 FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
+
+%% Store the data for return
+decodeInfo.RMSEVersusNPCA = decodeInfoTemp;

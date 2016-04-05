@@ -1,5 +1,5 @@
-function [dissimMatrixFit,tau,shadowIntensityShift,intensityExponent,additiveParams] = FitPSDissimMatrix(uniqueIntensities,dissimMatrix)
-% [dissimMatrixFit,tau,shadowIntensityShift,intensityExponent,additiveParams] = FitPSDissimMatrix(uniqueIntensities,dissimMatrix)
+function [dissimMatrixFit,tau,shadowIntensityShift,intensityExponent,additiveParams] = FitPSDissimMatrix(uniqueIntensities,dissimMatrix,DOSHIFT,DOEXPONENT)
+% [dissimMatrixFit,tau,shadowIntensityShift,intensityExponent,additiveParams] = FitPSDissimMatrix(uniqueIntensities,dissimMatrix,DOSHIFT,DOEXPONENT)
 %
 % Find weighted sum of model matrices that maximizes Kendall's tau between
 % a dissimilarity matrix and its prediction.
@@ -8,6 +8,16 @@ function [dissimMatrixFit,tau,shadowIntensityShift,intensityExponent,additivePar
 % starting points and track the best result.
 %
 % 3/28/16  dhb, dar  Wrote it.
+% 4/5/16   dhb       Options to not fit shift or exponent.
+
+% Optional arguments
+if (nargin < 3 | isempty(DOSHIFT))
+    DOSHIFT = true;
+end
+
+if (nargin < 4 | isempty(DOEXPONENT))
+    DOEXPONENT = true;
+end
 
 % Parameter ranges
 shiftRange = 0.2;
@@ -72,8 +82,29 @@ for ss = 1:nIntensityShiftStarts
             paramsTemp1,[],[],[],[],vlbUse,vubUse,[],options);
         
         % Set fmincon loose, with everything free
+        vlbUse = vlb;
+        vubUse = vub;
+        paramsTemp3 = fmincon(@(params)FitDissimMatrixErrorFun(params,dissimTriang,psPaintShadowDissimModel,uniqueIntensities),...
+            paramsTemp2,[],[],[],[],vlbUse,vubUse,[],options);
+        
+        % If we are constraining, then use these as a starting point for
+        % one more constrained search.  Because the code is cleaner, we
+        % do one more search even if we aren't constraining further, as it
+        % should go very quickly in that case and not hurt anything.
+        vlbUse = vlb;
+        vubUse = vub;
+        if (~DOSHIFT)
+            paramsTemp3(1) = 0;
+            vlbUse(1) = 0;
+            vubUse(1) = 0;
+        end
+        if (~DOEXPONENT)
+            paramsTemp3(2) = 1;
+            vlbUse(2) = 1;
+            vubUse(2) = 1;
+        end
         paramsTemp = fmincon(@(params)FitDissimMatrixErrorFun(params,dissimTriang,psPaintShadowDissimModel,uniqueIntensities),...
-            paramsTemp2,[],[],[],[],vlb,vub,[],options);
+            paramsTemp3,[],[],[],[],vlbUse,vubUse,[],options);
         
         % Track best fit and keep
         [fTemp,tauTmp,predTriangTmp,modelTriangTmp] = FitDissimMatrixErrorFun(paramsTemp,dissimTriang,psPaintShadowDissimModel,uniqueIntensities);
