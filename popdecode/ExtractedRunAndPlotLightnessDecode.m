@@ -72,23 +72,26 @@ if (decodeInfoOut.OK)
     % The switch gives us control for quicker debugging.
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
-    runType = 'FAST';
+    runType = 'REAL';
     switch (runType)
         case 'FAST'
+            decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 3;
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.ndecodeLOOType = 'no';
             decodeInfoOut.classifyLOOType = 'no';
         case 'SLOWER'
+            decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 50;
             decodeInfoOut.nRandomVectorRepeats = 50;
             decodeInfoOut.ndecodeLOOType = 'no';
             decodeInfoOut.classifyLOOType = 'no';
         case 'REAL'
+            decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
-            decodeInfoOut.nRepeatsPerNUnits = 100;
+            decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
             decodeInfoOut.ndecodeLOOType = 'ot';
             decodeInfoOut.classifyLOOType = 'foo';
@@ -96,13 +99,13 @@ if (decodeInfoOut.OK)
     
     % *******
     % Representational similarity
-    decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
     
     % *******
     % Analyze how paint and shadow RMSE/Prediction compare with each other when
     % decoder is built with both, built with paint only, built with shadow
     % only, is chosen randomly, is built to classify, etc.
-    decodeInfoOut = ExtractedRMSEAnalysis(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedRMSEAnalysis(decodeInfoOut,theData);
     
     % *******
     % Analyze decoding as a function of the number of units used to build
@@ -111,15 +114,15 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study decoding performance as a function of number of PCA dimensions
-    decodeInfoOut = ExtractedRMSEVersusNPCA(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedRMSEVersusNPCA(decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of the number of units
-    decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
-    decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
 
 end
 end

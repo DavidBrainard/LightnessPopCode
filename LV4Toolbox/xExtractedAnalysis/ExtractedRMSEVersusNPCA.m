@@ -7,7 +7,8 @@ function decodeInfo = ExtractedRMSEVersusNPCA(decodeInfo,theData)
 % 3/29/16  dhb  Pulled it out.
 
 %% Get info about what to do
-nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));
+nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);
+uniqueNUnitsToStudy = length(nUnitsToUseList);
 
 % Get PCA
 dataForPCA = [theData.paintResponses ; theData.shadowResponses];
@@ -17,15 +18,15 @@ paintPCAResponses = (pcaBasis\(theData.paintResponses-meanDataForPCA(ones(size(t
 shadowPCAResponses = (pcaBasis\(theData.shadowResponses-meanDataForPCA(ones(size(theData.shadowResponses,1),1),:))')';
 
 % Get RMSE as a function of number of PCA components
-thePCAUnits = zeros(decodeInfo.nNUnitsToStudy,1);
-thePCALOORMSE = zeros(decodeInfo.nNUnitsToStudy,1);
+thePCAUnits = zeros(uniqueNUnitsToStudy,1);
+thePCALOORMSE = zeros(uniqueNUnitsToStudy,1);
 clear decodeInfoTemp
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = decodeInfo.ndecodeLOOType;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-for uu = 1:decodeInfo.nNUnitsToStudy
+for uu = 1:uniqueNUnitsToStudy
     decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
     [~,~,paintPCAPredsLOO,shadowPCAPredsLOO] = PaintShadowDecode(decodeInfoTemp, ...
         theData.paintIntensities,paintPCAResponses(:,1:decodeInfo.nUnitsToUse),theData.shadowIntensities,shadowPCAResponses(:,1:decodeInfo.nUnitsToUse));

@@ -2,11 +2,9 @@
 %
 % Do the whole kit and kaboodle of decoding analyses.
 %
-% This is the "Extracted" version, which runs on the
-% .mat files that are dumped out by the original pass
-% through the data.  This version exists just so some
-% things can be broken out and tracked a little more
-% simply.
+% This is the "Extracted" version, which runs on the .mat files that are
+% dumped out by the original pass through the data.  This version exists
+% just so some things can be broken out and tracked a little more simply.
 %
 % 3/25/14  dhb  Wrote it.
 
@@ -21,7 +19,7 @@ cd(myDir);
 SetAnalysisPath;
 
 %% Compute or just plot?
-runAllCompute = false;
+runAllCompute = true;
 
 %% Original paint/shadow
 ExtractedRunOneCondition(...

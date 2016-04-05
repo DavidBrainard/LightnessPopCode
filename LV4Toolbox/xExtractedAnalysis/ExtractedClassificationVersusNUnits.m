@@ -7,6 +7,7 @@ function decodeInfo = ExtractedClassificationVersusNUnits(decodeInfo,theData)
 
 %% Get info about what to do
 nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));
+uniqueNUnitsToStudy = length(nUnitsToUseList);
 
 %% Set up input structure for classification
 clear decodeInfoTemp
@@ -20,10 +21,10 @@ decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 
 %% Set up space for some answers
-theLOOPerformance = zeros(decodeInfo.nNUnitsToStudy,decodeInfo.nRepeatsPerNUnits);
-theUnits = zeros(decodeInfo.nNUnitsToStudy,decodeInfo.nRepeatsPerNUnits);
-maxLOOPerformanceUnits = zeros(decodeInfo.nNUnitsToStudy,1);
-maxLOOPerformance = zeros(decodeInfo.nNUnitsToStudy,1);
+theLOOPerformance = zeros(uniqueNUnitsToStudy,decodeInfo.nRepeatsPerNUnits);
+theUnits = zeros(uniqueNUnitsToStudy,decodeInfo.nRepeatsPerNUnits);
+maxLOOPerformanceUnits = zeros(uniqueNUnitsToStudy,1);
+maxLOOPerformance = zeros(uniqueNUnitsToStudy,1);
 
 %% Get classification performance for all choices of one unit
 for jj = 1:decodeInfo.nUnits
