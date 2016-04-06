@@ -72,7 +72,7 @@ if (decodeInfoOut.OK)
     % The switch gives us control for quicker debugging.
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
-    runType = 'REAL';
+    runType = 'FAST';
     switch (runType)
         case 'FAST'
             decodeInfoOut.verbose = true;
@@ -99,7 +99,7 @@ if (decodeInfoOut.OK)
     
     % *******
     % Representational similarity
-    %decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
+    decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
     
     % *******
     % Analyze how paint and shadow RMSE/Prediction compare with each other when
