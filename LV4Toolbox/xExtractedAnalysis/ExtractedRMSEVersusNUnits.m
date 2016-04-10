@@ -3,10 +3,11 @@ function decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 %
 % Study decoding performance as a function of the number of units.
 %
+% NOTES:
+%   One could think about how often to shuffle the data, when the data are
+%   being shuffled.
+%
 % 3/29/16  dhb  Pulled this out.
-
-%% Parameters
-decodeInfo.nFitMaxUnits = 40;
 
 %% Decoding for various combinations of units
 %
@@ -23,7 +24,10 @@ decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfo.RMSEVersusNUnits.basicAnalysis = decodeInfoOut;
+
+% Noise correlation estimate
 
 %% Decoding for various combinations of units
 %
@@ -40,6 +44,7 @@ decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 decodeInfoOut= DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfo.RMSEVersusNUnits.shuffledAnalysis = decodeInfoOut;
 
 %% Suppose all the units were like the best unit ...
@@ -181,7 +186,7 @@ for uu1 = 1:decodeInfo.nUnits
     if (decodeInfo.verbose)
         fprintf('\t\tFirst unit %d\n',uu1);
     end
-    for uu2 = uu1+1:decodeInfo.nUnits
+    for uu2 = (uu1+1):decodeInfo.nUnits
         useUnits = [uu1 uu2];
         [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfo, ...
             paintIntensities,paintResponses(:,useUnits),shadowIntensities,shadowResponses(:,useUnits));
@@ -240,9 +245,11 @@ end
 %% Combine the ways we try decoding with a particular number of units
 %
 % And take the minimum.
- if (any(decodeInfo.minRanUnits(:) ~= decodeInfo.orderedUnits(:)))
-     error('This should not happen');
- end
+if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
+    if (any(decodeInfo.minRanUnits(:) ~= decodeInfo.orderedUnits(:)))
+        error('This should not happen in the no shuffle case');
+    end
+end
  decodeInfo.minUnits = decodeInfo.minRanUnits;
  decodeInfo.minRMSE = min([decodeInfo.minRanRMSE(:) decodeInfo.orderedRMSE(:)],[],2);
  
@@ -334,5 +341,44 @@ decodeInfo.rmse = c0;
 decodeInfo.fit = fit(decodeInfo.theUnits(index),decodeInfo.theRMSE(index),'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
 decodeInfo.fitScale = decodeInfo.fit.b;
 decodeInfo.fitAsymp = decodeInfo.fit.c;
+
+end
+
+
+%% decodeInfo = EstimateNoiseCorrelations(decodeInfo,theData)
+function decodeInfo = EstimateNoiseCorrelations(decodeInfo,theData)
+%
+% Estimate noise correlations across units
+
+%% Optional shuffle, should destroy (mostly) any noise correlations
+[paintIntensities,paintResponses,shadowIntensities,shadowResponses] = ...
+    PaintShadowShuffle(decodeInfo,theData.paintIntensities,theData.paintResponses,theData.shadowIntensities,theData.shadowResponses);
+
+%% Unique intensities
+uniqueIntensities = unique([paintIntensities(:) ; shadowIntensities(:)]);
+
+%% Get residual response for each intensity/[paint/shadow]/unit combination
+residualPaintResponses = zeros(size(paintResponses));
+residualShadowResponses = zeros(size(shadowResponses));
+for uu = 1:decodeInfo.nUnits   
+    for dc = 1:length(uniqueIntensities)
+        theIntensity = uniqueIntensities(dc);
+        paintIndex = find(theData.paintIntensities == theIntensity);
+        shadowIndex = find(theData.shadowIntensities == theIntensity);
+        meanPaintResponses(uu,dc) = mean(paintResponses(paintIndex,uu),1);
+        meanShadowResponses(uu,dc) = mean(shadowResponses(shadowIndex,uu),1);
+        residualPaintResponses(paintIndex,uu) = paintResponses(paintIndex,uu)-meanPaintResponses(uu,dc);
+        residualShadowResponses(shadowIndex,uu) = shadowResponses(shadowIndex,uu)-meanShadowResponses(uu,dc);
+    end 
+end
+
+%% Compute correlations
+paintCorrMatrix = corrcoef(residualPaintResponses);
+shadowCorrMatrix = corrcoef(residualShadowResponses);
+paintCorrTri = triu(paintCorrMatrix);
+shadowCorrTri = triu(shadowCorrMatrix);
+decodeInfo.paintNoiseCorr = mean(paintCorrTri(:));
+decodeInfo.shadowNoiseCorr = mean(shadowCorrTri(:));
+decodeInfo.noiseCorr = mean([decodeInfo.paintNoiseCorr decodeInfo.shadowNoiseCorr]);
 
 end

@@ -51,8 +51,8 @@ vlb = [-shiftRange ; exponentLow ; -100*parameterRange*ones(size(additiveParams0
 vub = [shiftRange ; exponentHigh ; 100*parameterRange*ones(size(additiveParams0,1),1)];
 
 % We'll search using a variety of starting points, and take the best result
-startingIntensityShifts = linspace(-shiftRange,shiftRange,nIntensityShiftStarts);
-intenstiyExponentStarts = linspace(exponentLow,exponentHigh,nIntensityExponentStarts);
+startingIntensityShifts = unique(sort([0 linspace(-shiftRange,shiftRange,nIntensityShiftStarts)]));
+intenstiyExponentStarts = unique(sort([1 linspace(exponentLow,exponentHigh,nIntensityExponentStarts)]));
 bestF = Inf;
 for ss = 1:nIntensityShiftStarts
     shadowIntensityShift0 = startingIntensityShifts(ss);
@@ -86,6 +86,24 @@ for ss = 1:nIntensityShiftStarts
         vubUse = vub;
         paramsTemp3 = fmincon(@(params)FitDissimMatrixErrorFun(params,dissimTriang,psPaintShadowDissimModel,uniqueIntensities),...
             paramsTemp2,[],[],[],[],vlbUse,vubUse,[],options);
+        
+        % Let's really make sure the shift is real.  Set it to zero again
+        % and search with it constrainted there.  If this leads to
+        % something better, use that as the starting point for the final
+        % search.
+        fTemp3 = FitDissimMatrixErrorFun(paramsTemp3,dissimTriang,psPaintShadowDissimModel,uniqueIntensities);
+        paramsTemp3a = paramsTemp3;
+        paramsTemp3a(1) = 0;
+        vlbUse = vlb;
+        vubUse = vub;
+        vlbUse(1) = 0;
+        vubUse(1) = 0;
+        paramsTemp3b = fmincon(@(params)FitDissimMatrixErrorFun(params,dissimTriang,psPaintShadowDissimModel,uniqueIntensities),...
+            paramsTemp3a,[],[],[],[],vlbUse,vubUse,[],options);
+        fTemp3b = FitDissimMatrixErrorFun(paramsTemp3b,dissimTriang,psPaintShadowDissimModel,uniqueIntensities);
+        if (fTemp3b < fTemp3)
+            paramsTemp3 = paramsTemp3b;
+        end
         
         % If we are constraining, then use these as a starting point for
         % one more constrained search.  Because the code is cleaner, we
@@ -166,7 +184,7 @@ psIntensityDissimModel = BuildPSIntensityModel(uniqueIntensities,shadowIntensity
 % Convert to form used in regression
 modelMatrices{1} = psPaintShadowDissimModel;
 modelMatrices{2} = psIntensityDissimModel;
-modelMatrices{3} = ones(size(modelMatrices{1})) - eye(size(modelMatrices{1}));
+%modelMatrices{3} = ones(size(modelMatrices{1})) - eye(size(modelMatrices{1}));
 for ii = 1:length(modelMatrices)
     modelTriang(:,ii) = squareform(modelMatrices{ii})';
 end

@@ -15,11 +15,10 @@ function prediction = DoTheClassifyPrediction(decodeInfo,responses)
 libsvmPath = fileparts(which('svmpredict'));
 curDir = pwd;
 
-% Build the decoder according to passed type
+% Predict according to passed type
 switch decodeInfo.classifyType
     case {'mvma' 'mvmb' 'mvmh'}
         % Matlab's SVM prediction
-        %predict = svmclassify(decodeInfo.classifyInfo,responses);
         prediction = predict(decodeInfo.classifyInfo,responses);
         
     case {'svma' 'svmb' 'svmh'}   

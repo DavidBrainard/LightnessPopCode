@@ -18,7 +18,7 @@ SetAnalysisPath;
 runAllPlotV4Only = false;
 
 %% Compute or just plot?
-runAllCompute = false;
+runAllCompute = true;
 
 %% Datastyle
 DATASTYLE = 'new';

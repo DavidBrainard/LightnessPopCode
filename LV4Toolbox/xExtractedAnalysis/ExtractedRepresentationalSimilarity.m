@@ -18,7 +18,11 @@ decodeInfoTemp.uniqueIntensities = decodeInfo.uniqueIntensities;
 decodeInfoTemp.dissimMatrix = ComputePSDissimMatrix(decodeInfo,theData);
 
 % Get the MDS solution
-mdsSoln = mdscale(decodeInfoTemp.dissimMatrix,2);
+try
+    mdsSoln = mdscale(decodeInfoTemp.dissimMatrix,2);
+catch
+    mdsSoln = mdscale(decodeInfoTemp.dissimMatrix,2,'Start','random');
+end
 
 %% Fit the dissimilarity matrix with a stimulus based model of how things might be.
 [decodeInfoTemp.dissimMatrixFit,decodeInfoTemp.fitTau,decodeInfoTemp.shadowIntensityShift,decodeInfoTemp.exponent] = ...
@@ -32,7 +36,11 @@ if (decodeInfoTemp.noShiftShadowIntensityShift ~= 0)
 end
 
 %% Do MDS on best fit dissimilarity matrix
-mdsSolnFit = mdscale(decodeInfoTemp.dissimMatrixFit,2);
+try 
+    mdsSolnFit = mdscale(decodeInfoTemp.dissimMatrixFit,2);
+catch
+    mdsSolnFit = mdscale(decodeInfoTemp.dissimMatrixFit,2,'Start','random');
+end
 [~,mdsSolnPro] = procrustes(mdsSolnFit,mdsSoln);
 
 %% PLOT: The dissimilarity matrix and its fit

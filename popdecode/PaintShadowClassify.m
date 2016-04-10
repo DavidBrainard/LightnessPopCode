@@ -40,6 +40,8 @@ end
 %% Numeric category labels
 decodeInfo.paintLabel = 1;
 decodeInfo.shadowLabel = -1;
+theLabels = [decodeInfo.paintLabel*ones(size(paintIntensities)) ; decodeInfo.shadowLabel*ones(size(shadowIntensities))];
+theResponses = [paintResponses ; shadowResponses];
 
 %% Classify and predict
 switch (decodeInfo.decodeJoint)
@@ -47,7 +49,7 @@ switch (decodeInfo.decodeJoint)
         % Use both paint and shadow trials to do the classificaiton.
         switch (decodeInfo.classifyType)
             case {'mvma' 'mvmb' 'mvmh' 'svma' 'svmb' 'svmh' 'nna' 'nnb' 'nnh' }
-                decodeInfo = DoTheClassify(decodeInfo,[decodeInfo.paintLabel*ones(size(paintIntensities)) ; decodeInfo.shadowLabel*ones(size(shadowIntensities))],[paintResponses ; shadowResponses]);
+                decodeInfo = DoTheClassify(decodeInfo,theLabels,theResponses);
                 paintPreds = DoTheClassifyPrediction(decodeInfo,paintResponses);
                 shadowPreds = DoTheClassifyPrediction(decodeInfo,shadowResponses);
             case 'no'

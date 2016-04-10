@@ -22,60 +22,63 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 %% Build decode on both, don't leave one out
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = 'no';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
-decodeInfoTemp.paintDecodeBothRMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-decodeInfoTemp.shadowDecodeBothRMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
-
+decodeInfoKeep.paintDecodeBothRMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
+decodeInfoKeep.shadowDecodeBothRMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
 
 %% Build decoder on both, use one trial LOO to evaluate.
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
-decodeInfoTemp.paintDecodeBothLOORMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-decodeInfoTemp.shadowDecodeBothLOORMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
+decodeInfoKeep.paintDecodeBothLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
+decodeInfoKeep.shadowDecodeBothLOORMSE = sqrt(mean((shadowIntensities(:)-shadowPreds(:)).^2));
+decodeInfoKeep.paintDecodeBothLOOMean = mean(paintPreds(:));
+decodeInfoKeep.shadowDecodeBothLOOMean = mean(shadowPreds(:));
+decodeInfoKeep.shadowMinusPaintDecodeBothLOOMean = mean(shadowPreds(:))-mean(paintPreds(:));
 
 %% Build decoder on paint, use one trial LOO to evaluate.
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'paint';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
-decodeInfoTemp.paintDecodePaintLOORMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-decodeInfoTemp.shadowDecodePaintLOORMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
+decodeInfoKeep.paintDecodePaintLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
+decodeInfoKeep.shadowDecodePaintLOORMSE = sqrt(mean((shadowIntensities(:)-shadowPreds(:)).^2));
+decodeInfoKeep.paintDecodePaintLOOMean = mean(paintPreds(:));
+decodeInfoKeep.shadowDecodePaintLOOMean = mean(shadowPreds(:));
+decodeInfoKeep.shadowMinusPaintDecodePaintLOOMean = mean(shadowPreds(:))-mean(paintPreds(:));
 
 %% Build decoder on shadow, use one trial LOO to evaluate.
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'shadow';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
-decodeInfoTemp.paintDecodeShadowLOORMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-decodeInfoTemp.shadowDecodeShadowLOORMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
+decodeInfoKeep.paintDecodeShadowLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
+decodeInfoKeep.shadowDecodeShadowLOORMSE = sqrt(mean((shadowIntensities(:)-shadowPreds(:)).^2));
+decodeInfoKeep.paintDecodeShadowLOOMean = mean(paintPreds(:));
+decodeInfoKeep.shadowDecodeShadowLOOMean = mean(shadowPreds(:));
+decodeInfoKeep.shadowMinusPaintDecodeShadowLOOMean = mean(shadowPreds(:))-mean(paintPreds(:));
 
 %% Build decoder on classification direction (by finding that first)
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
@@ -92,14 +95,13 @@ paintResponsesTemp = paintResponses*classifyDirection;
 shadowResponsesTemp = shadowResponses*classifyDirection;
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponsesTemp,shadowIntensities,shadowResponsesTemp);
-decodeInfoTemp.paintDecodeClassifyLOORMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-decodeInfoTemp.shadowDecodeClassifyLOORMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
+decodeInfoKeep.paintDecodeClassifyLOORMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
+decodeInfoKeep.shadowDecodeClassifyLOORMSE = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
 
 %% Project data onto a randomly chosen unit vector in the response
 % space, and decode based on that.
 clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
-decodeInfoTemp.nFitMaxUnits = decodeInfo.nFitMaxUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
@@ -111,29 +113,29 @@ for rr = 1:decodeInfoTemp.nRandomVectorRepeats
     shadowResponsesTemp = shadowResponses*theDirection;
     [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
         paintIntensities,paintResponsesTemp,shadowIntensities,shadowResponsesTemp);
-    decodeInfoTemp.paintDecodeRandomLOORMSE(rr) = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
-    decodeInfoTemp.shadowDecodeRandomLOORMSE(rr) = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
+    decodeInfoKeep.paintDecodeRandomLOORMSE(rr) = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
+    decodeInfoKeep.shadowDecodeRandomLOORMSE(rr) = sqrt(mean(([shadowIntensities(:)]-[shadowPreds(:)]).^2));
 end
-decodeInfoTemp.paintDecodeRandomLOORMSEMean = mean(decodeInfoTemp.paintDecodeRandomLOORMSE);
-decodeInfoTemp.paintDecodeRandomLOORMSEStd = std(decodeInfoTemp.paintDecodeRandomLOORMSE);
-decodeInfoTemp.shadowDecodeRandomLOORMSEMean = mean(decodeInfoTemp.paintDecodeRandomLOORMSE);
-decodeInfoTemp.shadowDecodeRandomLOORMSEStd = std(decodeInfoTemp.paintDecodeRandomLOORMSE);
+decodeInfoKeep.paintDecodeRandomLOORMSEMean = mean(decodeInfoKeep.paintDecodeRandomLOORMSE);
+decodeInfoKeep.paintDecodeRandomLOORMSEStd = std(decodeInfoKeep.paintDecodeRandomLOORMSE);
+decodeInfoKeep.shadowDecodeRandomLOORMSEMean = mean(decodeInfoKeep.paintDecodeRandomLOORMSE);
+decodeInfoKeep.shadowDecodeRandomLOORMSEStd = std(decodeInfoKeep.paintDecodeRandomLOORMSE);
 
 %% PLOT: RMSE analyses
 rmseAnaysisFig = figure; clf;
 nHistobins = 10;
-[nPaint,xPaint] = hist(decodeInfoTemp.paintDecodeRandomLOORMSE,nHistobins);
-[nShadow,xShadow] = hist(decodeInfoTemp.shadowDecodeRandomLOORMSE,nHistobins);
+[nPaint,xPaint] = hist(decodeInfoKeep.paintDecodeRandomLOORMSE,nHistobins);
+[nShadow,xShadow] = hist(decodeInfoKeep.shadowDecodeRandomLOORMSE,nHistobins);
 yMax = max([nPaint(:) ; nShadow(:)]);
 
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 subplot(2,1,1); hold on;
-plot([decodeInfoTemp.paintDecodeBothLOORMSE decodeInfoTemp.paintDecodeBothLOORMSE],[0 yMax],'k','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.paintDecodePaintLOORMSE decodeInfoTemp.paintDecodePaintLOORMSE],[0 yMax],'g','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.paintDecodeShadowLOORMSE decodeInfoTemp.paintDecodeShadowLOORMSE],[0 yMax],'b','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.paintDecodeClassifyLOORMSE decodeInfoTemp.paintDecodeClassifyLOORMSE],[0 yMax],'r','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.paintDecodeBothRMSE decodeInfoTemp.paintDecodeBothRMSE],[0 yMax],'k:','LineWidth',1);
+plot([decodeInfoKeep.paintDecodeBothLOORMSE decodeInfoKeep.paintDecodeBothLOORMSE],[0 yMax],'k','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.paintDecodePaintLOORMSE decodeInfoKeep.paintDecodePaintLOORMSE],[0 yMax],'g','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.paintDecodeShadowLOORMSE decodeInfoKeep.paintDecodeShadowLOORMSE],[0 yMax],'b','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.paintDecodeClassifyLOORMSE decodeInfoKeep.paintDecodeClassifyLOORMSE],[0 yMax],'r','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.paintDecodeBothRMSE decodeInfoKeep.paintDecodeBothRMSE],[0 yMax],'k:','LineWidth',1);
 bar(xPaint,nPaint,'c','EdgeColor','c');
 xlim([0,0.5]);
 legend({'Decode Both', 'Decode Paint', 'Decode Shadow' 'DecodeClassify' 'Decode Both (No LOO)' 'Random'},'Location','NorthEast','FontSize',decodeInfo.legendFontSize-4);
@@ -141,11 +143,11 @@ xlabel('Paint RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Histogram Count','FontSize',decodeInfo.labelFontSize);
 
 subplot(2,1,2); hold on;
-plot([decodeInfoTemp.shadowDecodeBothLOORMSE decodeInfoTemp.shadowDecodeBothLOORMSE],[0 yMax],'k','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.shadowDecodePaintLOORMSE decodeInfoTemp.shadowDecodePaintLOORMSE],[0 yMax],'g','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.shadowDecodeShadowLOORMSE decodeInfoTemp.shadowDecodeShadowLOORMSE],[0 yMax],'b','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.shadowDecodeClassifyLOORMSE decodeInfoTemp.shadowDecodeClassifyLOORMSE],[0 yMax],'r','LineWidth',decodeInfo.lineWidth);
-plot([decodeInfoTemp.shadowDecodeBothRMSE decodeInfoTemp.shadowDecodeBothRMSE],[0 yMax],'k:','LineWidth',1);
+plot([decodeInfoKeep.shadowDecodeBothLOORMSE decodeInfoKeep.shadowDecodeBothLOORMSE],[0 yMax],'k','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.shadowDecodePaintLOORMSE decodeInfoKeep.shadowDecodePaintLOORMSE],[0 yMax],'g','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.shadowDecodeShadowLOORMSE decodeInfoKeep.shadowDecodeShadowLOORMSE],[0 yMax],'b','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.shadowDecodeClassifyLOORMSE decodeInfoKeep.shadowDecodeClassifyLOORMSE],[0 yMax],'r','LineWidth',decodeInfo.lineWidth);
+plot([decodeInfoKeep.shadowDecodeBothRMSE decodeInfoKeep.shadowDecodeBothRMSE],[0 yMax],'k:','LineWidth',1);
 h = bar(xShadow,nShadow,'c','EdgeColor','c');
 xlim([0,0.5]);
 ylim([0 yMax+1]);
@@ -158,4 +160,4 @@ drawnow;
 FigureSave(figName,rmseAnaysisFig,decodeInfo.figType);
 
 %% Store the data for return
-decodeInfo.RMSEVersusNPCA = decodeInfoTemp;
+decodeInfo.RMSEAnalysis = decodeInfoKeep;

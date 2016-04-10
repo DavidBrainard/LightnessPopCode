@@ -47,7 +47,7 @@ end
 
 % Fit an exponential
 a0 = max(decodeInfoTemp.theRMSE); b0 = 5; c0 = min(decodeInfoTemp.theRMSE);
-index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
+index = find(decodeInfoTemp.theUnits <= decodeInfo.nFitMaxUnits);
 decodeInfoTemp.fit = fit(decodeInfoTemp.theUnits(index),decodeInfoTemp.theRMSE(index),'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
 decodeInfoTemp.rmse = c0;
 decodeInfoTemp.fitScale = decodeInfoTemp.fit.b;
@@ -99,9 +99,9 @@ for dc = 1:length(decodeInfo.uniqueIntensities)
     theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
     
     % Basic points first, so legend comes out right
-    plot(mean(decodeInfo.meanPaintPCAResponses(dc,1)),mean(decodeInfo.meanPaintPCAResponses(dc,2)),...
+    plot(mean(decodeInfoTemp.meanPaintPCAResponses(dc,1)),mean(decodeInfoTemp.meanPaintPCAResponses(dc,2)),...
         'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
-    plot(mean(decodeInfo.meanShadowPCAResponses(dc,1)),mean(decodeInfo.meanShadowPCAResponses(dc,2)),...
+    plot(mean(decodeInfoTemp.meanShadowPCAResponses(dc,1)),mean(decodeInfoTemp.meanShadowPCAResponses(dc,2)),...
         'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
 end
 xlabel('PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);

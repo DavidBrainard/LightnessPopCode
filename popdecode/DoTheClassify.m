@@ -40,11 +40,11 @@ switch decodeInfo.classifyType
             decodeInfo.classifyTelapse3 = toc(tstart);
             
             decodeInfo.classifyPrediction1 = predict(decodeInfo.classifyInfo1,responses);
-            decodeInfo.classifyPerf1 = length(find(decodeInfo.classifyPrediction1 == labels))/length(responses);
+            decodeInfo.classifyPerf1 = length(find(decodeInfo.classifyPrediction1 == labels))/length(labels);
             decodeInfo.classifyPrediction2 = predict(decodeInfo.classifyInfo2,responses);
-            decodeInfo.classifyPerf2 = length(find(decodeInfo.classifyPrediction1 == labels))/length(responses);
+            decodeInfo.classifyPerf2 = length(find(decodeInfo.classifyPrediction1 == labels))/length(labels);
             decodeInfo.classifyPrediction3 = predict(decodeInfo.classifyInfo3,responses);
-            decodeInfo.classifyPerf3 = length(find(decodeInfo.classifyPrediction1 == labels))/length(responses);
+            decodeInfo.classifyPerf3 = length(find(decodeInfo.classifyPrediction1 == labels))/length(labels);
             fprintf('\t\tSMO (default), %0.1f, %0.2f; L1QP, %0.1f, %0.2f; ISDA,%0.1f, %0.2f\n', ...
                 decodeInfo.classifyTelapse1,decodeInfo.classifyPerf1,decodeInfo.classifyTelapse2,decodeInfo.classifyPerf2,decodeInfo.classifyTelapse3,decodeInfo.classifyPerf3);
         end
