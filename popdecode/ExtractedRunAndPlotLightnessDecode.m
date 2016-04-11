@@ -74,7 +74,7 @@ if (decodeInfoOut.OK)
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
     decodeInfoOut.nFitMaxUnits = 40;
-    runType = 'FAST';
+    runType = 'REAL';
     switch (runType)
         case 'FAST'
             decodeInfoOut.verbose = true;
@@ -84,7 +84,6 @@ if (decodeInfoOut.OK)
             decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.classifyLOOType = 'lo';
             decodeInfoOut.nFolds = 10;
-
         case 'SLOWER'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
@@ -95,7 +94,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nFolds = 10;
         case 'REAL'
             decodeInfoOut.verbose = true;
-            decodeInfoOut.nNUnitsToStudy = 25;
+            decodeInfoOut.nNUnitsToStudy = 30;
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
             decodeInfoOut.decodeLOOType = 'ot';
@@ -124,7 +123,7 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study classification performance as a function of the number of units
-    decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
+    %decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
