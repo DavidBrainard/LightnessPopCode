@@ -48,13 +48,22 @@ end
 if (COMPUTE)
     curDir = pwd; cd(extractedDataRootDir);
     theDirs = dir('*00*');
-    cd(curDir);
-    for runIndex = 1:length(theDirs)
-        theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
-        save(saveFile,'-v7.3');
+    cd(curDir); 
+    if (exist('IsCluster','file') & IsCluster)
+        parfor runIndex = 1:length(theFiles)
+            theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
+            decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
+            %save(saveFile,'-v7.3');
+        end
+    else
+        runIndex = 1:length(theFiles)
+            theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
+            decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
+            save(saveFile,'-v7.3');
+        end
     end
 end
+%save(saveFile,'-v7.3');
 
 %% Load the saved analyses
 clear decodeInfoIn decodeInfoOut
