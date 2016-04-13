@@ -128,6 +128,11 @@ if (decodeInfoOut.OK)
     % *******
     % Study classification performance as a function of number of PCA dimensions
     %decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
+    
+    % Save the output for this directory.  Good for checkpointing
+    curDir = pwd; cd(theDir);
+    save('extDecodeInfoOut','decodeInfoOut','-v7.3');
+    cd(curDir);
 
 end
 end
