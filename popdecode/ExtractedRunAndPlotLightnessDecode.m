@@ -98,7 +98,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
             decodeInfoOut.decodeLOOType = 'ot';
-            decodeInfoOut.classifyLOOType = 'kfold';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.nFolds = 10;               
     end
     
