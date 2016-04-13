@@ -74,7 +74,7 @@ if (decodeInfoOut.OK)
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
     decodeInfoOut.nFitMaxUnits = 40;
-    runType = 'REAL';
+    runType = 'FAST';
     switch (runType)
         case 'FAST'
             decodeInfoOut.verbose = true;
@@ -82,7 +82,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.decodeLOOType = 'no';
-            decodeInfoOut.classifyLOOType = 'lo';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.nFolds = 10;
         case 'SLOWER'
             decodeInfoOut.verbose = true;
@@ -101,6 +101,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.nFolds = 10;               
     end
+    tstart = tic;
     
     % *******
     % Representational similarity
@@ -123,13 +124,14 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study classification performance as a function of the number of units
-    %decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
+    decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
     %decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
     
     % Save the output for this directory.  Good for checkpointing
+    decodeInfoOut.runTime = toc(tstart);
     curDir = pwd; cd(theDir);
     save('extDecodeInfoOut','decodeInfoOut','-v7.3');
     cd(curDir);

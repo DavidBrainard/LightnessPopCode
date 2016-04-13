@@ -27,8 +27,6 @@ decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfo.RMSEVersusNUnits.basicAnalysis = decodeInfoOut;
 
-% Noise correlation estimate
-
 %% Decoding for various combinations of units
 %
 % Trial shuffling
@@ -43,7 +41,7 @@ decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut= DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfo.RMSEVersusNUnits.shuffledAnalysis = decodeInfoOut;
 
@@ -172,8 +170,6 @@ if (decodeInfo.oneRMSE(oneRMSEIndex(1)) ~= decodeInfo.bestOneRMSE)
 end
 
 %% Get RMSE for all choices of two units
-%
-% When we add them in according to how well they do one at a time
 if (decodeInfo.verbose)
     fprintf('\tRMSE for all choices of two units\n');
 end
