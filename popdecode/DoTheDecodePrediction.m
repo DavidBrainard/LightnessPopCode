@@ -1,5 +1,5 @@
-function predict = DoThePrediction(decodeInfo,responses)
-% predict = DoThePrediction(decodeInfo,responses)
+function predict = DoTheDecode(decodeInfo,responses)
+% predict = DoTheDecode(decodeInfo,responses)
 %
 % Do the predictions
 %

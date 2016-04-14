@@ -109,7 +109,7 @@ switch decodeInfo.type
         decodeInfoTemp = decodeInfo;
         decodeInfoTemp.type = 'aff';
         decodeInfoTemp = GetTheDecoderRegressionParams(decodeInfoTemp,intensities,responses);
-        affinePreds = DoThePrediction(decodeInfoTemp,responses);
+        affinePreds = DoTheDecodePrediction(decodeInfoTemp,responses);
         [ameans,astes,~,~,~,axs]=sortbyx(intensities,affinePreds);
         
         % Do the smoothing spline

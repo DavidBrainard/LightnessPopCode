@@ -637,7 +637,7 @@ for nn1 = 1:length(useSizes)
         decodeInfoTemp = decodeInfoIn;
         decodeInfoTemp.type = 'aff';
         decodeInfoTemp = GetTheDecoderRegressionParams(decodeInfoTemp,paintIntensities,paintResponses);
-        affinePreds = DoThePrediction(decodeInfoTemp,paintResponses);
+        affinePreds = DoTheDecodePrediction(decodeInfoTemp,paintResponses);
         [paintPredictMeansAffine,~,~,~,~,paintGroupedIntensitiesAffine]=sortbyx(paintIntensities,affinePreds);
         clear affinePreds
         

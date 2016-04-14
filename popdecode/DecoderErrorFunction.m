@@ -7,7 +7,7 @@ switch (decodeInfo.type)
         decodeInfo.betacdfB = x(2);
         decodeInfo.betacdfScale = x(3);
         decodeInfo = GetTheDecoderRegressionParams(decodeInfo,contrasts,responses);
-        predict = DoThePrediction(decodeInfo,responses);
+        predict = DoTheDecodePrediction(decodeInfo,responses);
     case 'betadoublecdf'
         decodeInfo.betacdfA1 = x(1);
         decodeInfo.betacdfB1 = x(2);
@@ -15,7 +15,7 @@ switch (decodeInfo.type)
         decodeInfo.betacdfB2 = x(4);
         decodeInfo.betacdfScale = x(5);
         decodeInfo = GetTheDecoderRegressionParams(decodeInfo,contrasts,responses);
-        predict = DoThePrediction(decodeInfo,responses);
+        predict = DoTheDecodePrediction(decodeInfo,responses);
         
     otherwise
         error('Unknown decoder type passed');
