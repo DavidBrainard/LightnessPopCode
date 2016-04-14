@@ -80,11 +80,6 @@ switch (decodeInfo.decodeJoint)
         error('Bad option for field decodeJoint');
 end
 
-%% Tuck away rmse paint prediction error in percent
-%[pmeans,pstes,~,~,~,pxs]=sortbyx(paintIntensities,paintPreds);
-%decodeInfo.paintPredErr = ComputeDecodingError(decodeInfo,paintIntensities,paintPreds);
-%decodeInfo.paintMeanErr = ComputeDecodingError(decodeInfo,pxs,pmeans');
-
 %% Do the leave one out predictions
 paintPredsLOO = NaN*ones(numPaint,1);
 shadowPredsLOO = NaN*ones(numShadow,1);
@@ -94,18 +89,9 @@ switch (decodeInfo.decodeLOOType)
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
-    case {'ot','kfold'}
-        if (strcmp(decodeInfo.decodeLOOType,'ot'))
-            CVO = cvpartition(theIntensities,'leaveout');
-
-        elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
-            CVO = cvpartition(theIntensities,'kfold',decodeInfo.decodeNFolds);
-        else
-            error('Unknown decode cross-validation (LOO) type');
-        end
-        
+    case {'ot','kfold'}      
         % Leave out one trial at a time
-        switch (decodeInfo.decodeJoint)=
+        switch (decodeInfo.decodeJoint)
             case {'paint'}
                 % Decoder was built using paint, so we do the LOO for that but
                 % just return the decoded shadow predictions for the shadow data
@@ -193,10 +179,10 @@ switch (decodeInfo.decodeLOOType)
     case 'oi'
         % Leave out one intensity at a time for LOO calcs.
         switch (decodeInfo.decodeJoint)
-            % Decoder was built using paint, so we do the LOO for that but
-            % just return the decoded shadow predictions for the shadow data
-            % (since it was not used to build the decoder.)
             case {'paint'}
+                % Decoder was built using paint, so we do the LOO for that but
+                % just return the decoded shadow predictions for the shadow data
+                % (since it was not used to build the decoder.)
                 theUniqueIntensities = unique(paintIntensities);
                 for i = 1:length(theUniqueIntensities)
                     decodeIndex = find(paintIntensities ~= theUniqueIntensities(i));
@@ -211,6 +197,44 @@ switch (decodeInfo.decodeLOOType)
                     paintPredsLOO(predictIndex) = DoThePrediction(decodeInfoTemp,paintResponses(predictIndex,:));
                 end
                 shadowPredsLOO = shadowPreds;
+            
+            case {'shadow'}
+                % Decoder was built using shadow, so we do the LOO for that but
+                % just return the decoded shadow predictions for the paint data
+                % (since it was not used to build the decoder.)
+                theUniqueIntensities = unique(shadowIntensities);
+                for i = 1:length(theUniqueIntensities)
+                    decodeIndex = find(shadowIntensities ~= theUniqueIntensities(i));
+                    predictIndex = find(shadowIntensities == theUniqueIntensities(i));
+                    tempIntensities = shadowIntensities(decodeIndex);
+                    tempResponses = shadowResponses(decodeIndex,:);
+                    
+                    % Do the decode
+                    decodeInfoTemp = DoTheDecode(decodeInfo,tempIntensities,tempResponses);
+                    
+                    % Do the prediction
+                    shadowPredsLOO(predictIndex) = DoThePrediction(decodeInfoTemp,shadowResponses(predictIndex,:));
+                end
+                paintPredsLOO = shadowPreds;
+                
+            case {'both'}
+                % Do it when both paint and shadow were used for decoding.
+                theUniqueIntensities = unique(theIntensities);
+                for i = 1:length(theUniqueIntensities)
+                    decodeIndex = find(theIntensities ~= theUniqueIntensities(i));
+                    predictIndex = find(theIntensities == theUniqueIntensities(i));
+                    tempIntensities = theIntensities(decodeIndex);
+                    tempResponses = theResponses(decodeIndex,:);
+                    
+                    % Do the decode
+                    decodeInfoTemp = DoTheDecode(decodeInfo,tempIntensities,tempResponses);
+                    
+                    % Do the prediction
+                    thePredsLOO(predictIndex) = DoThePrediction(decodeInfoTemp,theResponses(predictIndex,:));
+                end
+                paintPredsLOO = thePredsLOO(1:numPaint);
+                shadowPredsLOO = thePredsLOO(numPaint+1:end);
+                
             otherwise
                 error('LOO oneintensity (oi) not implemented for specified joint decode type');
         end
