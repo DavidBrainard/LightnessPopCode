@@ -258,8 +258,10 @@ end
 % And also deal with the fact that we found the best decoding for two at a
 % time, so slip this into the minimum.
 index = find(decodeInfo.minUnits == 2);
-if (decodeInfo.bestTwoRMSE > decodeInfo.minRMSE(index))
-    error('Oops.  Best two at a time not the best.');
+if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
+    if (decodeInfo.bestTwoRMSE > decodeInfo.minRMSE(index))
+        error('Oops.  Best two at a time not the best in the no shuffle case.');
+    end
 end
 decodeInfo.minRMSE(index) = decodeInfo.bestTwoRMSE;
  

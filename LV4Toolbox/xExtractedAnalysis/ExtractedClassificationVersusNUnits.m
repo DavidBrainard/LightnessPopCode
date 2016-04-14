@@ -273,8 +273,10 @@ end
 % And also deal with the fact that we found the best decoding for two at a
 % time, so slip this into the maximum.
 index = find(decodeInfo.maxUnits == 2);
-if (decodeInfo.bestTwoPerformance < decodeInfo.maxPerformance(index))
-    error('Oops.  Best two at a time not the best.');
+if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
+    if (decodeInfo.bestTwoPerformance < decodeInfo.maxPerformance(index))
+        error('Oops.  Best two at a time not the best in the no shuffle case.');
+    end
 end
 decodeInfo.maxPerformance(index) = decodeInfo.bestTwoPerformance;
  
