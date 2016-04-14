@@ -88,8 +88,8 @@ decodeInfoTemp.classifydecodeLOOType = decodeInfo.classifydecodeLOOType;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
 decodeInfoTemp.decodeLOOType = 'ot';
-decodeInfoType.classifyLOOType = 'no';
-decodeInfoType.classifyNFolds = 10;
+decodeInfoTemp.classifyLOOType = 'no';
+decodeInfoTemp.classifyNFolds = 10;
 [~,~,paintClassifyPredsLOO,shadowClassifyPredsLOO,decodeInfoTempOut] = PaintShadowClassify(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 classifyDirection = decodeInfoTempOut.classifyInfo.Beta;
