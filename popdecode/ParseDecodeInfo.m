@@ -33,8 +33,9 @@ parser.addParamValue('paintCondition',1,@isnumeric);
 parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
 parser.addParamValue('looType','ot',@ischar);
+parser.addParamValue('decodeNFolds',10,@isnumeric);
 parser.addParamValue('classifyLooType','no',@ischar);
-parset.addParamValue('classifyNFolds',10,@isnumeric);
+parser.addParamValue('classifyNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
 parser.addParamValue('errType','mean',@ischar);
 parser.addParamValue('minTrials',20,@isnumeric);
@@ -205,7 +206,9 @@ decodeInfoIn.MVM_COMPARECLASS = false;
 %   'no'                   - LOO is just non-LOO predictions.
 %   'ot'                   - Leave out one trial at a time.
 %   'oi'                   - Leave out one intensity at a time.
+%   'kfold'                - K-fold cross validation
 decodeInfoIn.looType = parser.Results.looType;
+decodeInfoIn.decode
 
 % Classify leave one out type
 %   'no'                   - LOO is just non-LOO predictions.
