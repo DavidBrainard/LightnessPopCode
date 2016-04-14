@@ -25,7 +25,7 @@ decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'no';
+decodeInfoTemp.decodeLOOType = 'no';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 decodeInfoRMSEAnalysis.paintDecodeBothRMSE = sqrt(mean(([paintIntensities(:)]-[paintPreds(:)]).^2));
@@ -37,7 +37,7 @@ decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'ot';
+decodeInfoTemp.decodeLOOType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 decodeInfoRMSEAnalysis.paintDecodeBothLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
@@ -52,7 +52,7 @@ decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'paint';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'ot';
+decodeInfoTemp.decodeLOOType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 decodeInfoRMSEAnalysis.paintDecodePaintLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
@@ -67,7 +67,7 @@ decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'shadow';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'ot';
+decodeInfoTemp.decodeLOOType = 'ot';
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 decodeInfoRMSEAnalysis.paintDecodeShadowLOORMSE = sqrt(mean((paintIntensities(:)-paintPreds(:)).^2));
@@ -84,10 +84,10 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classifydecodeLOOType = decodeInfo.classifydecodeLOOType;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'ot';
+decodeInfoTemp.decodeLOOType = 'ot';
 [~,~,paintClassifyPredsLOO,shadowClassifyPredsLOO,decodeInfoTempOut] = PaintShadowClassify(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 classifyDirection = decodeInfoTempOut.classifyInfo.Beta;
@@ -105,7 +105,7 @@ decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.type = 'aff';
-decodeInfoTemp.looType = 'ot';
+decodeInfoTemp.decodeLOOType = 'ot';
 for rr = 1:decodeInfoTemp.nRandomVectorRepeats
     theDirection = rand(decodeInfoTemp.nUnits,1);
     theDirection = theDirection/norm(theDirection);

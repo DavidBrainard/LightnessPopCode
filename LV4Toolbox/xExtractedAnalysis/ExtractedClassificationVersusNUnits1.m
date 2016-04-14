@@ -16,7 +16,7 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classifyLOOType = 'no';
+decodeInfoTemp.classifydecodeLOOType = 'no';
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 
@@ -31,7 +31,7 @@ for jj = 1:decodeInfo.nUnits
     useUnits = jj;
     [~,~,paintClassifyPredsLOO,shadowClassifyPredsLOO,decodeInfoTempOut] = PaintShadowClassify(decodeInfoTemp, ...
         theData.paintIntensities,theData.paintResponses(:,useUnits),theData.shadowIntensities,theData.shadowResponses(:,useUnits));
-    switch (decodeInfo.classifyLOOType)
+    switch (decodeInfo.classifydecodeLOOType)
         case 'no'
             decodeInfoTempOut.nFolds = decodeInfo.nFolds;
             paintClassifyLOONCorrect = length(find(paintClassifyPredsLOO == decodeInfoTempOut.paintLabel));
@@ -42,7 +42,7 @@ for jj = 1:decodeInfo.nUnits
             decodeInfoTempOut.classifyCVM = crossval(decodeInfoTempOut.classifyInfo,'Kfold',decodeInfo.nFolds);
             theKFoldLoss = kfoldLoss(decodeInfo.classifyCVM);
         otherwise
-            error('Unknown classifyLOOType')
+            error('Unknown classifydecodeLOOType')
     end
     whichOnePerformanceUnits(jj) = useUnits;
 end

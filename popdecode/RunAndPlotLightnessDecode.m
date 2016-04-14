@@ -550,7 +550,7 @@ for nn1 = 1:length(useSizes)
         
         %% Decode and predict
         %
-        % We do everyting on the LOO return variables, which are not LOO if decodeInfoIn.looType = 'no'.
+        % We do everyting on the LOO return variables, which are not LOO if decodeInfoIn.decodeLOOType = 'no'.
         %
         % We subtract the offset (generally 0) from the shadow intensities to explore whether decoding
         % to the psychophysics and/or reflectance values changes anything.
@@ -804,7 +804,7 @@ for nn1 = 1:length(useSizes)
         summaryStructTemp.pcaKeep = decodeInfoOutTemp.pcaKeep;
         summaryStructTemp.decodedIntensityFitType = decodeInfoOutTemp.decodedIntensityFitType;
         summaryStructTemp.paintShadowFitType = decodeInfoOutTemp.paintShadowFitType;
-        summaryStructTemp.looType = decodeInfoOutTemp.looType;
+        summaryStructTemp.decodeLOOType = decodeInfoOutTemp.decodeLOOType;
         summaryStructTemp.errType = decodeInfoOutTemp.errType;
         summaryStructTemp.arrayPosition = decodeInfoOutTemp.titleInfoStr;
         summaryStructTemp.theCheckerboardSizeDegs = decodeInfoOutTemp.theCheckerboardSizeDegs;
