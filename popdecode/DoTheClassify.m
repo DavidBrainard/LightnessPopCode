@@ -3,6 +3,9 @@ function decodeInfo = DoTheClassify(decodeInfo,labels,responses)
 %
 % Build the paint/shadow classifier and return appropriate info about it.
 %
+% The classifier 'object' is returned in decodeInfo.classifyInfo.  It could
+% be we should just return that, but I'm not going to change it right now.
+%
 % 4/21/14  dhb  Wrote it.
 % 12/2/15  dhb  Update calling form for Matlab
 

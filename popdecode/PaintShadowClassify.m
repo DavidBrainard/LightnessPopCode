@@ -18,6 +18,7 @@ function [paintPreds,shadowPreds,paintPredsLOO,shadowPredsLOO,decodeInfo] = Pain
 %
 % 4/21/14  dhb  Wrote it.
 % 4/22/14  dhb  Modified so that LOO is done with equal number of paint/shadow trials at each intensity.
+% 4/14/16  dhb  Use Matlab's cvpartition object for cross-validation.
 
 %% Parameter extraction
 numPaint = length(paintIntensities);
@@ -64,84 +65,53 @@ switch (decodeInfo.decodeJoint)
         shadowPreds = NaN*ones(size(shadowIntensities));
 end
 
-%% Do the leave one out predictions
+%% Do the cross validation
 paintPredsLOO = NaN*ones(numPaint,1);
 shadowPredsLOO = NaN*ones(numShadow,1);
+thePredsLOO = NaN*ones(numPaint+numShadow,1);
 switch (decodeInfo.classLooType)
     case 'no'
-        % No leave one out
+        % No cross validation, just take the full predictions
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
-    case 'ot'
-% Example of how to do this using the cvpartition class.
-% This will also let us do kfold.
-%         load('fisheriris');
-%         CVO = cvpartition(species,'k',10);
-%         err = zeros(CVO.NumTestSets,1);
-%         for i = 1:CVO.NumTestSets
-%             trIdx = CVO.training(i);
-%             teIdx = CVO.test(i);
-%             ytest = classify(meas(teIdx,:),meas(trIdx,:),...
-%                 species(trIdx,:));
-%             err(i) = sum(~strcmp(ytest,species(teIdx)));
-%         end
-%         cvErr = sum(err)/sum(CVO.TestSize);
+    case {'ot','kfold'}
+        if (strcmp(decodeInfo.classLooType,'ot'))
+            CVO = cvpartition(theLabels,'leaveout');
 
-        % Leave out one trial at a time
+        elseif (strcmp(decodeInfo.classLooType,'kfold'))
+            CVO = cvpartition(theLabels,'kfold',decodeInfo.classNFolds);
+        else
+            error('Unknown classify cross-validation (LOO) type');
+        end
+
+        % Cross validation
         switch (decodeInfo.decodeJoint)
             case {'both'}        
                 switch (decodeInfo.classifyType)
                     case {'mvma' 'mvmb' 'mvmh' 'svma' 'svmb' 'svmh' 'nna' 'nnb' 'nnh'}
-                        % Classifier was built with both paint and shadow.  Do the LOO preds using
-                        % both, and for all trials of both types.
-                        temp1Intensities = [paintIntensities ; shadowIntensities];
-                        temp1Labels = [decodeInfo.paintLabel*ones(size(paintIntensities)) ; decodeInfo.shadowLabel*ones(size(shadowIntensities))];
-                        temp1Responses = [paintResponses ; shadowResponses];
-                        numTemp1 = length(temp1Labels);
-                        temp1PredsLOO = NaN*ones(numTemp1,1);
-                        for i = 1:numTemp1
-                            % if (decodeInfo.SVM_LOOPROGRESS  && rem(i,200) == 1)
-                            %     fprintf('\tLOO classify trial %d of %d\n',i,numTemp1);
-                            % end                           
-                                
-                            % Get the index for the not left out trials
-                            index = setdiff(1:numTemp1,i);
-                            thisIntensities= temp1Intensities(index);
-                            thisLabels = temp1Labels(index);
-                            thisResponses = temp1Responses(index,:);
+                        testCheckIndex = [];
+                        for i = 1:CVO.NumTestSets
+                            % Split set
+                            trainingIndex = CVO.training(i);
+                            testIndex = CVO.test(i);
+                            testCheckIndex = [testCheckIndex ; find(testIndex)];
                             
-                            % Need to equate number of trials of each intensity across paint and shadow,
-                            % to avoid driving the classifier with spurious stimulus driven inf
-                            uniqueIntensities = unique(thisIntensities);
-                            useIntensities = [];
-                            useLabels = [];
-                            useResponses = [];
-                            for ui = 1:length(uniqueIntensities)
-                                paintIntensityIndex = find(thisIntensities == uniqueIntensities(ui) & thisLabels == decodeInfo.paintLabel)';
-                                shadowIntensityIndex = find(thisIntensities == uniqueIntensities(ui) & thisLabels == decodeInfo.shadowLabel)';
-                                if (length(paintIntensityIndex) < length(shadowIntensityIndex))
-                                    tempIndex = Shuffle(1:length(shadowIntensityIndex));
-                                    shadowIntensityIndex = shadowIntensityIndex(tempIndex(1:length(paintIntensityIndex)));
-                                elseif (length(paintIntensityIndex) > length(shadowIntensityIndex))
-                                    tempIndex = Shuffle(1:length(paintIntensityIndex));
-                                    paintIntensityIndex = paintIntensityIndex(tempIndex(1:length(shadowIntensityIndex)));
-                                end
-                                
-                                useIntensities = [useIntensities ; thisIntensities(paintIntensityIndex) ; thisIntensities(shadowIntensityIndex)];
-                                useLabels = [useLabels ; thisLabels(paintIntensityIndex) ; thisLabels(shadowIntensityIndex)];
-                                useResponses = [useResponses ; thisResponses(paintIntensityIndex,:) ; thisResponses(shadowIntensityIndex,:)];
-                            end
-                            
-                            % Do the decode
-                            decodeInfoTemp = DoTheClassify(decodeInfo,useLabels,useResponses);
+                             % Do the classify
+                            decodeInfoTemp = DoTheClassify(decodeInfo,theLabels(trainingIndex),theResponses(trainingIndex,:));
                             
                             % Do the prediction
-                            temp1PredsLOO(i) = DoTheClassifyPrediction(decodeInfoTemp,temp1Responses(i,:));
+                            thePredsLOO(testIndex) = DoTheClassifyPrediction(decodeInfoTemp,theResponses(testIndex,:));
                         end
-                        paintPredsLOO = temp1PredsLOO(1:numPaint);
-                        shadowPredsLOO = temp1PredsLOO(numPaint+1:end);
+                        testCheckIndex = sort(testCheckIndex);
+                        if (any(testCheckIndex ~= (1:length(theLabels))'))
+                            error('We do not understand the cvpartition object');
+                        end
+                        paintPredsLOO = thePredsLOO(1:numPaint);
+                        shadowPredsLOO = thePredsLOO(numPaint+1:end); 
                         
+                    % No classifier specfied, so we don't do anything but
+                    % return empties and NaNs.
                     case 'no'
                         paintPredsLOO = NaN*ones(size(paintIntensities));
                         shadowPredsLOO = NaN*ones(size(shadowIntensities));
@@ -149,7 +119,9 @@ switch (decodeInfo.classLooType)
                     otherwise
                         error('Unkown classifier type specified');
                 end            
-                
+            
+            % We don't expect to hit this case, but just return nothingness
+            % if somehow we get here.
             otherwise
                 paintPredsLOO = NaN*ones(size(paintIntensities));
                 shadowPredsLOO = NaN*ones(size(shadowIntensities));
@@ -157,7 +129,7 @@ switch (decodeInfo.classLooType)
         end
                
     otherwise
-        error('Unknown leave one out type specified.');
+        error('Unknown classify cross-validation (LOO) type');
 end
 
 end
