@@ -34,7 +34,7 @@ parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
 parser.addParamValue('decodeLOOType','ot',@ischar);
 parser.addParamValue('decodeNFolds',10,@isnumeric);
-parser.addParamValue('classifydecodeLOOType','no',@ischar);
+parser.addParamValue('classifyLOOType','no',@ischar);
 parser.addParamValue('classifyNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
 parser.addParamValue('errType','mean',@ischar);
@@ -124,8 +124,6 @@ decodeInfoIn.reallyDoRFPlots = parser.Results.reallyDoRFPlots;
 %   'both'                    - Build decoder using paint and shadow trials
 %   'paint'                   - Build decoder using paint trials only
 %   'shadow'                  - Build decoder using shadow trials only
-%   'bothbestsingle'          - Build decoder using paint and shadow trials, find and choose best single electrode for decoding intensity.
-%   'bothbestdouble'          - Build decoder using paint and shadow trials, find and choose best two electrodes for decoding intensity.
 decodeInfoIn.decodeJoint = parser.Results.decodeJoint;
 
 % Numerical value to apply to subtract from shadow intensities before
@@ -214,7 +212,7 @@ decodeInfoIn.decodeNFolds = parser.Results.decodeNFolds;
 %   'no'                   - LOO is just non-LOO predictions.
 %   'ot'                   - Leave out one trial at a time.
 %   'kfold'                - K-fold cross-validation
-decodeInfoIn.classifydecodeLOOType = parser.Results.classifydecodeLOOType;
+decodeInfoIn.classifyLOOType = parser.Results.classifyLOOType;
 decodeInfoIn.classifyKFold = parser.Results.classifyNFolds;
 
 % Exclude SY electrodes

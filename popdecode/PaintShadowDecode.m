@@ -48,7 +48,9 @@ switch (decodeInfo.decodeJoint)
         
     case {'both'} 
         % Use both paint and shadow trials to do the decoding.
-        decodeInfo = DoTheDecode(decodeInfo,[paintIntensities ; shadowIntensities],[paintResponses ; shadowResponses]);
+        theIntensities = [paintIntensities ; shadowIntensities];
+        theResponses = [paintResponses ; shadowResponses];
+        decodeInfo = DoTheDecode(decodeInfo,theIntensities,theResponses);
         paintPreds = DoThePrediction(decodeInfo,paintResponses);
         shadowPreds = DoThePrediction(decodeInfo,shadowResponses);
         
@@ -73,62 +75,7 @@ switch (decodeInfo.decodeJoint)
                 decodeInfo.paintShadowDecodeAngle = rad2deg(acos(cosTheta));
                    
             otherwise
-        end
-           
-    case {'bothbestsingle'}
-        % Find best single electrode for decoding and return what we can do with that one.
-        bestRange = -Inf;
-        decodeInfo.electrodeWeights = zeros(size(paintResponses,2),1);
-        decodeInfo.affineTerms = zeros(size(paintResponses,2),1);
-        for j = 1:size(paintResponses,2);
-            temp = [paintResponses ; shadowResponses];
-            decodeInfoTemp = DoTheDecode(decodeInfo,[paintIntensities ; shadowIntensities],temp(:,j));
-            paintPredsTemp = DoThePrediction(decodeInfoTemp,paintResponses(:,j));
-            shadowPredsTemp = DoThePrediction(decodeInfoTemp,shadowResponses(:,j));
-            decodeRange = mean([max(paintPredsTemp)-min(paintPredsTemp), max(shadowPredsTemp)-min(shadowPredsTemp)]);
-            if (decodeRange > bestRange)
-                decodeInfo.bestJ = j;
-                paintPreds = paintPredsTemp;
-                shadowPreds = shadowPredsTemp;
-                bestRange = decodeRange;
-            end
-            
-            % Report weight and affine found for each electrode when used alone.
-            switch (decodeInfo.type)
-                case {'aff'}
-                    decodeInfo.electrodeWeights(j) = decodeInfoTemp.b(1);
-                    decodeInfo.affineTerms(j) = decodeInfoTemp.b(2);
-                otherwise
-            end    
-        end
-        
-    case {'bothbestdouble'}
-        % Find best two electrodes for decoding and return what we can do with them.
-        bestRange = -Inf;
-        for j = 1:size(paintResponses,2);
-            for k = setdiff(1:size(paintResponses,2),j)
-                temp = [paintResponses ; shadowResponses];
-                decodeInfoTemp = DoTheDecode(decodeInfo,[paintIntensities ; shadowIntensities],temp(:,[j k]));
-                paintPredsTemp = DoThePrediction(decodeInfoTemp,paintResponses(:,[j k]));
-                shadowPredsTemp = DoThePrediction(decodeInfoTemp,shadowResponses(:,[j k]));
-                decodeRange = mean([max(paintPredsTemp)-min(paintPredsTemp), max(shadowPredsTemp)-min(shadowPredsTemp)]);
-                if (decodeRange > bestRange)
-                    decodeInfo.bestJ = j;
-                    decodeInfo.bestK = k;
-                    paintPreds = paintPredsTemp;
-                    shadowPreds = shadowPredsTemp;
-                    bestRange = decodeRange;
-                end
-            end
-        end
-        % Not entirely clear how we want to report electrode weights for
-        % two electrode decoding case.  Below was an early attempt but
-        % the convention is now inconsistent with what we do for 'bestsingle' 
-        % method.
-        %
-        % decodeInfo.electrodeWeights = zeros(size(paintResponses,2),1);
-        % decodeInfo.electrodeWeights(decodeInfo.bestJ) = decodeInfoTemp.b(1);
-        % decodeInfo.electrodeWeights(decodeInfo.bestK) = decodeInfoTemp.b(2);     
+        end    
     otherwise
         error('Bad option for field decodeJoint');
 end
@@ -147,24 +94,41 @@ switch (decodeInfo.decodeLOOType)
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
-    case 'ot'
+    case {'ot','kfold'}
+        if (strcmp(decodeInfo.decodeLOOType,'ot'))
+            CVO = cvpartition(theIntensities,'leaveout');
+
+        elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
+            CVO = cvpartition(theIntensities,'kfold',decodeInfo.decodeNFolds);
+        else
+            error('Unknown decode cross-validation (LOO) type');
+        end
+        
         % Leave out one trial at a time
-        switch (decodeInfo.decodeJoint)
-            case {'paint'} 
+        switch (decodeInfo.decodeJoint)=
+            case {'paint'}
                 % Decoder was built using paint, so we do the LOO for that but
                 % just return the decoded shadow predictions for the shadow data
                 % (since it was not used to build the decoder.)
-                for i = 1:numPaint
-                    % Do the leave one out.
-                    index = setdiff(1:numPaint,i);
-                    tempIntensities = paintIntensities(index);
-                    tempResponses = paintResponses(index,:);
+                if (strcmp(decodeInfo.decodeLOOType,'ot'))
+                    CVO = cvpartition(paintIntensities,'leaveout');
+                    
+                elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
+                    CVO = cvpartition(paintIntensities,'kfold',decodeInfo.decodeNFolds);
+                else
+                    error('Unknown decode cross-validation (LOO) type');
+                end
+                for i = 1:CVO.NumTestSets
+                    % Split set
+                    trainingIndex = CVO.training(i);
+                    testIndex = CVO.test(i);
+                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
-                    decodeInfoTemp = DoTheDecode(decodeInfo,tempIntensities,tempResponses);
+                    decodeInfoTemp = DoTheDecode(decodeInfo,paintIntensities(trainingIndex),paintResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    paintPredsLOO(i) = DoThePrediction(decodeInfoTemp,paintResponses(i,:));
+                    paintPredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,paintResponses(testIndex,:));
                 end
                 shadowPredsLOO = shadowPreds;
                 
@@ -172,41 +136,55 @@ switch (decodeInfo.decodeLOOType)
                 % Decoder was built using shadow, so we do the LOO for that but
                 % just return the decoded paint predictions for the paint data
                 % (since it was not used to build the decoder.)
-                for i = 1:numShadow
-                    % Do the leave one out.
-                    index = setdiff(1:numShadow,i);
-                    tempIntensities = shadowIntensities(index);
-                    tempResponses = shadowResponses(index,:);
+                if (strcmp(decodeInfo.decodeLOOType,'ot'))
+                    CVO = cvpartition(shadowIntensities,'leaveout');
+                    
+                elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
+                    CVO = cvpartition(shadowIntensities,'kfold',decodeInfo.decodeNFolds);
+                else
+                    error('Unknown decode cross-validation (LOO) type');
+                end
+                for i = 1:CVO.NumTestSets
+                    % Split set
+                    trainingIndex = CVO.training(i);
+                    testIndex = CVO.test(i);
+                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
-                    decodeInfoTemp = DoTheDecode(decodeInfo,tempIntensities,tempResponses);
+                    decodeInfoTemp = DoTheDecode(decodeInfo,shadowIntensities(trainingIndex),shadowResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    shadowPredsLOO(i) = DoThePrediction(decodeInfoTemp,shadowResponses(i,:));
+                    shadowPredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,shadowResponses(testIndex,:));
                 end
                 paintPredsLOO = paintPreds;
                 
             case {'both'}
-                % Decoder was built with both paint and shadow.  Do the LOO preds using
-                % both, and for all trials of both types.
-                temp1Intensities = [paintIntensities ; shadowIntensities];
-                temp1Responses = [paintResponses ; shadowResponses];
-                numTemp1 = length(temp1Intensities);
-                temp1PredsLOO = NaN*ones(numTemp1,1);
-                for i = 1:numTemp1
-                    % Do the leave one out.
-                    index = setdiff(1:numTemp1,i);
-                    tempIntensities = temp1Intensities(index);
-                    tempResponses = temp1Responses(index,:);
+                % Decoder was built on both, do full cross val.  We don't
+                % worry about selecting equal paint and shadow in the cross
+                % val, just figure that it is OK because we have a fair
+                % number of trials.
+                if (strcmp(decodeInfo.decodeLOOType,'ot'))
+                    CVO = cvpartition(theIntensities,'leaveout');
+                    
+                elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
+                    CVO = cvpartition(theIntensities,'kfold',decodeInfo.decodeNFolds);
+                else
+                    error('Unknown decode cross-validation (LOO) type');
+                end
+                for i = 1:CVO.NumTestSets
+                    % Split set
+                    trainingIndex = CVO.training(i);
+                    testIndex = CVO.test(i);
+                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
-                    decodeInfoTemp = DoTheDecode(decodeInfo,tempIntensities,tempResponses);
+                    decodeInfoTemp = DoTheDecode(decodeInfo,theIntensities(trainingIndex),theResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    temp1PredsLOO(i) = DoThePrediction(decodeInfoTemp,temp1Responses(i,:));
+                    thePredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,theResponses(testIndex,:));
                 end
-                paintPredsLOO = temp1PredsLOO(1:numPaint);
-                shadowPredsLOO = temp1PredsLOO(numPaint+1:end);
+                paintPredsLOO = thePredsLOO(1:numPaint);
+                shadowPredsLOO = thePredsLOO(numPaint+1:end);
                 
             otherwise
                 error('LOO onetrial not implemented for specified joint decode type');
@@ -234,7 +212,7 @@ switch (decodeInfo.decodeLOOType)
                 end
                 shadowPredsLOO = shadowPreds;
             otherwise
-                error('LOO oneintensity not implemented for specified joint decode type');
+                error('LOO oneintensity (oi) not implemented for specified joint decode type');
         end
     otherwise
         error('Unknown leave one out type specified.');

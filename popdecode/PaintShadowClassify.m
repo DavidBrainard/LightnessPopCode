@@ -69,17 +69,17 @@ end
 paintPredsLOO = NaN*ones(numPaint,1);
 shadowPredsLOO = NaN*ones(numShadow,1);
 thePredsLOO = NaN*ones(numPaint+numShadow,1);
-switch (decodeInfo.classifydecodeLOOType)
+switch (decodeInfo.classifyLOOType)
     case 'no'
         % No cross validation, just take the full predictions
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
     case {'ot','kfold'}
-        if (strcmp(decodeInfo.classifydecodeLOOType,'ot'))
+        if (strcmp(decodeInfo.classifyLOOType,'ot'))
             CVO = cvpartition(theLabels,'leaveout');
 
-        elseif (strcmp(decodeInfo.classifydecodeLOOType,'kfold'))
+        elseif (strcmp(decodeInfo.classifyLOOType,'kfold'))
             CVO = cvpartition(theLabels,'kfold',decodeInfo.classifyNFolds);
         else
             error('Unknown classify cross-validation (LOO) type');

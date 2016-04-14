@@ -86,7 +86,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.decodedecodeLOOType = 'no';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifydecodeLOOType = 'kfold';
+            decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;
         case 'SLOWER'
             decodeInfoOut.verbose = true;
@@ -95,7 +95,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRandomVectorRepeats = 50;
             decodeInfoOut.decodedecodeLOOType = 'no';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifydecodeLOOType = 'no';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;
         case 'REAL'
             decodeInfoOut.verbose = true;
@@ -104,7 +104,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRandomVectorRepeats = 100;
             decodeInfoOut.decodedecodeLOOType = 'ot';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifydecodeLOOType = 'no';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;               
     end
     tstart = tic;
