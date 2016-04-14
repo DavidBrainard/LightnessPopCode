@@ -23,10 +23,11 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classLooType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classLooType = decodeInfo.classLOOType;
+decodeInfoTemp.classNFolds = decodeInfo.classNFolds;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = DoBasicClassification(decodeInfoTemp,theData);
 decodeInfoPerformanceVersusNUnits.basicAnalysis = decodeInfoOut;
 
 %% Decoding for various combinations of units
@@ -43,10 +44,11 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classLooType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classLooType = decodeInfo.classLOOType;
+decodeInfoTemp.classNFolds = decodeInfo.classNFolds;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = DoBasicClassification(decodeInfoTemp,theData);
 decodeInfoPerformanceVersusNUnits.shuffledAnalysis = decodeInfoOut;
 
 %% Suppose all the units were like the best unit ...
@@ -64,10 +66,11 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classLooType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classLooType = decodeInfo.classLOOType;
+decodeInfoTemp.classNFolds = decodeInfo.classNFolds;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut= DoBestUnitDecoding(decodeInfoTemp,theData,decodeInfoPerformanceVersusNUnits.basicAnalysis.bestOnePerformanceUnit);
+decodeInfoOut= DoBestUnitClassification(decodeInfoTemp,theData,decodeInfoPerformanceVersusNUnits.basicAnalysis.bestOnePerformanceUnit);
 decodeInfoPerformanceVersusNUnits.bestAnalysis = decodeInfoOut;
 
 %% PLOT: Performance versus number of units used to decode
@@ -147,8 +150,8 @@ save(fullfile(decodeInfo.writeDataDir,'extPerformanceVersusNUnits'),'decodeInfoP
 
 end
 
-%% decodeInfo = DoBasicDecoding(decodeInfo,theData)
-function decodeInfo = DoBasicDecoding(decodeInfo,theData)
+%% decodeInfo = DoBasicClassification(decodeInfo,theData)
+function decodeInfo = DoBasicClassification(decodeInfo,theData)
 %
 % Do the decoding for various choices of the number of units.
 % This is set up so that the same code can do the shuffled and unshuffled
@@ -290,8 +293,8 @@ decodeInfo.fitAsymp = decodeInfo.fit.c;
 
 end
 
-%% decodeInfo = DoBestUnitDecoding(decodeInfo,theData,bestUnit)
-function decodeInfo = DoBestUnitDecoding(decodeInfo,theData,bestUnit)
+%% decodeInfo = DoBestUnitClassification(decodeInfo,theData,bestUnit)
+function decodeInfo = DoBestUnitClassification(decodeInfo,theData,bestUnit)
 %
 % Do the decoding based on the idea that all units are independent
 % draws from trials for the best unit.
@@ -353,11 +356,10 @@ for uu = 1:length(nUnitsToUseList)
     decodeInfo.theUnits(uu) = nBestSynthesizedUnitsToUse;
 end
 
-% Fit an exponential through the best like unit rmse versus number of
-% units.
+% Fit an exponential through the best like unit rmse versus number of units.
 a0 = max(decodeInfo.thePerformance); b0 = 10; c0 = max(decodeInfo.thePerformance);
 decodeInfo.Performance = c0;
-index = find(decodeInfo.maxUnits <= decodeInfo.nFitMaxUnits);
+index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.fit = fit(decodeInfo.theUnits(index),decodeInfo.thePerformance(index),'a-(a-c)*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
 decodeInfo.fitScale = decodeInfo.fit.b;
 decodeInfo.fitAsymp = decodeInfo.fit.c;

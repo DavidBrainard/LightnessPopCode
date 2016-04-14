@@ -85,24 +85,27 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.decodeLOOType = 'no';
-            decodeInfoOut.classifyLOOType = 'no';
-            decodeInfoOut.nFolds = 10;
+            decodeInfoOut.decodeNFolds = 10;
+            decodeInfoOut.classLOOType = 'kfold';
+            decodeInfoOut.classNFolds = 10;
         case 'SLOWER'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 50;
             decodeInfoOut.nRandomVectorRepeats = 50;
             decodeInfoOut.decodeLOOType = 'no';
-            decodeInfoOut.classifyLOOType = 'no';
-            decodeInfoOut.nFolds = 10;
+            decodeInfoOut.decodeNFolds = 10;
+            decodeInfoOut.classLOOType = 'no';
+            decodeInfoOut.classNFolds = 10;
         case 'REAL'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 30;
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
             decodeInfoOut.decodeLOOType = 'ot';
-            decodeInfoOut.classifyLOOType = 'no';
-            decodeInfoOut.nFolds = 10;               
+            decodeInfoOut.decodeNFolds = 10;
+            decodeInfoOut.classLOOType = 'no';
+            decodeInfoOut.classNFolds = 10;               
     end
     tstart = tic;
     
