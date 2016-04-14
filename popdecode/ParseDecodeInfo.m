@@ -209,7 +209,7 @@ decodeInfoIn.looType = parser.Results.looType;
 % Classify leave one out type
 %   'no'                   - LOO is just non-LOO predictions.
 %   'ot'                   - Leave out one trial at a time.
-decodeInfoIn.classLooType = parser.Results.classLooType;
+decodeInfoIn.classifyLOOType = parser.Results.classifyLOOType;
 
 % Exclude SY electrodes
 %   'sykp'                    - Keep all electrodes

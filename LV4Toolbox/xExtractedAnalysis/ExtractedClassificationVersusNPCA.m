@@ -15,7 +15,7 @@ decodeInfoTemp.classifyType = 'mvma';
 decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
-decodeInfoTemp.classLooType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 
