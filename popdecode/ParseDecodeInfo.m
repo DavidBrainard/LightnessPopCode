@@ -33,7 +33,8 @@ parser.addParamValue('paintCondition',1,@isnumeric);
 parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
 parser.addParamValue('looType','ot',@ischar);
-parser.addParamValue('classLooType','no',@ischar);
+parser.addParamValue('classifyLooType','no',@ischar);
+parset.addParamValue('classifyNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
 parser.addParamValue('errType','mean',@ischar);
 parser.addParamValue('minTrials',20,@isnumeric);
@@ -209,7 +210,9 @@ decodeInfoIn.looType = parser.Results.looType;
 % Classify leave one out type
 %   'no'                   - LOO is just non-LOO predictions.
 %   'ot'                   - Leave out one trial at a time.
+%   'kfold'                - K-fold cross-validation
 decodeInfoIn.classifyLOOType = parser.Results.classifyLOOType;
+decodeInfoIn.classifyKFold = parser.Results.classifyNFolds;
 
 % Exclude SY electrodes
 %   'sykp'                    - Keep all electrodes
