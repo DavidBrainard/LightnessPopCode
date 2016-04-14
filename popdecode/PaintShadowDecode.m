@@ -26,7 +26,7 @@ function [paintPreds,shadowPreds,paintPredsLOO,shadowPredsLOO,decodeInfo] = Pain
 % 11/17/13  dhb  Return shadow preds LOO too.
 % 3/16/14   dhb  Change 'contrast' to 'intensity' everywhere, because that is what we represent currently.
 % 4/1/14    dhb  Pull out shuffling.
-% 4/14/16  dhb  Use Matlab's cvpartition object for cross-validation.
+% 4/14/16   dhb  Use Matlab's cvpartition object for cross-validation.
 
 %% Parameter extraction
 numPaint = length(paintIntensities);
