@@ -12,39 +12,43 @@ nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nN
 clear decodeInfoTemp
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.classifyType = 'mvma';
-decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
 decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
+decodeInfoTemp.classifyNFolds = decodeInfo.classifyNFolds;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 
-% Get PCA
-dataForPCA = [theData.paintResponses ; theData.shadowResponses];
+%% Shuffle if desired
+[paintIntensities,paintResponses,shadowIntensities,shadowResponses] = ...
+    PaintShadowShuffle(decodeInfo,theData.paintIntensities,theData.paintResponses,theData.shadowIntensities,theData.shadowResponses);
+
+%% Get PCA
+dataForPCA = [paintResponses ; shadowResponses];
 meanDataForPCA = mean(dataForPCA,1);
 [pcaBasis,paintShadowPCAResponsesTrans] = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-paintPCAResponses = (pcaBasis\(theData.paintResponses-meanDataForPCA(ones(size(theData.paintResponses,1),1),:))')';
-shadowPCAResponses = (pcaBasis\(theData.shadowResponses-meanDataForPCA(ones(size(theData.shadowResponses,1),1),:))')';
+paintPCAResponses = (pcaBasis\(paintResponses-meanDataForPCA(ones(size(paintResponses,1),1),:))')';
+shadowPCAResponses = (pcaBasis\(shadowResponses-meanDataForPCA(ones(size(shadowResponses,1),1),:))')';
 
 %% Get classification performance as a function of number of PCA components
-thePCAClassifyUnits = zeros(decodeInfo.nUnits,1);
-thePCALOOPerformance = zeros(decodeInfo.nUnits,1);
+decodeInfoPerformanceVersusNPCA.theUnits = zeros(decodeInfo.nUnits,1);
+decodeInfoPerformanceVersusNPCA.thePerformance = zeros(decodeInfo.nUnits,1);
 for uu = 1:decodeInfo.nNUnitsToStudy
     nUnitsToUse = nUnitsToUseList(uu);
     [~,~,paintClassifyPredsLOO,shadowClassifyPredsLOO,decodeInfoTempOut] = PaintShadowClassify(decodeInfoTemp, ...
-        theData.paintIntensities,paintPCAResponses(:,1:nUnitsToUse),theData.shadowIntensities,shadowPCAResponses(:,1:nUnitsToUse));
+        paintIntensities,paintPCAResponses(:,1:nUnitsToUse),shadowIntensities,shadowPCAResponses(:,1:nUnitsToUse));
     
     paintClassifyLOONCorrect = length(find(paintClassifyPredsLOO == decodeInfoTempOut.paintLabel));
     shadowClassifyLOONCorrect = length(find(shadowClassifyPredsLOO == decodeInfoTempOut.shadowLabel));
-    thePCALOOPerformance(uu) = (paintClassifyLOONCorrect+shadowClassifyLOONCorrect)/(length(paintClassifyPredsLOO)+length(shadowClassifyPredsLOO));
-    thePCAClassifyUnits(uu) = nUnitsToUse;
+    decodeInfoPerformanceVersusNPCA.thePerformance(uu) = (paintClassifyLOONCorrect+shadowClassifyLOONCorrect)/(length(paintClassifyPredsLOO)+length(shadowClassifyPredsLOO));
+    decodeInfoPerformanceVersusNPCA.theUnits(uu) = nUnitsToUse;
 end
 
 % Fit an exponential to classification versus number of PCA components
-a0 = max(thePCALOOPerformance); b0 = 5; c0 = min(thePCALOOPerformance);
-decodeInfo.performanceVersusNPCAFit = fit(thePCAClassifyUnits,thePCALOOPerformance,'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
-decodeInfo.performanceVersusNPCAFitScale = decodeInfo.performanceVersusNPCAFit.b;
-decodeInfo.performanceVersusNPCAFitAsymp = decodeInfo.performanceVersusNPCAFit.c;
+a0 = max(decodeInfoPerformanceVersusNPCA.thePerformance); b0 = 5; c0 = min(decodeInfoPerformanceVersusNPCA.thePerformance);
+decodeInfoPerformanceVersusNPCA.fit = fit(decodeInfoPerformanceVersusNPCA.theUnits,decodeInfoPerformanceVersusNPCA.thePerformance,'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
+decodeInfoPerformanceVersusNPCA.fitScale = decodeInfoPerformanceVersusNPCA.fit.b;
+decodeInfoPerformanceVersusNPCA.fitAsymp = decodeInfoPerformanceVersusNPCA.fit.c;
 
 % PLOT: Classification performance versus number of PCA components used to decode
 performanceVersusNPCAfig = figure; clf;
@@ -52,9 +56,9 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 smoothX = (1:decodeInfo.nUnits)';
-h = plot(smoothX,decodeInfo.performanceVersusNPCAFit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
-h = plot(thePCAClassifyUnits,thePCALOOPerformance,'ro','MarkerFaceColor','r','MarkerSize',4);
-h = plot(decodeInfo.performanceVersusNPCAFitScale,decodeInfo.performanceVersusNPCAFit(decodeInfo.performanceVersusNPCAFitScale),'go','MarkerFaceColor','g','MarkerSize',8);
+h = plot(smoothX,decodeInfoPerformanceVersusNPCA.fit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
+h = plot(decodeInfoPerformanceVersusNPCA.theUnits,decodeInfoPerformanceVersusNPCA.thePerformance,'ro','MarkerFaceColor','r','MarkerSize',4);
+h = plot(decodeInfoPerformanceVersusNPCA.fitScale,decodeInfoPerformanceVersusNPCA.fit(decodeInfoPerformanceVersusNPCA.fitScale),'go','MarkerFaceColor','g','MarkerSize',8);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint/Shadow Classification Performance','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
@@ -64,3 +68,9 @@ axis square
 figName = [decodeInfo.figNameRoot '_extClassPerformanceVersusNPCA'];
 drawnow;
 FigureSave(figName,performanceVersusNPCAfig,decodeInfo.figType);
+
+%% Store the data for return
+decodeInfo.performanceVersusNPCA = decodeInfoPerformanceVersusNPCA;
+
+%% Save the data
+save(fullfile(decodeInfo.writeDataDir,'extPerformanceVersusNPCA '),'decodeInfoPerformanceVersusNPCA','-v7.3');

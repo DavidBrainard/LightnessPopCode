@@ -13,7 +13,6 @@ uniqueNUnitsToStudy = length(nUnitsToUseList);
 clear decodeInfoTemp
 decodeInfoTemp.decodeJoint = 'both';
 decodeInfoTemp.classifyType = 'mvma';
-decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
 decodeInfoTemp.classifyLOOType = 'no';

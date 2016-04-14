@@ -70,9 +70,6 @@ h=plot(paintLOOMatchesDiscrete,shadowMatchesDiscreteAffinePred,'r','LineWidth',d
 xlabel('Decoded Paint Luminance','FontSize',decodeInfoIn.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfoIn.labelFontSize);
 switch (decodeInfoIn.paintShadowFitType)
-    case 'aff'
-        %title({titleRootStr{:} sprintf('Affine fit: slope %0.2f, intercept: %0.2f',paintShadowMb(1),paintShadowMb(2))}','FontSize',decodeInfoIn.titleFontSize);
-        text(0,1,(sprintf('Slope %0.2f, Intercept %0.2f',paintShadowMb(1),paintShadowMb(2))),'FontName',decodeInfoIn.fontName,'FontSize',decodeInfoIn.axisFontSize);
     case 'intcpt'
         %title({titleRootStr{:} sprintf('Affine fit: intercept: %0.2f',paintShadowMb(1))}','FontSize',decodeInfoIn.titleFontSize);
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',paintShadowMb(1))),'FontName',decodeInfoIn.fontName,'FontSize',decodeInfoIn.axisFontSize);
@@ -134,13 +131,7 @@ switch (decodeInfoIn.type)
                 hold on;
                 plot(decodeInfoIn.electrodeWeights,'r','LineWidth',1);
                 plot(decodeInfoIn.electrodeWeights,'ro','MarkerSize',6,'MarkerFaceColor','r');
-                switch (decodeInfoIn.decodeJoint)
-                    case {'bothbestsingle'}
-                        plot(decodeInfoIn.bestJ,decodeInfoIn.electrodeWeights(decodeInfoIn.bestJ),'bo','MarkerSize',6,'MarkerFaceColor','b');
-                end
                 switch (decodeInfoIn.paintShadowFitType)
-                    case 'aff'
-                        title({titleRootStr{:} sprintf('Affine fit: slope %0.2f, intercept: %0.2f',paintShadowMb(1),paintShadowMb(2)) [' '] [' ']}','FontSize',decodeInfoIn.titleFontSize);
                     case 'intcpt'
                         title({titleRootStr{:} sprintf('Intercept fit: intercept: %0.2f',paintShadowMb(1)) [' '] [' ']}','FontSize',decodeInfoIn.titleFontSize);
                     otherwise

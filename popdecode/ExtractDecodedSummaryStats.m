@@ -23,9 +23,6 @@ for f = 1:length(decodeInfo)
     decodePaintMean(f) = decodeInfo{f}.decodePaintMean;
     decodeShadowMean(f) = decodeInfo{f}.decodeShadowMean;
     switch (decodeInfo{f}.paintShadowFitType)
-        case 'aff'
-            decodeSlope(f) = decodeInfo{f}.decodeSlope;
-            decodeIntercept(f) = decodeInfo{f}.decodeIntercept;
         case 'intcpt'
             decodeIntercept(f) = decodeInfo{f}.decodeIntercept;
         otherwise

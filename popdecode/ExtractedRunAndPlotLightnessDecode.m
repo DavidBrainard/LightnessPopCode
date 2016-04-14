@@ -134,7 +134,7 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
-    %decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
+    decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
     
     % Save the output for this directory.  Good for checkpointing
     decodeInfoOut.runTime = toc(tstart);

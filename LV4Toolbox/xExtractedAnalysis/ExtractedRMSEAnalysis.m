@@ -81,7 +81,6 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.classifyType = 'mvma';
-decodeInfoTemp.classifyReduce = '';
 decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
 decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;

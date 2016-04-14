@@ -18,7 +18,6 @@ parser = inputParser;
 parser.addParamValue('dataType','spksrt',@ischar);
 parser.addParamValue('type','aff',@ischar);
 parser.addParamValue('classifyType','no',@ischar);
-parser.addParamValue('classifyReduce','',@ischar);
 parser.addParamValue('pcaType','no',@ischar);
 parser.addParamValue('pcaKeep',10,@isnumeric);
 parser.addParamValue('rfAnalysisType','no',@ischar);
@@ -63,11 +62,8 @@ decodeInfoIn.dataType = parser.Results.dataType;
 % decoded intensity.  There are various ways to do this, of
 % varying degrees of fanciness.  At present, affine is simple
 % enough that we think we understand how it works.  The rest
-% are in arious degrees of experimentatal development.
+% are in various degrees of experimentatal development.
 %   'aff'                  - Decoder uses multivariate affine regression.
-%   'betacdf'
-%   'betadoublecdf'
-%   'smoothing'
 decodeInfoIn.type = parser.Results.type;
 
 % Type of classifier
@@ -76,21 +72,10 @@ decodeInfoIn.type = parser.Results.type;
 % whether the image is paint or shadow.  There are various ways to do this, of
 % varying degrees of fanciness.  At present, 
 %   'mvma'                     - Matlab's svm classifier, on all trials
-%   'mvmb'                     - Matlab's svm classifier, just blank trials
-%   'mvmh'                     - Matlab's svm classifier, on higher intensities
 %   'svma'                     - LIBSVM's svm classifier, on all trials
-%   'svmb'                     - LIBSVM's svm classifier, just blank trials
-%   'svmh'                     - LIBSVM's svm classifier, on higher intensities
 %   'nna'                      - Nearest neighbor classification on all trials
-%   'nnb'                      - Nearest neighbor classificatoin on just blank trials.
-%   'nnn'                      - Nearest neighbor on higher intensities.
 %   'no'                       - Don't do the stinkin' classification.
 decodeInfoIn.classifyType = parser.Results.classifyType;
-
-% Data reduction before classification
-%   'ignoredecode'             - Only use data orthogonal to decode direction.
-%   ''                         - No reduction
-decodeInfoIn.classifyReduce = parser.Results.classifyReduce;
 
 % Type of pca
 %
@@ -102,7 +87,7 @@ decodeInfoIn.pcaKeep = parser.Results.pcaKeep;
 
 % Type of RF analysis
 %   'std'                 - Our standard analysis.
-%   'no'                       - Don't do it.
+%   'no'                  - Don't do it.
 %
 % The second one here controls not only plots but also some analyses
 % that are naturally associated with those plots.  So it is a bit
@@ -178,7 +163,6 @@ decodeInfoIn.DATASTYLE = parser.Results.DATASTYLE;
 % This controls how summarize the inferred matches between
 % paint and shadow.  Currently we are using intercept because
 % the affine does not appear to be well-identified.
-%    'aff'               - Fit inferred match plot with a line with free slope and intercept.
 %    'intcpt'            - Fit inferred match plot with a line of slope 1 and free intercept.
 decodeInfoIn.paintShadowFitType = parser.Results.paintShadowFitType;
 decodeInfoIn.nFinelySpacedIntensities = 1000;

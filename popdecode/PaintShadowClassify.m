@@ -24,20 +24,6 @@ function [paintPreds,shadowPreds,paintPredsLOO,shadowPredsLOO,decodeInfo] = Pain
 numPaint = length(paintIntensities);
 numShadow = length(shadowIntensities);
 
-%% Decoding direction
-switch (decodeInfo.classifyReduce)
-    case 'ignoredecode'
-        switch (decodeInfo.type)
-            case 'aff'
-                decodeDirection = decodeInfo.electrodeWeights;
-                ignoreBasis = null(decodeDirection')';
-                paintResponses = (ignoreBasis*paintResponses')';
-                shadowResponses = (ignoreBasis*shadowResponses')';
-            otherwise
-                error('Can only ignore decode direction for affine decoder');
-        end
-end
-
 %% Numeric category labels
 decodeInfo.paintLabel = 1;
 decodeInfo.shadowLabel = -1;
