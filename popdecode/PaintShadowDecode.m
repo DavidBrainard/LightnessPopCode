@@ -108,7 +108,6 @@ switch (decodeInfo.decodeLOOType)
                     % Split set
                     trainingIndex = CVO.training(i);
                     testIndex = CVO.test(i);
-                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
                     decodeInfoTemp = DoTheDecode(decodeInfo,paintIntensities(trainingIndex),paintResponses(trainingIndex,:));
@@ -134,7 +133,6 @@ switch (decodeInfo.decodeLOOType)
                     % Split set
                     trainingIndex = CVO.training(i);
                     testIndex = CVO.test(i);
-                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
                     decodeInfoTemp = DoTheDecode(decodeInfo,shadowIntensities(trainingIndex),shadowResponses(trainingIndex,:));
@@ -161,7 +159,6 @@ switch (decodeInfo.decodeLOOType)
                     % Split set
                     trainingIndex = CVO.training(i);
                     testIndex = CVO.test(i);
-                    testCheckIndex = [testCheckIndex ; find(testIndex)];
                     
                     % Do the decode
                     decodeInfoTemp = DoTheDecode(decodeInfo,theIntensities(trainingIndex),theResponses(trainingIndex,:));
@@ -215,7 +212,7 @@ switch (decodeInfo.decodeLOOType)
                     % Do the prediction
                     shadowPredsLOO(predictIndex) = DoThePrediction(decodeInfoTemp,shadowResponses(predictIndex,:));
                 end
-                paintPredsLOO = shadowPreds;
+                paintPredsLOO = paintPreds;
                 
             case {'both'}
                 % Do it when both paint and shadow were used for decoding.
