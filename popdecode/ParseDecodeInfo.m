@@ -32,9 +32,9 @@ parser.addParamValue('decodeIntensityFitType','betacdf',@ischar);
 parser.addParamValue('paintCondition',1,@isnumeric);
 parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
-parser.addParamValue('looType','ot',@ischar);
+parser.addParamValue('decodeLOOType','ot',@ischar);
 parser.addParamValue('decodeNFolds',10,@isnumeric);
-parser.addParamValue('classifyLooType','no',@ischar);
+parser.addParamValue('classifydecodeLOOType','no',@ischar);
 parser.addParamValue('classifyNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
 parser.addParamValue('errType','mean',@ischar);
@@ -207,14 +207,14 @@ decodeInfoIn.MVM_COMPARECLASS = false;
 %   'ot'                   - Leave out one trial at a time.
 %   'oi'                   - Leave out one intensity at a time.
 %   'kfold'                - K-fold cross validation
-decodeInfoIn.looType = parser.Results.looType;
-decodeInfoIn.decode
+decodeInfoIn.decodeLOOType = parser.Results.decodeLOOType;
+decodeInfoIn.decodeNFolds = parser.Results.decodeNFolds;
 
 % Classify leave one out type
 %   'no'                   - LOO is just non-LOO predictions.
 %   'ot'                   - Leave out one trial at a time.
 %   'kfold'                - K-fold cross-validation
-decodeInfoIn.classifyLOOType = parser.Results.classifyLOOType;
+decodeInfoIn.classifydecodeLOOType = parser.Results.classifydecodeLOOType;
 decodeInfoIn.classifyKFold = parser.Results.classifyNFolds;
 
 % Exclude SY electrodes

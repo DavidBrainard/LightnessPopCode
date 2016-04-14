@@ -5,7 +5,7 @@ function [paintPreds,shadowPreds,paintPredsLOO,shadowPredsLOO,decodeInfo] = Pain
 % The returned variables without the LOO in their name based on the entire input data set.
 %
 % For some decoding options, the decoding is also done using the specified leave-one-out (LOO)
-% method specified in field decodeInfo.looType.  If you ask for a looType other than 'no'
+% method specified in field decodeInfo.decodeLOOType.  If you ask for a decodeLOOType other than 'no'
 % for a method where LOO is not implemented, this routine will exit with an error.  If LOO
 % decoding is performed, the LOO decoding is returned in the variables with LOO in their names.
 %
@@ -140,7 +140,7 @@ end
 %% Do the leave one out predictions
 paintPredsLOO = NaN*ones(numPaint,1);
 shadowPredsLOO = NaN*ones(numShadow,1);
-switch (decodeInfo.looType)
+switch (decodeInfo.decodeLOOType)
     case 'no'
         % No leave one out
         paintPredsLOO = paintPreds;

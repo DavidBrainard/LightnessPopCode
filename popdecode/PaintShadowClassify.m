@@ -5,7 +5,7 @@ function [paintPreds,shadowPreds,paintPredsLOO,shadowPredsLOO,decodeInfo] = Pain
 % The returned variables without the LOO in their name based on the entire input data set.
 %
 % For some classification options, the classification is also done using the leave-one-out (LOO)
-% method specified in field decodeInfo.looType.  If you ask for a looType other than 'no'
+% method specified in field decodeInfo.decodeLOOType.  If you ask for a decodeLOOType other than 'no'
 % for a method where LOO is not implemented, this routine will exit with an error.  If LOO
 % classification is performed, the LOO decoding is returned in the variables with LOO in their names.
 %
@@ -69,17 +69,17 @@ end
 paintPredsLOO = NaN*ones(numPaint,1);
 shadowPredsLOO = NaN*ones(numShadow,1);
 thePredsLOO = NaN*ones(numPaint+numShadow,1);
-switch (decodeInfo.classifyLOOType)
+switch (decodeInfo.classifydecodeLOOType)
     case 'no'
         % No cross validation, just take the full predictions
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
     case {'ot','kfold'}
-        if (strcmp(decodeInfo.classifyLOOType,'ot'))
+        if (strcmp(decodeInfo.classifydecodeLOOType,'ot'))
             CVO = cvpartition(theLabels,'leaveout');
 
-        elseif (strcmp(decodeInfo.classifyLOOType,'kfold'))
+        elseif (strcmp(decodeInfo.classifydecodeLOOType,'kfold'))
             CVO = cvpartition(theLabels,'kfold',decodeInfo.classifyNFolds);
         else
             error('Unknown classify cross-validation (LOO) type');
