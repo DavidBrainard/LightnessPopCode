@@ -1,4 +1,4 @@
-function decodeInfoOut = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn)
+function decodeInfoOut = ExtractedRunAndPlotLightnessDecode(readDataDir,decodeInfoIn)
 % decodeInfoOut = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn)
 %
 % Work on data extracted by earlier big program.  Streamlines a bit for new
@@ -15,16 +15,18 @@ decodeInfoOut = decodeInfoIn;
 %% Plot info
 %
 % Condition and title strings
+decodeInfoOut.readDataDir = readDataDir;
 condStr = MakePopDecodeConditionStr(decodeInfoIn);
 titleBaseStr = strrep(condStr,'_',' ');
-[~,filename] = fileparts(theDir);
+[~,filename] = fileparts(readDataDir);
 decodeInfoOut.titleStr = LiteralUnderscore({filename ; ...
     ['''Shadow'' condition ' num2str(decodeInfoIn.shadowCondition) ', ''paint'' condition ' num2str(decodeInfoIn.paintCondition)]; ...
     titleBaseStr ...
     });
 
-% Where to put extracted plots
-extractedPlotBaseDir = '../../PennOutput/xPlots';
+% Where to put extracted plots.  This can differ from where the data come
+% from, if we like.
+extractedPlotBaseDir = '../../PennOutput/xExtractedPlots';
 if (~exist(extractedPlotBaseDir,'dir'))
     mkdir(extractedPlotBaseDir);
 end
@@ -44,9 +46,10 @@ for ii = 1:length(filename)
     filenameFig(ii) = filename(ii);
 end
 decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,[filenameFig '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
+decodeInfoOut.writeDataDir = extractedPlotDir;
 
 %% Read in extracted data
-curDir = pwd; cd(theDir);
+curDir = pwd; cd(readDataDir);
 theData = load('paintShadowData');
 cd(curDir);
 
@@ -65,7 +68,7 @@ end
 decodeInfoOut.filename = filename;
 decodeInfoOut.subjectStr = filename(1:2);
 if (decodeInfoOut.OK)
-    fprintf('\tWorking on condition %s\n',theDir);
+    fprintf('\tWorking on condition %s\n',readDataDir);
     
     % General stuff
     %
@@ -74,7 +77,7 @@ if (decodeInfoOut.OK)
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
     decodeInfoOut.nFitMaxUnits = 40;
-    runType = 'REAL';
+    runType = 'FAST';
     switch (runType)
         case 'FAST'
             decodeInfoOut.verbose = true;
@@ -82,7 +85,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.decodeLOOType = 'no';
-            decodeInfoOut.classifyLOOType = 'lo';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.nFolds = 10;
         case 'SLOWER'
             decodeInfoOut.verbose = true;
@@ -101,6 +104,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.nFolds = 10;               
     end
+    tstart = tic;
     
     % *******
     % Representational similarity
@@ -123,11 +127,17 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study classification performance as a function of the number of units
-    %decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
+    decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
     %decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
+    
+    % Save the output for this directory.  Good for checkpointing
+    decodeInfoOut.runTime = toc(tstart);
+    curDir = pwd; cd(readDataDir);
+    save('extDecodeInfoOut','decodeInfoOut','-v7.3');
+    cd(curDir);
 
 end
 end

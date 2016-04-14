@@ -25,9 +25,7 @@ decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
 decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
-decodeInfo.RMSEVersusNUnits.basicAnalysis = decodeInfoOut;
-
-% Noise correlation estimate
+decodeInfoRMSEVersusNUnits.basicAnalysis = decodeInfoOut;
 
 %% Decoding for various combinations of units
 %
@@ -43,9 +41,9 @@ decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut= DoBasicDecoding(decodeInfoTemp,theData);
+decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
-decodeInfo.RMSEVersusNUnits.shuffledAnalysis = decodeInfoOut;
+decodeInfoRMSEVersusNUnits.shuffledAnalysis = decodeInfoOut;
 
 %% Suppose all the units were like the best unit ...
 %
@@ -62,8 +60,8 @@ decodeInfoTemp.type = 'aff';
 decodeInfoTemp.looType = decodeInfo.decodeLOOType;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
-decodeInfoOut= DoBestUnitDecoding(decodeInfoTemp,theData,decodeInfo.RMSEVersusNUnits.basicAnalysis.bestOneRMSEUnit);
-decodeInfo.RMSEVersusNUnits.bestAnalysis = decodeInfoOut;
+decodeInfoOut= DoBestUnitDecoding(decodeInfoTemp,theData,decodeInfoRMSEVersusNUnits.basicAnalysis.bestOneRMSEUnit);
+decodeInfoRMSEVersusNUnits.bestAnalysis = decodeInfoOut;
 
 %% PLOT: RMSE versus number of units used to decode
 %
@@ -75,22 +73,22 @@ set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineW
 subplot(1,2,1); hold on;
 
 % The fit lines underneath everything else
-h = plot(smoothX,decodeInfo.RMSEVersusNUnits.basicAnalysis.fit(smoothX),'k:','LineWidth',decodeInfo.lineWidth-2);
-h = plot(smoothX,decodeInfo.RMSEVersusNUnits.bestAnalysis.fit(smoothX),'b:','LineWidth',decodeInfo.lineWidth-2);
+h = plot(smoothX,decodeInfoRMSEVersusNUnits.basicAnalysis.fit(smoothX),'k:','LineWidth',decodeInfo.lineWidth-2);
+h = plot(smoothX,decodeInfoRMSEVersusNUnits.bestAnalysis.fit(smoothX),'b:','LineWidth',decodeInfo.lineWidth-2);
 
 % The points
-h = plot(decodeInfo.RMSEVersusNUnits.basicAnalysis.ranUnits(:),decodeInfo.RMSEVersusNUnits.basicAnalysis.ranRMSE(:),'ro','MarkerSize',4);
-h = plot(1,decodeInfo.RMSEVersusNUnits.basicAnalysis.bestOneRMSE,'ro','MarkerSize',8);
-h = plot(2,decodeInfo.RMSEVersusNUnits.basicAnalysis.bestTwoRMSE,'ro','MarkerSize',8);
-h = plot(decodeInfo.RMSEVersusNUnits.basicAnalysis.minUnits,decodeInfo.RMSEVersusNUnits.basicAnalysis.minRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
-h = plot(decodeInfo.RMSEVersusNUnits.bestAnalysis.theUnits,decodeInfo.RMSEVersusNUnits.bestAnalysis.theRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
+h = plot(decodeInfoRMSEVersusNUnits.basicAnalysis.ranUnits(:),decodeInfoRMSEVersusNUnits.basicAnalysis.ranRMSE(:),'ro','MarkerSize',4);
+h = plot(1,decodeInfoRMSEVersusNUnits.basicAnalysis.bestOneRMSE,'ro','MarkerSize',8);
+h = plot(2,decodeInfoRMSEVersusNUnits.basicAnalysis.bestTwoRMSE,'ro','MarkerSize',8);
+h = plot(decodeInfoRMSEVersusNUnits.basicAnalysis.minUnits,decodeInfoRMSEVersusNUnits.basicAnalysis.minRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+h = plot(decodeInfoRMSEVersusNUnits.bestAnalysis.theUnits,decodeInfoRMSEVersusNUnits.bestAnalysis.theRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
     
 % Best unit analsyis
-h = plot(decodeInfo.RMSEVersusNUnits.basicAnalysis.fitScale,...
-    decodeInfo.RMSEVersusNUnits.basicAnalysis.fit(decodeInfo.RMSEVersusNUnits.basicAnalysis.fitScale),...
+h = plot(decodeInfoRMSEVersusNUnits.basicAnalysis.fitScale,...
+    decodeInfoRMSEVersusNUnits.basicAnalysis.fit(decodeInfoRMSEVersusNUnits.basicAnalysis.fitScale),...
     'ko','MarkerFaceColor','k','MarkerSize',8);
-h = plot(decodeInfo.RMSEVersusNUnits.bestAnalysis.fitScale,...
-    decodeInfo.RMSEVersusNUnits.bestAnalysis.fit(decodeInfo.RMSEVersusNUnits.bestAnalysis.fitScale),...
+h = plot(decodeInfoRMSEVersusNUnits.bestAnalysis.fitScale,...
+    decodeInfoRMSEVersusNUnits.bestAnalysis.fit(decodeInfoRMSEVersusNUnits.bestAnalysis.fitScale),...
     'bo','MarkerFaceColor','b','MarkerSize',8);
 
 % Labels, scale, etc
@@ -103,22 +101,22 @@ axis square
 
 % Second panel is same plot for shuffled analysis
 subplot(1,2,2); hold on;
-h = plot(smoothX,decodeInfo.RMSEVersusNUnits.shuffledAnalysis.fit(smoothX),'k:','LineWidth',decodeInfo.lineWidth-2);
-h = plot(smoothX,decodeInfo.RMSEVersusNUnits.bestAnalysis.fit(smoothX),'b:','LineWidth',decodeInfo.lineWidth-2);
+h = plot(smoothX,decodeInfoRMSEVersusNUnits.shuffledAnalysis.fit(smoothX),'k:','LineWidth',decodeInfo.lineWidth-2);
+h = plot(smoothX,decodeInfoRMSEVersusNUnits.bestAnalysis.fit(smoothX),'b:','LineWidth',decodeInfo.lineWidth-2);
 
 % The points
-h = plot(decodeInfo.RMSEVersusNUnits.shuffledAnalysis.ranUnits(:),decodeInfo.RMSEVersusNUnits.shuffledAnalysis.ranRMSE(:),'ro','MarkerSize',4);
-h = plot(1,decodeInfo.RMSEVersusNUnits.shuffledAnalysis.bestOneRMSE,'ro','MarkerSize',8);
-h = plot(2,decodeInfo.RMSEVersusNUnits.shuffledAnalysis.bestTwoRMSE,'ro','MarkerSize',8);
-h = plot(decodeInfo.RMSEVersusNUnits.shuffledAnalysis.minUnits,decodeInfo.RMSEVersusNUnits.shuffledAnalysis.minRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
-h = plot(decodeInfo.RMSEVersusNUnits.bestAnalysis.theUnits,decodeInfo.RMSEVersusNUnits.bestAnalysis.theRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
+h = plot(decodeInfoRMSEVersusNUnits.shuffledAnalysis.ranUnits(:),decodeInfoRMSEVersusNUnits.shuffledAnalysis.ranRMSE(:),'ro','MarkerSize',4);
+h = plot(1,decodeInfoRMSEVersusNUnits.shuffledAnalysis.bestOneRMSE,'ro','MarkerSize',8);
+h = plot(2,decodeInfoRMSEVersusNUnits.shuffledAnalysis.bestTwoRMSE,'ro','MarkerSize',8);
+h = plot(decodeInfoRMSEVersusNUnits.shuffledAnalysis.minUnits,decodeInfoRMSEVersusNUnits.shuffledAnalysis.minRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+h = plot(decodeInfoRMSEVersusNUnits.bestAnalysis.theUnits,decodeInfoRMSEVersusNUnits.bestAnalysis.theRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
     
 % Best unit analysis
-h = plot(decodeInfo.RMSEVersusNUnits.shuffledAnalysis.fitScale,...
-    decodeInfo.RMSEVersusNUnits.shuffledAnalysis.fit(decodeInfo.RMSEVersusNUnits.shuffledAnalysis.fitScale),...
+h = plot(decodeInfoRMSEVersusNUnits.shuffledAnalysis.fitScale,...
+    decodeInfoRMSEVersusNUnits.shuffledAnalysis.fit(decodeInfoRMSEVersusNUnits.shuffledAnalysis.fitScale),...
     'ko','MarkerFaceColor','k','MarkerSize',8);
-h = plot(decodeInfo.RMSEVersusNUnits.bestAnalysis.fitScale,...
-    decodeInfo.RMSEVersusNUnits.bestAnalysis.fit(decodeInfo.RMSEVersusNUnits.bestAnalysis.fitScale),...
+h = plot(decodeInfoRMSEVersusNUnits.bestAnalysis.fitScale,...
+    decodeInfoRMSEVersusNUnits.bestAnalysis.fit(decodeInfoRMSEVersusNUnits.bestAnalysis.fitScale),...
     'bo','MarkerFaceColor','b','MarkerSize',8);
 
 % Labels, scale, etc
@@ -133,6 +131,12 @@ axis square
 figName = [decodeInfo.figNameRoot '_extRmseVersusNUnits'];
 drawnow;
 FigureSave(figName,rmseVersusNUnitsfig,decodeInfo.figType);
+
+%% Store the data for return
+decodeInfo.decodeInfoRMSEVersusNUnits = decodeInfoRMSEVersusNUnits;
+
+%% Save the data
+save(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNUnits'),'decodeInfoRMSEVersusNUnits','-v7.3');
 
 end
 
@@ -172,8 +176,6 @@ if (decodeInfo.oneRMSE(oneRMSEIndex(1)) ~= decodeInfo.bestOneRMSE)
 end
 
 %% Get RMSE for all choices of two units
-%
-% When we add them in according to how well they do one at a time
 if (decodeInfo.verbose)
     fprintf('\tRMSE for all choices of two units\n');
 end

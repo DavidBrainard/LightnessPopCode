@@ -10,36 +10,36 @@ function decodeInfo = ExtractedRepresentationalSimilarity(decodeInfo,theData)
 % 4/5/16   dhb  Cleaned up to use new conventions.  Not debugged.
 
 %% Clear
-clear decodeInfoTemp
-decodeInfoTemp.uniqueIntensities = decodeInfo.uniqueIntensities;
+clear decodeInfoRepSim
+decodeInfoRepSim.uniqueIntensities = decodeInfo.uniqueIntensities;
 
 %% Get similarity matrix based on mean responses as a point of
 % departure.
-decodeInfoTemp.dissimMatrix = ComputePSDissimMatrix(decodeInfo,theData);
+decodeInfoRepSim.dissimMatrix = ComputePSDissimMatrix(decodeInfo,theData);
 
 % Get the MDS solution
 try
-    mdsSoln = mdscale(decodeInfoTemp.dissimMatrix,2);
+    mdsSoln = mdscale(decodeInfoRepSim.dissimMatrix,2);
 catch
-    mdsSoln = mdscale(decodeInfoTemp.dissimMatrix,2,'Start','random');
+    mdsSoln = mdscale(decodeInfoRepSim.dissimMatrix,2,'Start','random');
 end
 
 %% Fit the dissimilarity matrix with a stimulus based model of how things might be.
-[decodeInfoTemp.dissimMatrixFit,decodeInfoTemp.fitTau,decodeInfoTemp.shadowIntensityShift,decodeInfoTemp.exponent] = ...
-    FitPSDissimMatrix(decodeInfoTemp.uniqueIntensities,decodeInfoTemp.dissimMatrix,true,true);
+[decodeInfoRepSim.dissimMatrixFit,decodeInfoRepSim.fitTau,decodeInfoRepSim.shadowIntensityShift,decodeInfoRepSim.exponent] = ...
+    FitPSDissimMatrix(decodeInfoRepSim.uniqueIntensities,decodeInfoRepSim.dissimMatrix,true,true);
 
 %% Repeat fit without allowing a shift
-[decodeInfoTemp.noShiftDissimMatrixFit,decodeInfoTemp.noShiftTau,decodeInfoTemp.noShiftShadowIntensityShift,decodeInfoTemp.noShiftExponent] = ...
-    FitPSDissimMatrix(decodeInfoTemp.uniqueIntensities,decodeInfoTemp.dissimMatrix,false,true);
-if (decodeInfoTemp.noShiftShadowIntensityShift ~= 0)
+[decodeInfoRepSim.noShiftDissimMatrixFit,decodeInfoRepSim.noShiftTau,decodeInfoRepSim.noShiftShadowIntensityShift,decodeInfoRepSim.noShiftExponent] = ...
+    FitPSDissimMatrix(decodeInfoRepSim.uniqueIntensities,decodeInfoRepSim.dissimMatrix,false,true);
+if (decodeInfoRepSim.noShiftShadowIntensityShift ~= 0)
     error('This should be constrained to zero');
 end
 
 %% Do MDS on best fit dissimilarity matrix
 try 
-    mdsSolnFit = mdscale(decodeInfoTemp.dissimMatrixFit,2);
+    mdsSolnFit = mdscale(decodeInfoRepSim.dissimMatrixFit,2);
 catch
-    mdsSolnFit = mdscale(decodeInfoTemp.dissimMatrixFit,2,'Start','random');
+    mdsSolnFit = mdscale(decodeInfoRepSim.dissimMatrixFit,2,'Start','random');
 end
 [~,mdsSolnPro] = procrustes(mdsSolnFit,mdsSoln);
 
@@ -47,12 +47,12 @@ end
 dissimMatrixFig = figure; clf;
 set(gcf,'Position',decodeInfo.position);
 subplot(1,2,1);
-imagesc(decodeInfoTemp.dissimMatrix); colorbar; axis('square');
+imagesc(decodeInfoRepSim.dissimMatrix); colorbar; axis('square');
 title('Dissimilarity Matrix','FontSize',decodeInfo.titleFontSize);
 subplot(1,2,2);
-imagesc(decodeInfoTemp.dissimMatrixFit); colorbar; axis('square');
+imagesc(decodeInfoRepSim.dissimMatrixFit); colorbar; axis('square');
 title(sprintf('Fit: Tau = %0.2f, Shadow Shift = %0.2f, Exponent= %0.2f', ...
-    decodeInfoTemp.fitTau,decodeInfoTemp.shadowIntensityShift,decodeInfoTemp.exponent),'FontSize',decodeInfo.titleFontSize);
+    decodeInfoRepSim.fitTau,decodeInfoRepSim.shadowIntensityShift,decodeInfoRepSim.exponent),'FontSize',decodeInfo.titleFontSize);
 drawnow;
 figName = [decodeInfo.figNameRoot '_extDissimMatrix'];
 FigureSave(figName,dissimMatrixFig,decodeInfo.figType);
@@ -61,20 +61,20 @@ FigureSave(figName,dissimMatrixFig,decodeInfo.figType);
 paintShadowOnMDSFig = figure; clf; hold on;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
-theGrays = linspace(.4,1,length(decodeInfoTemp.uniqueIntensities));
-for dc = 1:length(decodeInfoTemp.uniqueIntensities)
+theGrays = linspace(.4,1,length(decodeInfoRepSim.uniqueIntensities));
+for dc = 1:length(decodeInfoRepSim.uniqueIntensities)
     theGreen = [0 theGrays(dc) 0];
     theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
     
     % Basic points first, so legend comes out right
     plot(mdsSolnPro(dc,1),mdsSolnPro(dc,2),...
         'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
-    plot(mdsSolnPro(dc+length(decodeInfoTemp.uniqueIntensities),1),mdsSolnPro(dc+length(decodeInfoTemp.uniqueIntensities),2),...
+    plot(mdsSolnPro(dc+length(decodeInfoRepSim.uniqueIntensities),1),mdsSolnPro(dc+length(decodeInfoRepSim.uniqueIntensities),2),...
         'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
     
     plot(mdsSolnFit(dc,1),mdsSolnFit(dc,2),...
         'x','MarkerSize',8,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
-    plot(mdsSolnFit(dc+length(decodeInfoTemp.uniqueIntensities),1),mdsSolnFit(dc+length(decodeInfoTemp.uniqueIntensities),2),...
+    plot(mdsSolnFit(dc+length(decodeInfoRepSim.uniqueIntensities),1),mdsSolnFit(dc+length(decodeInfoRepSim.uniqueIntensities),2),...
         'x','MarkerSize',8,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
 end
 xlabel('MDS Solution 1 Wgt','FontSize',decodeInfo.labelFontSize);
@@ -86,4 +86,7 @@ figName = [decodeInfo.figNameRoot '_extPaintShadowOnMDS'];
 FigureSave(figName,paintShadowOnMDSFig,decodeInfo.figType);
 
 %% Store the data for return
-decodeInfo.repSim = decodeInfoTemp;
+decodeInfo.repSim = decodeInfoRepSim;
+
+%% Save the data
+save(fullfile(decodeInfo.writeDataDir,'extRepSim'),'decodeInfoRepSim','-v7.3');
