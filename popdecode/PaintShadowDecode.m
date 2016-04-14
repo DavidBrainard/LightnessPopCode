@@ -113,7 +113,7 @@ switch (decodeInfo.decodeLOOType)
                     decodeInfoTemp = DoTheDecode(decodeInfo,paintIntensities(trainingIndex),paintResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    paintPredsLOO(testIndex) = DoTheDecode(decodeInfoTemp,paintResponses(testIndex,:));
+                    paintPredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,paintResponses(testIndex,:));
                 end
                 shadowPredsLOO = shadowPreds;
                 
@@ -138,7 +138,7 @@ switch (decodeInfo.decodeLOOType)
                     decodeInfoTemp = DoTheDecode(decodeInfo,shadowIntensities(trainingIndex),shadowResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    shadowPredsLOO(testIndex) = DoTheDecode(decodeInfoTemp,shadowResponses(testIndex,:));
+                    shadowPredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,shadowResponses(testIndex,:));
                 end
                 paintPredsLOO = paintPreds;
                 
@@ -164,7 +164,7 @@ switch (decodeInfo.decodeLOOType)
                     decodeInfoTemp = DoTheDecode(decodeInfo,theIntensities(trainingIndex),theResponses(trainingIndex,:));
                     
                     % Do the prediction
-                    thePredsLOO(testIndex) = DoTheDecode(decodeInfoTemp,theResponses(testIndex,:));
+                    thePredsLOO(testIndex) = DoTheDecodePrediction(decodeInfoTemp,theResponses(testIndex,:));
                 end
                 paintPredsLOO = thePredsLOO(1:numPaint);
                 shadowPredsLOO = thePredsLOO(numPaint+1:end);
