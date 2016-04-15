@@ -24,7 +24,6 @@ parser.addParamValue('rfAnalysisType','no',@ischar);
 parser.addParamValue('reallyDoIRFPlots',false,@islogical);
 parser.addParamValue('reallyDoRFPlots',false,@islogical);
 parser.addParamValue('decodeJoint','both',@ischar);
-parser.addParamValue('decodeOffset',0,@isnumeric);
 parser.addParamValue('trialShuffleType','notshf',@ischar);
 parser.addParamValue('paintShadowShuffleType','nopsshf',@ischar);
 parser.addParamValue('decodeIntensityFitType','betacdf',@ischar);
@@ -110,13 +109,6 @@ decodeInfoIn.reallyDoRFPlots = parser.Results.reallyDoRFPlots;
 %   'paint'                   - Build decoder using paint trials only
 %   'shadow'                  - Build decoder using shadow trials only
 decodeInfoIn.decodeJoint = parser.Results.decodeJoint;
-
-% Numerical value to apply to subtract from shadow intensities before
-% decoding.
-%
-% This is passed as a positive integer, and the passed value
-% is divided by 100 here.
-decodeInfoIn.decodeOffset = parser.Results.decodeOffset/100;
 
 % Shuffle trials?
 %  
