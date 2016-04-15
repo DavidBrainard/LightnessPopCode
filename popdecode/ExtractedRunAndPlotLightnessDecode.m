@@ -110,6 +110,10 @@ if (decodeInfoOut.OK)
     tstart = tic;
     
     % *******
+    % Paint shadow effect
+    decodeInfoOut = ExtractedPaintShadowEffect(decodeInfoOut,theData);
+    
+    % *******
     % Representational similarity
     decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
     
