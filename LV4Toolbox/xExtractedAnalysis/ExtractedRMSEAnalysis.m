@@ -1,5 +1,5 @@
-function decodeInfo = ExtractRMSEAnalysis(decodeInfo,theData)
-% decodeInfo = ExtractRMSEAnalysis(decodeInfo,theData)
+function decodeInfo = ExtractedRMSEAnalysis(decodeInfo,theData)
+% decodeInfo = ExtractedRMSEAnalysis(decodeInfo,theData)
 %
 % Analyze how paint and shadow RMSE/Prediction compare with each other when
 % decoder is built with both, built with paint only, built with shadow
