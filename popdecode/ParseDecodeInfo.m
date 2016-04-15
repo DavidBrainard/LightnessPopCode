@@ -30,12 +30,8 @@ parser.addParamValue('decodeIntensityFitType','betacdf',@ischar);
 parser.addParamValue('paintCondition',1,@isnumeric);
 parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
-parser.addParamValue('decodeLOOType','ot',@ischar);
 parser.addParamValue('decodeNFolds',10,@isnumeric);
-parser.addParamValue('classifyLOOType','no',@ischar);
-parser.addParamValue('classifyNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
-parser.addParamValue('errType','mean',@ischar);
 parser.addParamValue('minTrials',20,@isnumeric);
 parser.addParamValue('filterRangeLower',0.2,@isnumeric);
 parser.addParamValue('doIndElectrodeRFPlots',false,@islogical);
@@ -176,37 +172,11 @@ decodeInfoIn.SVM_LOOPROGRESS = true;
 decodeInfoIn.MVM_ALG = 'SMO';
 decodeInfoIn.MVM_COMPARECLASS = false;
 
-% Leave one out type
-%   'no'                   - LOO is just non-LOO predictions.
-%   'ot'                   - Leave out one trial at a time.
-%   'oi'                   - Leave out one intensity at a time.
-%   'kfold'                - K-fold cross validation
-decodeInfoIn.decodeLOOType = parser.Results.decodeLOOType;
-decodeInfoIn.decodeNFolds = parser.Results.decodeNFolds;
-
-% Classify leave one out type
-%   'no'                   - LOO is just non-LOO predictions.
-%   'ot'                   - Leave out one trial at a time.
-%   'kfold'                - K-fold cross-validation
-decodeInfoIn.classifyLOOType = parser.Results.classifyLOOType;
-decodeInfoIn.classifyKFold = parser.Results.classifyNFolds;
-
 % Exclude SY electrodes
 %   'sykp'                    - Keep all electrodes
 %   'syexp'                   - Exclude SY peripheral electrodes
 %   'syexf'                   - Exclude SY foveal electrodes
 decodeInfoIn.excludeSYelectrodes = parser.Results.excludeSYelectrodes;
-
-% Error measure type
-% 
-% What gets minimized when we train the decoder.
-%   'mean'                 - Mean error over trials of same intensity.
-%   'median'               - Median error over trials of same intensity.
-%
-% Note that the median method only affects what
-% happens for decoding methods based on fmincon
-% search, which is not all of them.
-decodeInfoIn.errType = parser.Results.errType;
 
 % Debugging plots?
 decodeInfoIn.debugPlots = true;

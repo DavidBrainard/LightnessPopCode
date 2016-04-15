@@ -399,7 +399,7 @@ for nn1 = 1:length(useSizes)
     %% Shuffle if desired.  The shuffling propagates through everything.
     [paintIntensities,paintResponses,shadowIntensities,shadowResponses,decodeInfoIn] = PaintShadowShuffle(decodeInfoIn,paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 
-    %% PCA if desired.This also propagates.
+    %% PCA if desired.  This also propagates.
     [paintResponses,shadowResponses,decodeInfoIn] = PaintShadowPCA(decodeInfoIn,paintResponses,shadowResponses);
     
     %% Save what we want to save for second pass analyses
