@@ -1,4 +1,5 @@
-function [paintShadowEffect] = ...
+function [paintShadowEffect,paintSmooth,shadowSmooth,paintMatchesSmooth,shadowMatchesSmooth, ...
+    paintMatchesDiscrete,shadowMatchesDiscrete,shadowMatchesDiscretePred,fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfo,paintIntensities,shadowIntensities,paintPredictions,shadowPredictions)
 %
 %
@@ -38,6 +39,7 @@ switch (decodeInfo.paintShadowFitType)
     case 'intcpt'
         % Summarize intensity matches with a line through the discrete level matches.
         paintShadowEffect = mean(shadowMatchesDiscrete') - mean(paintMatchesDiscrete');
+        shadowMatchesDiscretePred = mean(paintMatchesDiscrete) + paintShadowEffect;
     otherwise
         error('Unknown paint/shadow match fit type');
 end
