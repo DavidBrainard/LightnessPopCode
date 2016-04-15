@@ -1,5 +1,5 @@
-function outputSummaryStructs = ExtractedRunAndPlotLightnessDecode(varargin)
-% outputSummaryStructs = ExtractedRunAndPlotLightnessDecode(varargin)
+function outputSummaryStructs = ExtractedRunOne(varargin)
+% outputSummaryStructs = ExtractedRunOne(varargin)
 %
 % Make plots based on the data extracted by the main pass through the data.
 %
@@ -52,13 +52,13 @@ if (COMPUTE)
     if (exist('IsCluster','file') & IsCluster)
         parfor runIndex = 1:length(theDirs)
             theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-            decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
+            decodeInfoOut{runIndex} = ExtractedEngine(theDir,decodeInfoIn);
             %save(saveFile,'-v7.3');
         end
     else
         for runIndex = 1:length(theDirs)
             theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-            decodeInfoOut{runIndex} = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn);
+            decodeInfoOut{runIndex} = ExtractedEngine(theDir,decodeInfoIn);
             save(saveFile,'-v7.3');
         end
     end

@@ -1,5 +1,5 @@
-function decodeInfoOut = ExtractedRunAndPlotLightnessDecode(readDataDir,decodeInfoIn)
-% decodeInfoOut = ExtractedRunAndPlotLightnessDecode(theDir,decodeInfoIn)
+function decodeInfoOut = ExtractedEngine(readDataDir,decodeInfoIn)
+% decodeInfoOut = ExtractedEngine(theDir,decodeInfoIn)
 %
 % Work on data extracted by earlier big program.  Streamlines a bit for new
 % things.

@@ -1,5 +1,5 @@
-function decodeInfoOut = DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
-% decodeInfoOut = DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
+function DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
+% DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
 %
 % Lightness decoder.  Original provided by Doug and Marlene.
 %
@@ -395,6 +395,12 @@ for nn1 = 1:length(useSizes)
     % 
     % If there were enough trials to keep this condition.
     if (OK)
+        % Where figures will go
+        outputDir = fullfile(outputRootDir,[filename '_' sizeLocStr]);
+        if (~exist(outputDir,'dir'))
+            mkdir(outputDir);
+        end
+        
         decodeInfoOutTemp.paintIntensities = paintIntensities;
         decodeInfoOutTemp.paintResponses = paintResponses;
         decodeInfoOutTemp.shadowIntensities = shadowIntensities;

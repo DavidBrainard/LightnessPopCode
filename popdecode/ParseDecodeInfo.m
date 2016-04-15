@@ -192,12 +192,6 @@ decodeInfoIn.filterRangeLower = parser.Results.filterRangeLower;
 decodeInfoIn.blankIntensity = 105;
 decodeInfoIn.leaveOutIntensities = [decodeInfoIn.blankIntensity 0 5 10 15];
 decodeInfoIn.minFineGrainedIntensities = 0.20;
-switch (decodeInfoIn.classifyType)
-    case {'nnh' 'svmh' 'mvmh'}
-        decodeInfoIn.leaveOutClassifyIntensities = [decodeInfoIn.blankIntensity 0 5 10 20 25 30 35 40 45];
-    otherwise
-        decodeInfoIn.leaveOutClassifyIntensities = decodeInfoIn.leaveOutIntensities;
-end
 
 % Plot params
 decodeInfoIn = SetFigParams(decodeInfoIn,'popdecode');

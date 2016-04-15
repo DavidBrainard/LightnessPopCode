@@ -35,11 +35,11 @@ ListAllConditions;
 %% Run 'em
 if (exist('IsCluster','file') & IsCluster)
     parfor runIndex = 1:length(theFiles)
-        decodeInfoOut{runIndex} = DataPreprocessEngine(theFiles{runIndex},theRFFiles{runIndex},decodeInfoInRun{runIndex});
+        DataPreprocessEngine(theFiles{runIndex},theRFFiles{runIndex},decodeInfoInRun{runIndex});
     end
 else
     for runIndex = 1:length(theFiles)
-        decodeInfoOut{runIndex} = DataPreprocessEngine(theFiles{runIndex},theRFFiles{runIndex},decodeInfoInRun{runIndex});
+        DataPreprocessEngine(theFiles{runIndex},theRFFiles{runIndex},decodeInfoInRun{runIndex});
     end
 end
 
