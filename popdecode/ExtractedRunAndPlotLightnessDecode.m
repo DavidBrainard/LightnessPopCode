@@ -46,7 +46,7 @@ for ii = 1:length(filename)
     filenameFig(ii) = filename(ii);
 end
 %decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,[filenameFig '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
-decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,'');
+decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,'Fig');
 decodeInfoOut.writeDataDir = extractedPlotDir;
 
 %% Read in extracted data
