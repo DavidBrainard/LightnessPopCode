@@ -1,5 +1,5 @@
-function decodeInfoOut = RunAndPlotLightnessDecode(filename,rfFilename,decodeInfoIn)
-% decodeInfoOut = RunAndPlotLightnessDecode(filename,rfFilename,decodeInfoIn)
+function decodeInfoOut = DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
+% decodeInfoOut = DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
 %
 % Lightness decoder.  Original provided by Doug and Marlene.
 %
@@ -14,8 +14,7 @@ function decodeInfoOut = RunAndPlotLightnessDecode(filename,rfFilename,decodeInf
 % 3/23/14   dhb  Count good trials after reducing for NaNs.
 % 4/20/14   dhb  Started to add RF mapping analyses, based on code provided by Doug.
 % 12/19/15  dhb  Fix up SY foveal/peripheral exclusion convention.
-% 4/14/16   dhb  Change filled in letter from 'd' to 'g', I think that is
-%                what it should be.
+% 4/14/16   dhb  Change filled in letter from 'd' to 'g', I think that is what it should be.
 
 %% Basic initialization
 close all;
@@ -29,16 +28,16 @@ titleStr = strrep(condStr,'_',' ');
 
 switch (decodeInfoIn.DATASTYLE)
     case 'new'
-        plotBaseDir = '../../PennOutput/xPlots';
+        outputBaseDir = '../../PennOutput/xPreprocessedData';
     otherwise
         error('Unknown data style');
 end
-if (~exist(plotBaseDir,'dir'))
-    mkdir(plotBaseDir);
+if (~exist(outputBaseDir,'dir'))
+    mkdir(outputBaseDir);
 end
-plotRootDir = fullfile(plotBaseDir,condStr,'');
-if (~exist(plotRootDir,'dir'))
-    mkdir(plotRootDir);
+outputRootDir = fullfile(outputBaseDir,condStr,'');
+if (~exist(outputRootDir,'dir'))
+    mkdir(outputRootDir);
 end
 
 % Set up to read data.  We only deal with spikesorted data.
@@ -123,33 +122,6 @@ for nn1 = 1:length(useSizes)
     decodeInfoOutTemp.theCenterYPixels = decodeInfoOutTemp.theCenterYPixels;
     [~,sizeLocStr] = MakePopDecodeConditionStr(decodeInfoOutTemp);
     titleSizeLocStr = strrep(sizeLocStr,'_',' ');
-    
-    % Where figures will go
-    plotDir = fullfile(plotRootDir,[filename '_' sizeLocStr]);
-    if (~exist(plotDir,'dir'))
-        mkdir(plotDir);
-    end
-    figNameRoot = fullfile(plotDir,[filename '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
-    
-    % Note that these containing dirs get made even when we don't have any RF data.
-    switch (decodeInfoIn.DATASTYLE)
-        case 'new'
-            rfSummaryDir = fullfile(plotDir,'xRFSummaryStuff');
-            rfPlotDir = fullfile(plotDir,'xRFPlots','');
-        case 'old'
-            rfSummaryDir = fullfile(plotDir,'xRFSummaryStOld');
-            rfPlotDir = fullfile(plotDir,'xRFPlOld','');
-        otherwise
-            error('Unknown data style');
-    end
-    if (~exist(rfSummaryDir,'dir'))
-        mkdir(rfSummaryDir);
-    end
-    if (~exist(rfPlotDir,'dir'))
-        mkdir(rfPlotDir);
-    end
-    rfSummaryNameRoot = fullfile(rfSummaryDir,[filename '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
-    rfFigNameRoot = fullfile(rfPlotDir,[filename '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
     
     %% Get indices for the trials we'll analyze
     %
@@ -354,15 +326,13 @@ for nn1 = 1:length(useSizes)
         end
     end
     
-    %% Scale intensities to range 0-1 not 0-100.  More convenient
-    % conceptually.
+    %% Scale intensities to range 0-1 not 0-100.  More convenient conceptually.
     %
     % Be sure to do this after any filtering of intensities above.
     paintIntensities = paintIntensities/100;
     shadowIntensities = shadowIntensities/100;
     
-    %% Get the actual electrode numbers/units that correspond to
-    % each response.
+    %% Get the actual electrode numbers/units that correspond to each response.
     %
     % There is only one set of spike sorting done for each session,
     % so we don't need to handle things separately for different
@@ -402,16 +372,39 @@ for nn1 = 1:length(useSizes)
     %% PCA if desired.  This also propagates.
     [paintResponses,shadowResponses,decodeInfoIn] = PaintShadowPCA(decodeInfoIn,paintResponses,shadowResponses);
     
+    %% Check that there is enough data, only write the output if so.
+    OK = true;
+    uniquePaintIntensities = unique(paintIntensities);
+    for ii = 1:length(uniquePaintIntensities)
+        index = find(paintIntensities == uniquePaintIntensities(ii));
+        if (length(index) < decodeInfoIn.minTrials)
+            OK = false;
+            break;
+        end
+    end
+    uniqueShadowIntensities = unique(shadowIntensities);
+    for ii = 1:length(uniqueShadowIntensities)
+        index = find(shadowIntensities == uniqueShadowIntensities(ii));
+        if (length(index) < decodeInfoIn.minTrials)
+            OK = false;
+            break;
+        end
+    end
+            
     %% Save what we want to save for second pass analyses
-    decodeInfoOutTemp.paintIntensities = paintIntensities;
-    decodeInfoOutTemp.paintResponses = paintResponses;
-    decodeInfoOutTemp.shadowIntensities = shadowIntensities;
-    decodeInfoOutTemp.shadowResponses = shadowResponses;
-    decodeInfoOutTemp.nPaintTrials = length(decodeInfoOutTemp.paintIntensities);
-    decodeInfoOutTemp.nShadowTrials = length(decodeInfoOutTemp.shadowIntensities);
-    curDir = pwd; cd(plotDir);
-    save paintShadowData paintIntensities paintResponses shadowIntensities shadowResponses
-    cd(curDir);
+    % 
+    % If there were enough trials to keep this condition.
+    if (OK)
+        decodeInfoOutTemp.paintIntensities = paintIntensities;
+        decodeInfoOutTemp.paintResponses = paintResponses;
+        decodeInfoOutTemp.shadowIntensities = shadowIntensities;
+        decodeInfoOutTemp.shadowResponses = shadowResponses;
+        decodeInfoOutTemp.nPaintTrials = length(decodeInfoOutTemp.paintIntensities);
+        decodeInfoOutTemp.nShadowTrials = length(decodeInfoOutTemp.shadowIntensities);
+        curDir = pwd; cd(outputDir);
+        save paintShadowData paintIntensities paintResponses shadowIntensities shadowResponses
+        cd(curDir);
+    end
 end
     
  
