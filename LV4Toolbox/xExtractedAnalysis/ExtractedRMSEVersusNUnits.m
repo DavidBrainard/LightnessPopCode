@@ -1,4 +1,4 @@
-function decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
+vfunction decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 % decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 %
 % Study decoding performance as a function of the number of units.
@@ -24,6 +24,7 @@ decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
+decodeInfoTemp.writedDataDir = decodeInfo.writeDataDir;
 decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfoRMSEVersusNUnits.basicAnalysis = decodeInfoOut;
@@ -43,6 +44,7 @@ decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
+decodeInfoTemp.writedDataDir = decodeInfo.writeDataDir;
 decodeInfoOut = DoBasicDecoding(decodeInfoTemp,theData);
 decodeInfoOut = EstimateNoiseCorrelations(decodeInfoOut,theData);
 decodeInfoRMSEVersusNUnits.shuffledAnalysis = decodeInfoOut;

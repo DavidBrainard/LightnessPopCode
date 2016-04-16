@@ -47,6 +47,7 @@ decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
 decodeInfoTemp.classifyNFolds = decodeInfo.classifyNFolds;
 decodeInfoTemp.trialShuffleType = 'intshf';
 decodeInfoTemp.paintShadowShuffleType = 'none';
+decodeInfoTemp.writeDataDir = decodeInfo.writeDataDir;
 decodeInfoOut = DoBasicClassification(decodeInfoTemp,theData);
 decodeInfoPerformanceVersusNUnits.shuffledAnalysis = decodeInfoOut;
 
