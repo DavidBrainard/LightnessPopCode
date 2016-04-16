@@ -77,7 +77,7 @@ if (decodeInfoOut.OK)
     decodeInfoOut.uniqueIntensities = unique([theData.paintIntensities ; theData.shadowIntensities]);
     decodeInfoOut.nUnits = size(theData.paintResponses,2);
     decodeInfoOut.nFitMaxUnits = 40;
-    runType = 'FAST';
+    runType = 'SLOWER';
     switch (runType)
         case 'FAST'
             decodeInfoOut.verbose = true;
@@ -93,18 +93,18 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 50;
             decodeInfoOut.nRandomVectorRepeats = 50;
-            decodeInfoOut.decodeLOOType = 'no';
+            decodeInfoOut.decodeLOOType = 'kfold';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifyLOOType = 'no';
+            decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;
         case 'REAL'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 30;
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
-            decodeInfoOut.decodeLOOType = 'ot';
+            decodeInfoOut.decodeLOOType = 'kfold';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifyLOOType = 'no';
+            decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;               
     end
     tstart = tic;
