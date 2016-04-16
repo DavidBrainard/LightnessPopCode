@@ -280,13 +280,14 @@ if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowSh
     if (decodeInfo.bestTwoPerformance < decodeInfo.maxPerformance(index))
         % This should not happen, but sometimes does.  My current theory is
         % that the SVM classifier may behave differently given [a,b] as
-        % dimensions than when given [b,a]
+        % dimensions than when given [b,a].  When we use K-fold cross-validation,
+        % this might also occur.
         %
         % Because it happens rarely and is hard to debug on the cluster,
         % this code now saves out the workspace when this occurs, for
         % looking at later.
         % error('Oops.  Best two at a time not the best in the no shuffle case.');
-        save(fullfile(decodeInfo.writeDataDir,'extDEBUGBESTTWOUNITSCODE'),'-v7.3');
+        save(fullfile(decodeInfo.writeDataDir,'extCLASSDEBUGBESTTWOUNITSCODE'),'-v7.3');
     end
 end
 decodeInfo.maxPerformance(index) = decodeInfo.bestTwoPerformance;

@@ -263,7 +263,16 @@ end
 index = find(decodeInfo.minUnits == 2);
 if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
     if (decodeInfo.bestTwoRMSE > decodeInfo.minRMSE(index))
-        error('Oops.  Best two at a time not the best in the no shuffle case.');
+        % This should not happen, but sometimes does.  My current theory is
+        % that the SVM classifier may behave differently given [a,b] as
+        % dimensions than when given [b,a].  When we use K-fold cross-validation,
+        % this might also occur.
+        %
+        % Because it happens rarely and is hard to debug on the cluster,
+        % this code now saves out the workspace when this occurs, for
+        % looking at later.
+        % error('Oops.  Best decode two at a time not the best in the no shuffle case.');
+        save(fullfile(decodeInfo.writeDataDir,'extRMSEBUGBESTTWOUNITSCODE'),'-v7.3');
     end
 end
 decodeInfo.minRMSE(index) = decodeInfo.bestTwoRMSE;
