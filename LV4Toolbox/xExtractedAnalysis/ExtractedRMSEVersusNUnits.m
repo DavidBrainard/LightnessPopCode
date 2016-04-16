@@ -1,4 +1,4 @@
-vfunction decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
+function decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 % decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 %
 % Study decoding performance as a function of the number of units.
