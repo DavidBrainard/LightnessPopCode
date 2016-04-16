@@ -55,10 +55,15 @@ decodeInfoIn.dataType = parser.Results.dataType;
 %
 % The decoder maps the multivariate electrode responses to a 
 % decoded intensity.  There are various ways to do this, of
-% varying degrees of fanciness.  At present, affine is simple
-% enough that we think we understand how it works.  The rest
+% varying degrees of fanciness.  At present, affine ('aff')
+% is simple enough that we think we understand how it works.  The rest
 % are in various degrees of experimentatal development.
 %   'aff'                  - Decoder uses multivariate affine regression.
+%   'svmreg'               - SVM regression
+%   'maxlikely'            - Max likelihood based        
+%   'maxlikelyfano'        - Max likelihood based, multiplicative noise model
+%   'mlbayes'              - Bayes based
+%   'mlbayesfano'          - Bayes based, multiplicative noise model
 decodeInfoIn.type = parser.Results.type;
 
 % Type of classifier

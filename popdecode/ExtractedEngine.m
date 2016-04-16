@@ -45,7 +45,6 @@ for ii = 1:length(filename)
     end
     filenameFig(ii) = filename(ii);
 end
-%decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,[filenameFig '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType]);
 decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,'Fig');
 decodeInfoOut.writeDataDir = extractedPlotDir;
 
@@ -85,7 +84,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nNUnitsToStudy = 3;
             decodeInfoOut.nRepeatsPerNUnits = 2;
             decodeInfoOut.nRandomVectorRepeats = 5;
-            decodeInfoOut.decodedecodeLOOType = 'no';
+            decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;
@@ -94,7 +93,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nNUnitsToStudy = 25;
             decodeInfoOut.nRepeatsPerNUnits = 50;
             decodeInfoOut.nRandomVectorRepeats = 50;
-            decodeInfoOut.decodedecodeLOOType = 'no';
+            decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;
@@ -103,7 +102,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nNUnitsToStudy = 30;
             decodeInfoOut.nRepeatsPerNUnits = 500;
             decodeInfoOut.nRandomVectorRepeats = 100;
-            decodeInfoOut.decodedecodeLOOType = 'ot';
+            decodeInfoOut.decodeLOOType = 'ot';
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;               

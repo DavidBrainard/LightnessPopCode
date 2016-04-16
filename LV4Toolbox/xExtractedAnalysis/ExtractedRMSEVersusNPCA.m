@@ -19,7 +19,7 @@ decodeInfoRMSEVersusNPCA.nNUnitsToStudy = decodeInfo.nNUnitsToStudy;
 decodeInfoRMSEVersusNPCA.nRepeatsPerNUnits = decodeInfo.nRepeatsPerNUnits;
 decodeInfoRMSEVersusNPCA.decodeJoint = 'both';
 decodeInfoRMSEVersusNPCA.type = 'aff';
-decodeInfoRMSEVersusNPCA.decodeLOOType = decodeInfo.decodedecodeLOOType;
+decodeInfoRMSEVersusNPCA.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoRMSEVersusNPCA.trialShuffleType = 'none';
 decodeInfoRMSEVersusNPCA.paintShadowShuffleType = 'none';
 

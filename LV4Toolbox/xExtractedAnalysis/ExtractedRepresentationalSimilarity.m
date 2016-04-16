@@ -21,7 +21,11 @@ decodeInfoRepSim.dissimMatrix = ComputePSDissimMatrix(decodeInfo,theData);
 try
     mdsSoln = mdscale(decodeInfoRepSim.dissimMatrix,2);
 catch
-    mdsSoln = mdscale(decodeInfoRepSim.dissimMatrix,2,'Start','random');
+    try
+        mdsSoln = mdscale(decodeInfoRepSim.dissimMatrix,2,'Start','random');
+    catch
+        mdsSoln = cmdscale(decodeInfoRepSim.dissimMatrix,2);
+    end
 end
 
 %% Fit the dissimilarity matrix with a stimulus based model of how things might be.
@@ -39,7 +43,11 @@ end
 try 
     mdsSolnFit = mdscale(decodeInfoRepSim.dissimMatrixFit,2);
 catch
-    mdsSolnFit = mdscale(decodeInfoRepSim.dissimMatrixFit,2,'Start','random');
+    try
+        mdsSolnFit = mdscale(decodeInfoRepSim.dissimMatrixFit,2,'Start','random');
+    catch
+        mdsSolnFit = cmdscale(decodeInfoRepSim.dissimMatrixFit,2,'Start','random');
+    end
 end
 [~,mdsSolnPro] = procrustes(mdsSolnFit,mdsSoln);
 

@@ -26,6 +26,7 @@ decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
 decodeInfoTemp.classifyNFolds = decodeInfo.classifyNFolds;
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
+decodeInfoTemp.writeDataDir = decodeInfo.writeDataDir;
 decodeInfoOut = DoBasicClassification(decodeInfoTemp,theData);
 decodeInfoPerformanceVersusNUnits.basicAnalysis = decodeInfoOut;
 
@@ -206,6 +207,8 @@ for uu1 = 1:decodeInfo.nUnits
         tmpPerformance = (paintClassifyNCorrect+shadowClassifyNCorrect)/(length(paintPreds)+length(shadowPreds));
         if (tmpPerformance > decodeInfo.bestTwoPerformance)
             decodeInfo.bestTwoPerformance = tmpPerformance;
+            decodeInfo.bestTwoPerformanceFirstUnit = uu1;
+            decodeInfo.bestTwoPerformanceSecondUnit = uu2;
         end
     end
 end
@@ -275,7 +278,15 @@ end
 index = find(decodeInfo.maxUnits == 2);
 if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
     if (decodeInfo.bestTwoPerformance < decodeInfo.maxPerformance(index))
-        error('Oops.  Best two at a time not the best in the no shuffle case.');
+        % This should not happen, but sometimes does.  My current theory is
+        % that the SVM classifier may behave differently given [a,b] as
+        % dimensions than when given [b,a]
+        %
+        % Because it happens rarely and is hard to debug on the cluster,
+        % this code now saves out the workspace when this occurs, for
+        % looking at later.
+        % error('Oops.  Best two at a time not the best in the no shuffle case.');
+        save(fullfile(decodeInfo.writeDataDir,'extDEBUGBESTTWOUNITSCODE'),'-v7.3');
     end
 end
 decodeInfo.maxPerformance(index) = decodeInfo.bestTwoPerformance;

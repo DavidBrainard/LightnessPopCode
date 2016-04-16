@@ -18,7 +18,7 @@ ClockRandSeed;
 [decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin{:});
 
 %% Set up summary file directory
-summaryRootDir = '../../PennOutput/xSummaryExtracted';
+summaryRootDir = '../../PennOutput/xExtractedSummary';
 if (~exist(summaryRootDir))
     mkdir(summaryRootDir);
 end
@@ -33,7 +33,7 @@ end
 saveFile = fullfile(summaryDir,['Output' '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType],'');
 
 %% Find extracted data basic location
-extractedDataDir = '../../PennOutput/xPlots';
+extractedDataDir = '../../PennOutput/xPreprocessedData';
 if (~exist(extractedDataDir,'dir'))
     error('Extracted data base dir doesn''t exist');
 end
