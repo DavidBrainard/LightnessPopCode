@@ -9,28 +9,12 @@ function prediction = DoTheClassifyPrediction(decodeInfo,responses)
 % Get/check dimensions
 [nContrasts,nResponses] = size(responses);
 
-% Get path to svmlib.  Ugh.  This is to call it 
-% which full path and avoid convlicts with 
-% matlab functions of same name.
-libsvmPath = fileparts(which('svmpredict'));
-curDir = pwd;
-
 % Predict according to passed type
 switch decodeInfo.classifyType
     case {'mvma' 'mvmb' 'mvmh'}
         % Matlab's SVM prediction
         prediction = predict(decodeInfo.classifyInfo,responses);
         
-    case {'svma' 'svmb' 'svmh'}   
-        % libsvm SVM prediction
-        predictOpts = '';
-        if (decodeInfo.LIBSVM_QUIET)
-            predictOpts = [predictOpts ' -q'];
-            
-        end
-        cd(libsvmPath);
-        prediction = svmpredict(rand(size(responses,1),1), responses, decodeInfo.classifyInfo, predictOpts);
-        cd(curDir);
     case {'nna' 'nnb' 'nnh'}
         % Nearest neighbor classification.
         %

@@ -15,12 +15,6 @@ if (length(labels) ~= nIntensities)
     error('nIntensities mismatch');
 end
 
-% Get path to svmlib.  Ugh.  This is to call it 
-% which full path and avoid convlicts with 
-% matlab functions of same name.
-libsvmPath = fileparts(which('svmpredict'));
-curDir = pwd;
-
 % Build the decoder according to passed type
 switch decodeInfo.classifyType
     % Matlab's SVM
@@ -51,17 +45,6 @@ switch decodeInfo.classifyType
             fprintf('\t\tSMO (default), %0.1f, %0.2f; L1QP, %0.1f, %0.2f; ISDA,%0.1f, %0.2f\n', ...
                 decodeInfo.classifyTelapse1,decodeInfo.classifyPerf1,decodeInfo.classifyTelapse2,decodeInfo.classifyPerf2,decodeInfo.classifyTelapse3,decodeInfo.classifyPerf3);
         end
-        
-    % libsvm SVM
-    case {'svma' 'svmb' 'svmh'}
-        % Train the svm classifier
-        svmOpts = '-s 0 -t 0';
-        if (decodeInfo.LIBSVM_QUIET)
-            svmOpts =  [svmOpts ' -q'];
-        end
-        cd(libsvmPath);
-        decodeInfo.classifyInfo = svmtrain(labels, responses, svmOpts); 
-        cd(curDir);
     
     % Nearest neighbor
     case {'nna' 'nnb' 'nnh'}

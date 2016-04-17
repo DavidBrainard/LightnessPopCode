@@ -7,6 +7,7 @@ function decodeInfo = ExtractedClassificationVersusNPCA(decodeInfo,theData)
 
 %% Get info about what to do
 nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));
+uniqueNUnitsToStudy = length(nUnitsToUseList);
 
 %% Set up input structure for classification
 clear decodeInfoTemp
@@ -25,15 +26,16 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 
 %% Get PCA
 dataForPCA = [paintResponses ; shadowResponses];
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
 meanDataForPCA = mean(dataForPCA,1);
-[pcaBasis,paintShadowPCAResponsesTrans] = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-paintPCAResponses = (pcaBasis\(paintResponses-meanDataForPCA(ones(size(paintResponses,1),1),:))')';
-shadowPCAResponses = (pcaBasis\(shadowResponses-meanDataForPCA(ones(size(shadowResponses,1),1),:))')';
+[paintPCAResponses,shadowPCAResponses] = PaintShadowPCA(decodeInfoPCA,paintResponses,shadowResponses);
 
 %% Get classification performance as a function of number of PCA components
 decodeInfoPerformanceVersusNPCA.theUnits = zeros(decodeInfo.nUnits,1);
 decodeInfoPerformanceVersusNPCA.thePerformance = zeros(decodeInfo.nUnits,1);
-for uu = 1:decodeInfo.nNUnitsToStudy
+for uu = 1:uniqueNUnitsToStudy
     nUnitsToUse = nUnitsToUseList(uu);
     [~,~,paintClassifyPredsLOO,shadowClassifyPredsLOO,decodeInfoTempOut] = PaintShadowClassify(decodeInfoTemp, ...
         paintIntensities,paintPCAResponses(:,1:nUnitsToUse),shadowIntensities,shadowPCAResponses(:,1:nUnitsToUse));
@@ -46,7 +48,8 @@ end
 
 % Fit an exponential to classification versus number of PCA components
 a0 = max(decodeInfoPerformanceVersusNPCA.thePerformance); b0 = 5; c0 = min(decodeInfoPerformanceVersusNPCA.thePerformance);
-decodeInfoPerformanceVersusNPCA.fit = fit(decodeInfoPerformanceVersusNPCA.theUnits,decodeInfoPerformanceVersusNPCA.thePerformance,'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
+index = find(decodeInfoPerformanceVersusNPCA.theUnits <= decodeInfo.nFitMaxUnits);
+decodeInfoPerformanceVersusNPCA.fit = fit(decodeInfoPerformanceVersusNPCA.theUnits(index),decodeInfoPerformanceVersusNPCA.thePerformance(index),'a-(a-c)*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
 decodeInfoPerformanceVersusNPCA.fitScale = decodeInfoPerformanceVersusNPCA.fit.b;
 decodeInfoPerformanceVersusNPCA.fitAsymp = decodeInfoPerformanceVersusNPCA.fit.c;
 

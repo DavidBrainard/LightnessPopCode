@@ -30,10 +30,11 @@ decodeInfoRMSEVersusNPCA.paintShadowShuffleType = 'none';
 
 %% Get PCA
 dataForPCA = [paintResponses ; shadowResponses];
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
 meanDataForPCA = mean(dataForPCA,1);
-[pcaBasis,paintShadowPCAResponsesTrans] = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-paintPCAResponses = (pcaBasis\(paintResponses-meanDataForPCA(ones(size(paintResponses,1),1),:))')';
-shadowPCAResponses = (pcaBasis\(shadowResponses-meanDataForPCA(ones(size(shadowResponses,1),1),:))')';
+[paintPCAResponses,shadowPCAResponses] = PaintShadowPCA(decodeInfoPCA,paintResponses,shadowResponses);
 
 % Get RMSE as a function of number of PCA components
 decodeInfoRMSEVersusNPCA.theUnits = zeros(uniqueNUnitsToStudy,1);
@@ -85,11 +86,11 @@ for dc = 1:length(decodeInfo.uniqueIntensities)
     meanPaintResponses(dc,:) = mean(theData.paintResponses(paintIndex,:),1);
     meanShadowResponses(dc,:) = mean(theData.shadowResponses(shadowIndex,:),1);
 end
-dataForPCA = [meanPaintResponses ; meanShadowResponses];
-meanDataForPCA = mean(dataForPCA,1);
-pcaBasis = pca(dataForPCA,'NumComponents',decodeInfo.nUnits);
-decodeInfoRMSEVersusNPCA.meanPaintPCAResponses = (pcaBasis\(meanPaintResponses-meanDataForPCA(ones(size(meanPaintResponses,1),1),:))')';
-decodeInfoRMSEVersusNPCA.meanShadowPCAResponses = (pcaBasis\(meanShadowResponses-meanDataForPCA(ones(size(meanShadowResponses,1),1),:))')';
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
+[decodeInfoRMSEVersusNPCA.meanPaintPCAResponses, decodeInfoRMSEVersusNPCA.meanShadowPCAResponses] = ...
+    PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
 
 paintShadowOnPCAFig = figure; clf; hold on;
 set(gcf,'Position',decodeInfo.sqPosition);

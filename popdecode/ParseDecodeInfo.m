@@ -80,7 +80,7 @@ decodeInfoIn.classifyType = parser.Results.classifyType;
 % Type of pca
 %
 % We can do pca on the responses before analyzing.
-%   'sdn'                - LIBSVM's pca.
+%   'ml'                 - Matlab's pca.
 %   'no'                 - Don't do pca.
 decodeInfoIn.pcaType = parser.Results.pcaType;
 decodeInfoIn.pcaKeep = parser.Results.pcaKeep;

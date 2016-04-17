@@ -86,7 +86,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.nRandomVectorRepeats = 5;
             decodeInfoOut.decodeLOOType = 'no';
             decodeInfoOut.decodeNFolds = 10;
-            decodeInfoOut.classifyLOOType = 'kfold';
+            decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;
         case 'SLOWER'
             decodeInfoOut.verbose = true;
