@@ -115,7 +115,7 @@ if (decodeInfoOut.OK)
     
     % *******
     % Representational similarity
-    decodeInfoOut = ExtractedRepresentationalSimilarity(decodeInfoOut,theData);
+    decodeInfoOut = ExtractedRepSim(decodeInfoOut,theData);
     
     % *******
     % Analyze how paint and shadow RMSE/Prediction compare with each other when

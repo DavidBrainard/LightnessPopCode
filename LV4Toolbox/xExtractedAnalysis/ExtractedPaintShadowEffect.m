@@ -38,7 +38,7 @@ d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
-decodeInfoPaintShadowEffect.decodeBoth = d;
+decodeSave.decodeBoth = d;
 
 % PLOT: decoded intensities
 decodingfig = figure; clf;
@@ -64,7 +64,7 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodeBothDecoding'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothDecoding'];
 drawnow;
 FigureSave(figName,decodingfig,decodeInfo.figType);
 
@@ -88,7 +88,7 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodeBothInferredMatches'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothInferredMatches'];
 drawnow;
 FigureSave(figName,predmatchfig,decodeInfo.figType);
 
@@ -118,7 +118,7 @@ d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
-decodeInfoPaintShadowEffect.decodePaint = d;
+decodeSave.decodePaint = d;
 
 % PLOT: decoded intensities
 decodingfig = figure; clf;
@@ -144,7 +144,7 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodePaintDecoding'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodePaintDecoding'];
 drawnow;
 FigureSave(figName,decodingfig,decodeInfo.figType);
 
@@ -168,7 +168,7 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodePaintInferredMatches'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodePaintInferredMatches'];
 drawnow;
 FigureSave(figName,predmatchfig,decodeInfo.figType);
 
@@ -198,7 +198,7 @@ d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
-decodeInfoPaintShadowEffect.decodePaint = d;
+decodeSave.decodePaint = d;
 
 % PLOT: decoded intensities
 decodingfig = figure; clf;
@@ -224,7 +224,7 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodeShadowDecoding'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeShadowDecoding'];
 drawnow;
 FigureSave(figName,decodingfig,decodeInfo.figType);
 
@@ -233,8 +233,10 @@ predmatchfig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+if (~isempty(d.paintMatchesDiscrete) & ~isempty(d.shadowMatchesDiscrete))
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
@@ -248,15 +250,15 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-figName = [decodeInfo.figNameRoot '_extPaintShadowDecodeShadowInferredMatches'];
+figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeShadowInferredMatches'];
 drawnow;
 FigureSave(figName,predmatchfig,decodeInfo.figType);
 
 %% Store the data for return
-decodeInfo.paintShadowEffect = decodeInfoPaintShadowEffect;
+decodeInfo.paintShadowEffect = decodeSave;
 
 %% Save the data
-save(fullfile(decodeInfo.writeDataDir,'extPaintShadowEffect'),'decodeInfoPaintShadowEffect','-v7.3');
+save(fullfile(decodeInfo.writeDataDir,'extPaintShadowEffect'),'decodeSave','-v7.3');
 
 
         

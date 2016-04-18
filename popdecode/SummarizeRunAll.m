@@ -1,10 +1,7 @@
-% ExtractedRunAll
+% SummarizeRunAll
 %
-% Do the whole kit and kaboodle of extracted analyses.
-%
-% This is the "Extracted" version, which runs on the .mat files that are
-% dumped out by the original pass through the data.  This version exists
-% just so some things can be broken out and tracked a little more simply.
+% Collect up the extracted data analyses of individual conditions and make
+% summary plots.
 %
 % 3/25/14  dhb  Wrote it.
 
@@ -22,7 +19,7 @@ SetAnalysisPath;
 runAllCompute = true;
 
 %% Original paint/shadow
-ExtractedRunOne(...
+SummarizeRunOne(...
     'dataType','spksrt', ...
     'type','aff', ...
     'classifyType','mvma', ...
