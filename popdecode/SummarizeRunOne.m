@@ -15,7 +15,7 @@ SetAnalysisPath;
 ClockRandSeed;
 
 % Set up decodeInfoIn from args
-[decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin{:});
+[decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin(:));
 
 %% Set up summary file directory
 summaryRootDir = '../../PennOutput/xSummary';
@@ -49,24 +49,24 @@ cd(curDir);
 if (exist('IsCluster','file') & IsCluster)
     parfor runIndex = 1:length(theDirs)
         theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        paintShadowEffect{runIndex} = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
-        repSim{runIndex} = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
-        RMSEAnalysis{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
-        RMSEVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
-        %RMSEVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
-        %ClassificationVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
-        %ClassificationVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
+        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
+        repSim(runIndex) = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
+        RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
+        RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
+        %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
+        %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
+        %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
     end
 else
     for runIndex = 1:length(theDirs)
         theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        paintShadowEffect{runIndex} = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
-        repSim{runIndex} = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
-        RMSEAnalysis{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
-        RMSEVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
-        %RMSEVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
-        %ClassificationVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
-        %ClassificationVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
+        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
+        repSim(runIndex) = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
+        RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
+        RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
+        %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
+        %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
+        %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
     end
 end
 
