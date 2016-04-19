@@ -42,49 +42,45 @@ if (~exist(extractedDataRootDir,'dir'))
     error('Extracted analysis output condition dir doesn''t exist');
 end
 
-%% Get all the files and run whatever we want to do on them
-%
-% Save after each call so we can recover from partial runs.
+%% Get all the processed data so we plot or otherwise analyze them.
 curDir = pwd; cd(extractedDataRootDir);
 theDirs = dir('*00*');
 cd(curDir);
 if (exist('IsCluster','file') & IsCluster)
     parfor runIndex = 1:length(theDirs)
         theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        paintShadowEffect{runIndex} = SummaryGetStructs(theDir,'extPaintShadowEffect.mat');
-        repSim{runIndex} = SummaryGetStructs(theDir,'extRepSim.mat');
-        RMSEAnalysis{runIndex} = SummaryGetStructs(theDir,'extRMSEAnalysis.mat');
-        RMSEVersusNUnits{runIndex} = SummaryGetStructs(theDir,'extRMSEVersusNUnits.mat');
-        RMSEVersusNPCA{runIndex} = SummaryGetStructs(theDir,'extRMSEVersusNPCA.mat');
-        ClassificationVersusNUnits{runIndex} = SummaryGetStructs(theDir,'extClassificationVersusNUnits.mat');
-        ClassificationVersusNPCA{runIndex} = SummaryGetStructs(theDir,'extClassificationVersusNPCA.mat');
-
+        paintShadowEffect{runIndex} = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
+        repSim{runIndex} = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
+        RMSEAnalysis{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
+        RMSEVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
+        %RMSEVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
+        %ClassificationVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
+        %ClassificationVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
     end
 else
     for runIndex = 1:length(theDirs)
         theDir = fullfile(extractedDataRootDir,theDirs(runIndex).name,'');
-        decodeInfoOut{runIndex} = ExtractedEngine(theDir,decodeInfoIn);
+        paintShadowEffect{runIndex} = SummarizeGetExtractedStructs(theDir,'extPaintShadowEffect.mat');
+        repSim{runIndex} = SummarizeGetExtractedStructs(theDir,'extRepSim.mat');
+        RMSEAnalysis{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEAnalysis.mat');
+        RMSEVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNUnits.mat');
+        %RMSEVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extRMSEVersusNPCA.mat');
+        %ClassificationVersusNUnits{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNUnits.mat');
+        %ClassificationVersusNPCA{runIndex} = SummarizeGetExtractedStructs(theDir,'extClassificationVersusNPCA.mat');
     end
 end
 
-save(saveFile,'-v7.3');
+%% Figure parameters
+figParams = SetFigParams([],'popdecode');
 
-%% Load the saved analyses
-clear decodeInfoIn decodeInfoOut
-loadedData = load(saveFile);
-close all
-
-%% Plot params for summary plots.
-OVERRIDE_FIGINFO = true;
-if (OVERRIDE_FIGINFO)
-    loadedData.decodeInfoIn = SetFigParams(loadedData.decodeInfoIn,'popdecode');
-end
+%% Call routines to make nice summary plots
+PaintShadowEffectSummaryPlots(paintShadowEffect,figParams);
 
 %% Summary plots
 rmseLower = 0.20;
 
 % RMSE Versus Fit Scale
-ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,loadedData.decodeInfoIn,loadedData.decodeInfoOut);
+%ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,loadedData.decodeInfoIn,loadedData.decodeInfoOut);
 
 %% Write out summary text file
 % outputSummaryStructs = [outputSummaryTextStructs_BR_V1 outputSummaryTextStructs_ST_V1 outputSummaryTextStructs_JD_V4 outputSummaryTextStructs_SY_V4];
