@@ -1,10 +1,9 @@
-function ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,decodeInfoIn,decodeInfoOut)
-% ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,decodeInfoIn,decodeInfoOut)
+function PaintShadowEffectSummaryPlots(paintShadowEffect,figParams)
+% PaintShadowEffectSummaryPlots(paintShadowEffect,figParams)
 %
-% Make a plot by subject/area of the scale factor describing improvement
-% with number of units in the decoder versus the RMSE of full decoder.
+% Summary plots of the basic paint/shadow effect.
 %
-% 4/4/16  dhb  Wrote it.
+% 4/19/16  dhb  Wrote it.
 
 % Open figure
 figRMSEVsNUnitsFitScaleFig = figure; clf; hold on
