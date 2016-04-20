@@ -360,7 +360,7 @@ foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'
 decodeInfo.bestSynthesizedRMSE = c0;
 index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.rmse = c0;
-decodeInfo.fit = fit(decodeInfo.theUnits(index),decodeInfo.theRMSE(index),foptions);
+decodeInfo.fit = fit(decodeInfo.theUnits(index),decodeInfo.theRMSE(index),ftype,foptions);
 decodeInfo.fitScale = decodeInfo.fit.b;
 decodeInfo.fitAsymp = decodeInfo.fit.c;
 
