@@ -48,9 +48,10 @@ end
 
 % Fit an exponential to classification versus number of PCA components
 a0 = max(decodeSave.thePerformance); b0 = 5; c0 = min(decodeSave.thePerformance);
-foptions = fitoptions('Method','NonLinearLeastSquares','Lower',[0 2 0],'Upper',[5 200 5]);
+ftype = fittype('a-(a-c)*exp(-(x-1)/(b-1)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[0 2 0],'Upper',[5 200 5]);
 index = find(decodeSave.theUnits <= decodeInfo.nFitMaxUnits);
-decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.thePerformance(index),'a-(a-c)*exp(-(x-1)/(b-1)) + c',foptions,'StartPoint',[a0 b0 c0]);
+decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.thePerformance(index),ftype,foptions);
 decodeSave.fitScale = decodeSave.fit.b;
 decodeSave.fitAsymp = decodeSave.fit.c;
 
