@@ -281,7 +281,7 @@ decodeInfo.minRMSE(index) = decodeInfo.bestTwoRMSE;
  
 %% Fit an exponential through the lower envelope of the RMSE versus units
 a0 = max(decodeInfo.minRMSE); b0 = 10; c0 = min(decodeInfo.minRMSE);
-foptions = fitoptions('Lower',[0 2 0],'Upper',[5 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','Lower',[0 2 0],'Upper',[5 200 5]);
 decodeInfo.RMSE = c0;
 index = find(decodeInfo.minUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.fit = fit(decodeInfo.minUnits(index),decodeInfo.minRMSE(index),'a*exp(-(x-1)/(b-1)) + c',foptions,'StartPoint',[a0 b0 c0]);
@@ -354,7 +354,7 @@ end
 % Fit an exponential through the best like unit rmse versus number of
 % units.
 a0 = max(decodeInfo.theRMSE); b0 = 10; c0 = min(decodeInfo.theRMSE);
-foptions = fitoptions('Lower',[0 2 0],'Upper',[5 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','Lower',[0 2 0],'Upper',[5 200 5]);
 decodeInfo.bestSynthesizedRMSE = c0;
 index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.rmse = c0;

@@ -295,7 +295,7 @@ decodeInfo.maxPerformance(index) = decodeInfo.bestTwoPerformance;
  
 %% Fit an exponential through the upper envelope of the performance versus units
 a0 = max(decodeInfo.maxPerformance); b0 = 10; c0 = max(decodeInfo.maxPerformance);
-foptions = fitoptions('Lower',[0 2 0],'Upper',[5 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','Lower',[0 2 0],'Upper',[5 200 5]);
 decodeInfo.Performance = c0;
 index = find(decodeInfo.maxUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.fit = fit(decodeInfo.maxUnits(index),decodeInfo.maxPerformance(index),'a-(a-c)*exp(-(x-1)/(b-1)) + c',foptions,'StartPoint',[a0 b0 c0]);
@@ -369,7 +369,7 @@ end
 
 % Fit an exponential through the best like unit rmse versus number of units.
 a0 = max(decodeInfo.thePerformance); b0 = 10; c0 = max(decodeInfo.thePerformance);
-foptions = fitoptions('Lower',[0 2 0],'Upper',[5 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','Lower',[0 2 0],'Upper',[5 200 5]);
 decodeInfo.Performance = c0;
 index = find(decodeInfo.theUnits <= decodeInfo.nFitMaxUnits);
 decodeInfo.fit = fit(decodeInfo.theUnits(index),decodeInfo.thePerformance(index),'a-(a-c)*exp(-(x-1)/(b-1)) + c',foptions,'StartPoint',[a0 b0 c0]);
