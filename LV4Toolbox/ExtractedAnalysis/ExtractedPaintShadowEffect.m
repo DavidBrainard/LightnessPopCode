@@ -73,8 +73,10 @@ predmatchfig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+if (~isempty(d.paintMatchesDiscrete) & ~isempty(d.shadowMatchesDiscrete))
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
@@ -153,8 +155,10 @@ predmatchfig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
-h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+if (~isempty(d.paintMatchesDiscrete) & ~isempty(d.shadowMatchesDiscrete))
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscrete,'ro','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','r');
+    h=plot(d.paintMatchesDiscrete,d.shadowMatchesDiscretePred,'r','LineWidth',decodeInfo.lineWidth);
+end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
