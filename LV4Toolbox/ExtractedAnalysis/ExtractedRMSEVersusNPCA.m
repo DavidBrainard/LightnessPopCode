@@ -49,8 +49,9 @@ end
 
 % Fit an exponential
 a0 = max(decodeSave.theRMSE); b0 = 5; c0 = min(decodeSave.theRMSE);
+foptions = fitoptions('Lower',[0 2 0],'Upper',[5 200 5]);
 index = find(decodeSave.theUnits <= decodeInfo.nFitMaxUnits);
-decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.theRMSE(index),'a*exp(-(x-1)/(b-1)) + c','StartPoint',[a0 b0 c0]);
+decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.theRMSE(index),'a*exp(-(x-1)/(b-1)) + c',foptions,'StartPoint',[a0 b0 c0]);
 decodeSave.rmse = c0;
 decodeSave.fitScale = decodeSave.fit.b;
 decodeSave.fitAsymp = decodeSave.fit.c;
