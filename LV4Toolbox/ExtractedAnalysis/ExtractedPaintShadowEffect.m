@@ -27,17 +27,17 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
 [~,~,d.paintPreds,d.shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
-d.shadowDecodeBothRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
-d.paintDecodeBothMean = mean(d.paintPreds(:));
-d.shadowDecodeBothMean = mean(d.shadowPreds(:));
-d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
-[d.paintDecodeBothMeans,d.paintDecodeBothSEMs,~,~,~,d.paintDecodeBothGroupedIntensities] = ...
+d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.paintMean = mean(d.paintPreds(:));
+d.shadowMean = mean(d.shadowPreds(:));
+d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
+[d.paintMeans,d.paintSEMs,~,~,~,d.paintGroupedIntensities] = ...
     sortbyx(paintIntensities,d.paintPreds);
-[d.shadowDecodeBothMeans,d.shadowDecodeBothSEMs,~,~,~,d.shadowDecodeBothGroupedIntensities] = ...
+[d.shadowMeans,d.shadowSEMs,~,~,~,d.shadowGroupedIntensities] = ...
     sortbyx(shadowIntensities,d.shadowPreds);
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
-    FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
+    FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
 decodeSave.decodeBoth = d;
 
 % PLOT: decoded intensities
@@ -47,12 +47,12 @@ set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineW
 hold on;
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.paintSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'g','LineWidth',decodeInfo.lineWidth);
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.shadowSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'k','LineWidth',decodeInfo.lineWidth);
-h=errorbar(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, d.paintDecodeBothSEMs, 'go');
+h=errorbar(d.paintGroupedIntensities, d.paintMeans, d.paintSEMs, 'go');
 set(h,'MarkerFaceColor','g','MarkerSize',decodeInfo.markerSize-6);
-h=errorbar(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, d.shadowDecodeBothSEMs, 'ko');
+h=errorbar(d.shadowGroupedIntensities, d.shadowMeans, d.shadowSEMs, 'ko');
 set(h,'MarkerFaceColor','k','MarkerSize',decodeInfo.markerSize-6);
-h=plot(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
-h=plot(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
+h=plot(d.paintGroupedIntensities, d.paintMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
+h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
 h = legend({'Paint','Shadow'},'FontSize',decodeInfo.legendFontSize,'Location','NorthWest');
 lfactor = 0.5;
 lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
@@ -109,17 +109,17 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
 [~,~,d.paintPreds,d.shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
-d.shadowDecodeBothRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
-d.paintDecodeBothMean = mean(d.paintPreds(:));
-d.shadowDecodeBothMean = mean(d.shadowPreds(:));
-d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
-[d.paintDecodeBothMeans,d.paintDecodeBothSEMs,~,~,~,d.paintDecodeBothGroupedIntensities] = ...
+d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.paintMean = mean(d.paintPreds(:));
+d.shadowMean = mean(d.shadowPreds(:));
+d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
+[d.paintMeans,d.paintSEMs,~,~,~,d.paintGroupedIntensities] = ...
     sortbyx(paintIntensities,d.paintPreds);
-[d.shadowDecodeBothMeans,d.shadowDecodeBothSEMs,~,~,~,d.shadowDecodeBothGroupedIntensities] = ...
+[d.shadowMeans,d.shadowSEMs,~,~,~,d.shadowGroupedIntensities] = ...
     sortbyx(shadowIntensities,d.shadowPreds);
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
-    FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
+    FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
 decodeSave.decodePaint = d;
 
 % PLOT: decoded intensities
@@ -129,12 +129,12 @@ set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineW
 hold on;
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.paintSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'g','LineWidth',decodeInfo.lineWidth);
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.shadowSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'k','LineWidth',decodeInfo.lineWidth);
-h=errorbar(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, d.paintDecodeBothSEMs, 'go');
+h=errorbar(d.paintGroupedIntensities, d.paintMeans, d.paintSEMs, 'go');
 set(h,'MarkerFaceColor','g','MarkerSize',decodeInfo.markerSize-6);
-h=errorbar(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, d.shadowDecodeBothSEMs, 'ko');
+h=errorbar(d.shadowGroupedIntensities, d.shadowMeans, d.shadowSEMs, 'ko');
 set(h,'MarkerFaceColor','k','MarkerSize',decodeInfo.markerSize-6);
-h=plot(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
-h=plot(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
+h=plot(d.paintGroupedIntensities, d.paintMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
+h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
 h = legend({'Paint','Shadow'},'FontSize',decodeInfo.legendFontSize,'Location','NorthWest');
 lfactor = 0.5;
 lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
@@ -191,18 +191,18 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
 [~,~,d.paintPreds,d.shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
-d.shadowDecodeBothRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
-d.paintDecodeBothMean = mean(d.paintPreds(:));
-d.shadowDecodeBothMean = mean(d.shadowPreds(:));
-d.shadowMinusPaintDecodeBothMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
-[d.paintDecodeBothMeans,d.paintDecodeBothSEMs,~,~,~,d.paintDecodeBothGroupedIntensities] = ...
+d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.paintMean = mean(d.paintPreds(:));
+d.shadowMean = mean(d.shadowPreds(:));
+d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
+[d.paintMeans,d.paintSEMs,~,~,~,d.paintGroupedIntensities] = ...
     sortbyx(paintIntensities,d.paintPreds);
-[d.shadowDecodeBothMeans,d.shadowDecodeBothSEMs,~,~,~,d.shadowDecodeBothGroupedIntensities] = ...
+[d.shadowMeans,d.shadowSEMs,~,~,~,d.shadowGroupedIntensities] = ...
     sortbyx(shadowIntensities,d.shadowPreds);
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
-    FindPaintShadowEffect(decodeInfoTemp,d.paintDecodeBothGroupedIntensities,d.shadowDecodeBothGroupedIntensities,d.paintDecodeBothMeans,d.shadowDecodeBothMeans);
-decodeSave.decodePaint = d;
+    FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
+decodeSave.decodeShadow = d;
 
 % PLOT: decoded intensities
 decodingfig = figure; clf;
@@ -211,12 +211,12 @@ set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineW
 hold on;
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.paintSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'g','LineWidth',decodeInfo.lineWidth);
 h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.shadowSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'k','LineWidth',decodeInfo.lineWidth);
-h=errorbar(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, d.paintDecodeBothSEMs, 'go');
+h=errorbar(d.paintGroupedIntensities, d.paintMeans, d.paintSEMs, 'go');
 set(h,'MarkerFaceColor','g','MarkerSize',decodeInfo.markerSize-6);
-h=errorbar(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, d.shadowDecodeBothSEMs, 'ko');
+h=errorbar(d.shadowGroupedIntensities, d.shadowMeans, d.shadowSEMs, 'ko');
 set(h,'MarkerFaceColor','k','MarkerSize',decodeInfo.markerSize-6);
-h=plot(d.paintDecodeBothGroupedIntensities, d.paintDecodeBothMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
-h=plot(d.shadowDecodeBothGroupedIntensities, d.shadowDecodeBothMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
+h=plot(d.paintGroupedIntensities, d.paintMeans, 'go','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','g');
+h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'ko','MarkerSize',decodeInfo.markerSize,'MarkerFaceColor','k');
 h = legend({'Paint','Shadow'},'FontSize',decodeInfo.legendFontSize,'Location','NorthWest');
 lfactor = 0.5;
 lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);

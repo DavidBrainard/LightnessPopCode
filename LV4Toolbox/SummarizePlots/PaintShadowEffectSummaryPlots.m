@@ -5,10 +5,13 @@ function PaintShadowEffectSummaryPlots(paintShadowEffect,figParams)
 %
 % 4/19/16  dhb  Wrote it.
 
+%% PLOT: Paint/shadow effect from decoding on both paint and shadow
+[paintShadowEffectDecodeBoth] = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
+
 % Open figure
-figRMSEVsNUnitsFitScaleFig = figure; clf; hold on
-set(gcf,'Position',decodeInfoIn.sqPosition);
-set(gca,'FontName',decodeInfoIn.fontName,'FontSize',decodeInfoIn.axisFontSize,'LineWidth',decodeInfoIn.axisLineWidth);
+figPaintShadowEffectDecodeBothFig = figure; clf; hold on
+set(gcf,'Position',figParams.sqPosition);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 
 % V4 data for JD
 whichSubject = 'JD';
@@ -19,7 +22,7 @@ filter.plotSymbol = 'o';
 filter.plotColor = 'r';
 filter.outlineColor = 'r';
 filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',decodeInfoIn.markerSize);
+plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
 
 % V4 data for SY
 whichSubject = 'SY';
@@ -29,7 +32,7 @@ filter.plotSymbol = 's';
 filter.plotColor = 'r';
 filter.outlineColor = 'r';
 filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',decodeInfoIn.markerSize);
+plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
 
 % V1 data for BR
 whichSubject = 'BR';
@@ -39,7 +42,7 @@ filter.plotSymbol = 's';
 filter.plotColor = 'k';
 filter.outlineColor = 'k';
 filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',decodeInfoIn.markerSize);
+plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
 
 % V1 data for ST
 whichSubject = 'ST';
@@ -49,13 +52,13 @@ filter.plotSymbol = '^';
 filter.plotColor = 'k';
 filter.outlineColor = 'k';
 filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',decodeInfoIn.markerSize);
+plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
 
 % Labels etc
-xlabel('Decoding RMSE','FontSize',decodeInfoIn.labelFontSize);
-ylabel('RMSE versus NUnits Fit Scale','FontSize',decodeInfoIn.labelFontSize);
+xlabel('Decoding RMSE','FontSize',figParams.labelFontSize);
+ylabel('RMSE versus NUnits Fit Scale','FontSize',figParams.labelFontSize);
 drawnow;
 
 % Write the figure
 figName = fullfile(summaryDir,'RmseVsNUnitsFitScaleAnalysis');
-FigureSave(figName,figRMSEVsNUnitsFitScaleFig,decodeInfoIn.figType);
+FigureSave(figName,figRMSEVsNUnitsFitScaleFig,figParams.figType);

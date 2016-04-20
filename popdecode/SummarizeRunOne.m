@@ -15,7 +15,7 @@ SetAnalysisPath;
 ClockRandSeed;
 
 % Set up decodeInfoIn from args
-[decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin(:));
+[decodeInfoIn] = ParseDecodeInfo(varargin{:});
 
 %% Set up summary file directory
 summaryRootDir = '../../PennOutput/xSummary';
