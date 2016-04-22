@@ -8,6 +8,12 @@ function [theSubstructArray,index] = SubstructArrayFromStructArray(theStructArra
 %
 % See GetFilteringIndex for information on how the filtering is done.
 %
+% See also FilterAndGetFieldFromStrucArray
+%
+% Examples:
+% 1) Get the decodeBoth structure field as a struct array, taking all of them with no filtering
+%   paintShadowEffectDecodeBoth = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
+%
 % 4/19/16  dhb  Wrote it.
 
 % Deal with optional arguments.

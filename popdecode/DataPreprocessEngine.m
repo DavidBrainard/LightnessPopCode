@@ -409,6 +409,8 @@ for nn1 = 1:length(useSizes)
         decodeInfoOutTemp.nShadowTrials = length(decodeInfoOutTemp.shadowIntensities);
         curDir = pwd; cd(outputDir);
         save paintShadowData paintIntensities paintResponses shadowIntensities shadowResponses
+        decodeSave = decodeInfoOutTemp;
+        save('basicInfo','decodeSave','-v7.3');
         cd(curDir);
     end
 end

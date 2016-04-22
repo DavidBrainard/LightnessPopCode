@@ -33,7 +33,7 @@ parser.addParamValue('paintShadowFitType','intcpt',@ischar);
 parser.addParamValue('decodeNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
 parser.addParamValue('minTrials',20,@isnumeric);
-parser.addParamValue('filterRangeLower',0.2,@isnumeric);
+parser.addParamValue('filterMaxRMSE',0.2,@isnumeric);
 parser.addParamValue('doIndElectrodeRFPlots',false,@islogical);
 parser.addParamValue('COMPUTE',true,@islogical);
 parser.addParamValue('plotV4Only',false,@islogical);
@@ -188,7 +188,7 @@ decodeInfoIn.debugPlots = true;
 
 % Minimum number of trials needed to go forward with a session.
 decodeInfoIn.minTrials = parser.Results.minTrials;
-decodeInfoIn.filterRangeLower = parser.Results.filterRangeLower;
+decodeInfoIn.filterMaxRMSE = parser.Results.filterMaxRMSE;
 
 % Which stimulus intensities to leave out of the analysis.
 %

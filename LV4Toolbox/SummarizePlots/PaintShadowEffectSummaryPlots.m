@@ -1,64 +1,174 @@
-function PaintShadowEffectSummaryPlots(paintShadowEffect,figParams)
-% PaintShadowEffectSummaryPlots(paintShadowEffect,figParams)
+function PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams)
+% PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams)
 %
 % Summary plots of the basic paint/shadow effect.
 %
 % 4/19/16  dhb  Wrote it.
 
+%% Additional parameters
+figParams.bumpSizeForMean = 6;
+figureSubdir = 'PaintShadowEffect';
+figureDir = fullfile(summaryDir,figureSubdir,'');
+if (~exist(figureDir,'dir'))
+    mkdir(figureDir);
+end
+
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
-[paintShadowEffectDecodeBoth] = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
+%
+% Get the decode both results from the top level structure.
+paintShadowEffectDecodeBoth = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
+if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
+    error('Length mismatch on struct arrays that should be the same');
+end
+
+% Make the figure
+paintShadowEffectDecodeBothFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeBoth,figParams);
+
+% Add title and save
+figure(paintShadowEffectDecodeBothFig);
+title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
+FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
+
+%% PLOT: Paint/shadow effect from decoding on paint
+%
+% Get the decode both results from the top level structure.
+paintShadowEffectDecodePaint = SubstructArrayFromStructArray(paintShadowEffect,'decodePaint');
+if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
+    error('Length mismatch on struct arrays that should be the same');
+end
+
+% Make the figure
+paintShadowEffectDecodePaintFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodePaint,figParams);
+
+% Add title and save
+figure(paintShadowEffectDecodePaintFig);
+title({'Paint/Shadow Effect, Decode On Paint'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodePaint','');
+FigureSave(figFilename,paintShadowEffectDecodePaintFig,figParams.figType);
+
+%% PLOT: Paint/shadow effect from decoding on shadow
+%
+% Get the decode both results from the top level structure.
+paintShadowEffectDecodeShadow = SubstructArrayFromStructArray(paintShadowEffect,'decodeShadow');
+if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
+    error('Length mismatch on struct arrays that should be the same');
+end
+
+% Make the figure
+paintShadowEffectDecodeShadowFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeShadow,figParams);
+
+% Add title and save
+figure(paintShadowEffectDecodeShadowFig);
+title({'Paint/Shadow Effect, Decode On Shadow'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeShadow','');
+FigureSave(figFilename,paintShadowEffectDecodeShadowFig,figParams.figType);
+
+end
+
+%% Function to actually make the figure
+function theFigure = PaintShadowEffectFigure(basicInfo,paintShadowEffectIn,figParams)
 
 % Open figure
-figPaintShadowEffectDecodeBothFig = figure; clf; hold on
-set(gcf,'Position',figParams.sqPosition);
+theFigure = figure; clf; hold on
+tempPosition = figParams.position;
+tempPosition(3) = 1000;
+set(gcf,'Position',tempPosition);
 set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+startX = 1;
 
-% V4 data for JD
+% Get data for JD (V4) and add to plot
 whichSubject = 'JD';
-rmse = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmse',{'subjectStr'},{whichSubject});
-rmseVersusNUnitsFitScale = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmseVersusNUnitsFitScale',{'subjectStr'},{whichSubject});
-filter.titleInfoStr = 'V4';
-filter.plotSymbol = 'o';
-filter.plotColor = 'r';
-filter.outlineColor = 'r';
-filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
+figParams.plotSymbol = 'o';
+figParams.plotColor = 'r';
+figParams.outlineColor = 'r';
+[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanRMSE] = GetFilteringIndex(paintShadowEffectIn,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
+indexKeep = find(booleanSubject & booleanRMSE);
+paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintRMSE',indexKeep);
+shadowRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'shadowRMSE',indexKeep);
+paintShadowEffectArray = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintShadowEffect',indexKeep);
+plot(startX:startX+length(paintShadowEffectArray)-1,paintShadowEffectArray,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize,'MarkerFaceColor',figParams.outlineColor);
+plot(startX:startX+length(paintShadowEffectArray)-1,mean(paintShadowEffectArray(~isnan(paintShadowEffectArray)))*ones(size(1:length(paintShadowEffectArray))), ...
+    figParams.plotColor,'LineWidth',figParams.lineWidth);
+startX = startX + length(paintShadowEffectArray);
 
-% V4 data for SY
+% Get data for SY (V4) and add to plot
 whichSubject = 'SY';
-rmse = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmse',{'subjectStr'},{whichSubject});
-rmseVersusNUnitsFitScale = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmseVersusNUnitsFitScale',{'subjectStr'},{whichSubject});
-filter.plotSymbol = 's';
-filter.plotColor = 'r';
-filter.outlineColor = 'r';
-filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
+figParams.plotSymbol = 's';
+figParams.plotColor = 'r';
+figParams.outlineColor = 'r';
+[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanRMSE] = GetFilteringIndex(paintShadowEffectIn,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
+indexKeep = find(booleanSubject & booleanRMSE);
+paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintRMSE',indexKeep);
+shadowRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'shadowRMSE',indexKeep);
+paintShadowEffectArray = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintShadowEffect',indexKeep);
+plot(startX:startX+length(paintShadowEffectArray)-1,paintShadowEffectArray,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize,'MarkerFaceColor',figParams.outlineColor);
+plot(startX:startX+length(paintShadowEffectArray)-1,mean(paintShadowEffectArray(~isnan(paintShadowEffectArray)))*ones(size(1:length(paintShadowEffectArray))), ...
+    figParams.plotColor,'LineWidth',figParams.lineWidth);
+startX = startX + length(paintShadowEffectArray);
 
-% V1 data for BR
+% Get data for BR (V1) and add to plot
 whichSubject = 'BR';
-rmse = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmse',{'subjectStr'},{whichSubject});
-rmseVersusNUnitsFitScale = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmseVersusNUnitsFitScale',{'subjectStr'},{whichSubject});
-filter.plotSymbol = 's';
-filter.plotColor = 'k';
-filter.outlineColor = 'k';
-filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
+figParams.plotSymbol = 's';
+figParams.plotColor = 'k';
+figParams.outlineColor = 'k';
+[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanRMSE] = GetFilteringIndex(paintShadowEffectIn,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
+indexKeep = find(booleanSubject & booleanRMSE);
+paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintRMSE',indexKeep);
+shadowRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'shadowRMSE',indexKeep);
+paintShadowEffectArray = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintShadowEffect',indexKeep);
+plot(startX:startX+length(paintShadowEffectArray)-1,paintShadowEffectArray,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize,'MarkerFaceColor',figParams.outlineColor);
+plot(startX:startX+length(paintShadowEffectArray)-1,mean(paintShadowEffectArray(~isnan(paintShadowEffectArray)))*ones(size(1:length(paintShadowEffectArray))), ...
+    figParams.plotColor,'LineWidth',figParams.lineWidth);
+startX = startX + length(paintShadowEffectArray);
 
-% V1 data for ST
+% Get data for ST (V1) and add to plot
 whichSubject = 'ST';
-rmse = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmse',{'subjectStr'},{whichSubject});
-rmseVersusNUnitsFitScale = FilterAndGetFieldFromStructArray([decodeInfoOut{:}],'rmseVersusNUnitsFitScale',{'subjectStr'},{whichSubject});
-filter.plotSymbol = '^';
-filter.plotColor = 'k';
-filter.outlineColor = 'k';
-filter.bumpSizeForMean = 6;
-plot(rmse,rmseVersusNUnitsFitScale,[filter.plotSymbol filter.outlineColor],'MarkerFaceColor',filter.plotColor','MarkerSize',figParams.markerSize);
+figParams.plotSymbol = '^';
+figParams.plotColor = 'k';
+figParams.outlineColor = 'k';
+[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanRMSE] = GetFilteringIndex(paintShadowEffectIn,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
+indexKeep = find(booleanSubject & booleanRMSE);
+paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintRMSE',indexKeep);
+shadowRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'shadowRMSE',indexKeep);
+paintShadowEffectArray = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintShadowEffect',indexKeep);
+plot(startX:startX+length(paintShadowEffectArray)-1,paintShadowEffectArray,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize,'MarkerFaceColor',figParams.outlineColor);
+plot(startX:startX+length(paintShadowEffectArray)-1,mean(paintShadowEffectArray(~isnan(paintShadowEffectArray)))*ones(size(1:length(paintShadowEffectArray))), ...
+    figParams.plotColor,'LineWidth',figParams.lineWidth);
+startX = startX + length(paintShadowEffectArray);
 
-% Labels etc
-xlabel('Decoding RMSE','FontSize',figParams.labelFontSize);
-ylabel('RMSE versus NUnits Fit Scale','FontSize',figParams.labelFontSize);
-drawnow;
+% Add psychophysics to summary plot
+%
+% The script ../psychoanalysis/AnalyzeOriginalPaintShadow produces the output files we need.
+% You, the user, are responsible for ensuring that the analysis done there
+% is commensurate with what we are reporting from the neural recordings
+% here.
+if (basicInfo(1).paintCondition == 1 && basicInfo(1).shadowCondition == 2)
+    figParams.plotSymbol = 'v';
+    figParams.plotColor = 'b';
+    thePsychoFile = '../psychoanalysis/xSummary/OriginalPaintShadowIntercept';
+    thePsychoData = load(thePsychoFile);
+    psychoPaintShadowEffect = thePsychoData.theData.allPaintShadow;
+    plot(startX:startX+length(psychoPaintShadowEffect)-1,psychoPaintShadowEffect,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize+1,'MarkerFaceColor',figParams.plotColor);
+    plot(startX:startX+length(psychoPaintShadowEffect)-1,...
+        mean(psychoPaintShadowEffect)*ones(size(startX:startX+length(psychoPaintShadowEffect)-1)),figParams.plotColor,'LineWidth',figParams.lineWidth);
+    startX = startX + length(psychoPaintShadowEffect) + 2;
+end
 
-% Write the figure
-figName = fullfile(summaryDir,'RmseVsNUnitsFitScaleAnalysis');
-FigureSave(figName,figRMSEVsNUnitsFitScaleFig,figParams.figType);
+% Save the figure
+figure(theFigure);
+plot([1 startX],[0 0],'k:','LineWidth',figParams.lineWidth);
+xlim([0 startX+1]);
+ylim([figParams.interceptLimLow figParams.interceptLimHigh]);
+set(gca,'YTick',figParams.interceptTicks);
+set(gca,'YTickLabel',figParams.interceptTickLabels);
+set(gca,'XTickLabel',{});
+ylabel('Paint/Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+
+end
+
+

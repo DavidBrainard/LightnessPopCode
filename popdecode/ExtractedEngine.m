@@ -110,6 +110,10 @@ if (decodeInfoOut.OK)
     tstart = tic;
     
     % *******
+    % Basic information
+    decodeInfoOut = ExtractedBasicInfo(decodeInfoOut,theData);
+    
+    % *******
     % Paint shadow effect
     decodeInfoOut = ExtractedPaintShadowEffect(decodeInfoOut,theData);
     

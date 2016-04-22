@@ -6,6 +6,18 @@ function [theArray,index] = FilterAndGetFieldFromStructArray(theStructArray,theF
 %
 % See GetFilteringIndex for information on how the filtering is done.
 %
+% See also SubstructArrayFromStructArray
+%
+% Examples:
+% 1) Get paintRMSE values for all cases where both paint and shadow RMSE were
+% less than or equal to 0.2:
+%   paintRMSE = GetFilteringIndex(paintShadowEffectDecodeBoth,'paintRMSE',{'paintRMSE' 'shadowRMSE'},{0.2 0.2}, {'<=' '<='});
+%
+% 2) Get paintRMSE for all sessions with subject JD
+%  indexJD = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+%  paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectDecodeBoth,'paintRMSE',indexJD);
+%
+%
 % 4/1/16  dhb  Wrote it.
 
 % Deal with optional args
