@@ -29,7 +29,7 @@ summaryDir = fullfile(summaryRootDir,condStr,'');
 if (~exist(summaryDir,'dir'))
     mkdir(summaryDir);
 end
-saveFile = fullfile(summaryDir,['Output' '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType],'');
+%saveFile = fullfile(summaryDir,['Output' '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType],'');
 
 %% Find preprocessed data basic location and get all the directories
 preprocessedDataDir = '../../PennOutput/xPreprocessedData';
@@ -128,19 +128,13 @@ end
 %     error('Data length mismatch');
 % end
 
-
 %% Figure parameters
 figParams = SetFigParams([],'popdecode');
 
 %% Call routines to make nice summary plots
+
+% Paint/Shadow Effect
 PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
 
-% RMSE Versus Fit Scale
-%ExtractedSummaryRMSEVsNUnitsFitScalePlot(summaryDir,loadedData.decodeInfoIn,loadedData.decodeInfoOut);
-
-%% Write out summary text file
-% outputSummaryStructs = [outputSummaryTextStructs_BR_V1 outputSummaryTextStructs_ST_V1 outputSummaryTextStructs_JD_V4 outputSummaryTextStructs_SY_V4];
-% summaryFilename =  fullfile(summaryDir,['Summary'  '_' loadedData.decodeInfoIn.dataType '_' loadedData.decodeInfoIn.paintShadowFitType '.txt'],'');
-% WriteStructsToText(summaryFilename,outputSummaryStructs);
 
 
