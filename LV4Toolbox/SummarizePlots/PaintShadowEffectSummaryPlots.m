@@ -3,6 +3,10 @@ function PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,fi
 %
 % Summary plots of the basic paint/shadow effect.
 %
+% Note that we include sessions based on the decode both RMSE, no matter
+% how we are decoding.  This is because the logic is that a session is
+% either good or bad, independent of what is being analyzed.
+%
 % 4/19/16  dhb  Wrote it.
 
 %% Additional parameters
@@ -15,14 +19,16 @@ end
 
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
-% Get the decode both results from the top level structure.
+% Get the decode both results from the top level structure, and also get
+% the boolean for inclusion based on decoded RMSE.
 paintShadowEffectDecodeBoth = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
 if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
     error('Length mismatch on struct arrays that should be the same');
 end
+[~,booleanRMSEInclude] = GetFilteringIndex(paintShadowEffectDecodeBoth,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
 
 % Make the figure
-paintShadowEffectDecodeBothFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeBoth,figParams);
+paintShadowEffectDecodeBothFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeBoth,booleanRMSEInclude,figParams);
 
 % Add title and save
 figure(paintShadowEffectDecodeBothFig);
@@ -39,7 +45,7 @@ if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
 end
 
 % Make the figure
-paintShadowEffectDecodePaintFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodePaint,figParams);
+paintShadowEffectDecodePaintFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodePaint,booleanRMSEInclude,figParams);
 
 % Add title and save
 figure(paintShadowEffectDecodePaintFig);
@@ -56,7 +62,7 @@ if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
 end
 
 % Make the figure
-paintShadowEffectDecodeShadowFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeShadow,figParams);
+paintShadowEffectDecodeShadowFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeShadow,booleanRMSEInclude,figParams);
 
 % Add title and save
 figure(paintShadowEffectDecodeShadowFig);
@@ -67,7 +73,7 @@ FigureSave(figFilename,paintShadowEffectDecodeShadowFig,figParams.figType);
 end
 
 %% Function to actually make the figure
-function theFigure = PaintShadowEffectFigure(basicInfo,paintShadowEffectIn,figParams)
+function [theFigure,booleanRMSE] = PaintShadowEffectFigure(basicInfo,paintShadowEffectIn,booleanRMSE,figParams)
 
 % Open figure
 theFigure = figure; clf; hold on
@@ -83,7 +89,6 @@ figParams.plotSymbol = 'o';
 figParams.plotColor = 'r';
 figParams.outlineColor = 'r';
 [~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
-[~,booleanRMSE] = GetFilteringIndex(paintShadowEffectIn,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
 indexKeep = find(booleanSubject & booleanRMSE);
 paintRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'paintRMSE',indexKeep);
 shadowRMSE = FilterAndGetFieldFromStructArray(paintShadowEffectIn,'shadowRMSE',indexKeep);

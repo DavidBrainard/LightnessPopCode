@@ -134,7 +134,8 @@ figParams = SetFigParams([],'popdecode');
 %% Call routines to make nice summary plots
 
 % Paint/Shadow Effect
-PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
+%PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
+RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams);
 
 
 
