@@ -19,7 +19,7 @@ SetAnalysisPath;
 ClockRandSeed;
 
 %% Set up decodeInfoIn from args
-[decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin{:});
+decodeInfoIn= ParseDecodeInfo(varargin{:});
 
 %% Set up files to run
 %
