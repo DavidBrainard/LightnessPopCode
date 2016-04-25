@@ -1,5 +1,5 @@
-function decodeInfo = ExtractedRMSEAnalysis(decodeInfo,theData)
-% decodeInfo = ExtractedRMSEAnalysis(decodeInfo,theData)
+function ExtractedRMSEAnalysis(doIt,decodeInfo,theData)
+% ExtractedRMSEAnalysis(doIt,decodeInfo,theData)
 %
 % Analyze how paint and shadow RMSE/Prediction compare with each other when
 % decoder is built with both, built with paint only, built with shadow
@@ -11,6 +11,17 @@ function decodeInfo = ExtractedRMSEAnalysis(decodeInfo,theData)
 % doesn't provide good intuitions.
 %
 % 3/29/16  dhb  Pulled this out as a function
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEAnalysis'),'file'))
+            return;
+        end
+end
 
 %% Shuffle just once in this whole function, if desired
 clear decodeInfoTemp

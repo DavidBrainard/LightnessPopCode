@@ -1,5 +1,5 @@
-function decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
-% decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
+function ExtractedRMSEVersusNUnits(doIt,decodeInfo,theData)
+% ExtractedRMSEVersusNUnits(doIt,decodeInfo,theData)
 %
 % Study decoding performance as a function of the number of units.
 %
@@ -8,6 +8,17 @@ function decodeInfo = ExtractedRMSEVersusNUnits(decodeInfo,theData)
 %   being shuffled.
 %
 % 3/29/16  dhb  Pulled this out.
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNUnits'),'file'))
+            return;
+        end
+end
 
 %% Decoding for various combinations of units
 %

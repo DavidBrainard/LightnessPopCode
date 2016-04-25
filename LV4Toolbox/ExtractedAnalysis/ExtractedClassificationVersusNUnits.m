@@ -1,9 +1,20 @@
-function decodeInfo = ExtractedClassificationVersusNUnits(decodeInfo,theData)
-% decodeInfo = ExtractedClassificationVersusNUnits(decodeInfo,theData)
+function ExtractedClassificationVersusNUnits(doIt,decodeInfo,theData)
+% ExtractedClassificationVersusNUnits(doIt,decodeInfo,theData)
 %
 % Study classification performance as a function of the number of units.
 %
 % 3/29/16  dhb  Pulled this out into its own function.
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNUnits'),'file'))
+            return;
+        end
+end
 
 %% Get info about what to do
 nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));

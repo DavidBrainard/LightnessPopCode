@@ -1,9 +1,20 @@
-function decodeInfo = ExtractedClassificationVersusNPCA(decodeInfo,theData)
-% decodeInfo = ExtractedClassificationVersusNPCA(decodeInfo,theData)
+function ExtractedClassificationVersusNPCA(doIt,decodeInfo,theData)
+% ExtractedClassificationVersusNPCA(doIt,decodeInfo,theData)
 %
 % Study classification performance as a function of number of PCA dimensions
 %
 % 3/29/16  dhb  Pulled this out into its own function
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA'),'file'))
+            return;
+        end
+end
 
 %% Get info about what to do
 nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));

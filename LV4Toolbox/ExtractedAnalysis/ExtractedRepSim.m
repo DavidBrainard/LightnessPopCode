@@ -1,5 +1,5 @@
-function decodeInfo = ExtractedRepSim(decodeInfo,theData)
-% decodeInfo = ExtractedRepSim(decodeInfo,theData)
+function ExtractedRepSim(doIt,decodeInfo,theData)
+% ExtractedRepSim(doIt,decodeInfo,theData)
 %
 % Run through and make plots of the respresentational similarity analysis
 % for one session.
@@ -9,7 +9,18 @@ function decodeInfo = ExtractedRepSim(decodeInfo,theData)
 % 3/29/16  dhb  Pulled this out of main script, as a quasi modularization.
 % 4/5/16   dhb  Cleaned up to use new conventions.  Not debugged.
 
-%% Clear
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRepSim'),'file'))
+            return;
+        end
+end
+
+%% Setup decodeSave
 clear decodeSave
 decodeSave.uniqueIntensities = decodeInfo.uniqueIntensities;
 

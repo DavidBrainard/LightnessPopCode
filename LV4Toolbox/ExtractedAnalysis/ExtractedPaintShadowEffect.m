@@ -1,9 +1,20 @@
-function decodeInfo = ExtractedPaintShadowEffect(decodeInfo,theData)
-% decodeInfo = ExtractedPaintShadowEffect(decodeInfo,theData)
+function ExtractedPaintShadowEffect(doIt,decodeInfo,theData)
+% ExtractedPaintShadowEffect(doIt,doPaintShadowEffect,decodeInfo,theData)
 %
 % Do the basic paint/shadow decoding and get paint shadow effect.
 %
 % 3/29/16  dhb  Pulled this out as a function
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extPaintShadowEffect'),'file'))
+            return;
+        end
+end
 
 %% Shuffle just once in this whole function, if desired
 clear decodeInfoTemp

@@ -1,10 +1,21 @@
-function decodeInfo = ExtractedRMSEVersusNPCA(decodeInfo,theData)
-% decodeInfo = ExtractedRMSEVersusNPCA(decodeInfo,theData)
+function ExtractedRMSEVersusNPCA(doIt,decodeInfo,theData)
+% ExtractedRMSEVersusNPCA(doIt,decodeInfo,theData)
 %
 % Study decoding performance as a function of number of PCA dimensions
 %
 % 3/29/16  dhb  Pulled it out.
-% 4/5/16   dhb  Cleaned up to use new conventions.  Not debugged.
+% 4/5/16   dhb  Cleaned up to use new conventions.
+
+%% Are we doing it?
+switch (doIt)
+    case 'always'
+    case 'never'
+        return;
+    case 'ifmissing'
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA'),'file'))
+            return;
+        end
+end
 
 %% Get info about what to do
 nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);

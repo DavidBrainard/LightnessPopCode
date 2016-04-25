@@ -9,6 +9,15 @@ function decodeInfoOut = ExtractedEngine(readDataDir,decodeInfoIn)
 %% Basic initialization
 close all;
 
+%% Control what we do
+doPaintShadowEffect = 'always';
+doRepSim = 'always';
+doRMSEAnalysis = 'always';
+doRMSEVersusNUnits = 'always';
+doRMSEVersusNPCA= 'ifmissing';
+doClassificationVersusNUnits = 'ifmissing';
+doClassificationVersusNPCA = 'ifmissing';
+
 %% Start getting info to pass on back
 decodeInfoOut = decodeInfoIn;
 
@@ -110,39 +119,35 @@ if (decodeInfoOut.OK)
     tstart = tic;
     
     % *******
-    % Basic information
-    decodeInfoOut = ExtractedBasicInfo(decodeInfoOut,theData);
-    
-    % *******
     % Paint shadow effect
-    decodeInfoOut = ExtractedPaintShadowEffect(decodeInfoOut,theData);
+    ExtractedPaintShadowEffect(doPaintShadowEffect,decodeInfoOut,theData);
     
     % *******
     % Representational similarity
-    decodeInfoOut = ExtractedRepSim(decodeInfoOut,theData);
+    ExtractedRepSim(doRepSim,decodeInfoOut,theData);
     
     % *******
     % Analyze how paint and shadow RMSE/Prediction compare with each other when
     % decoder is built with both, built with paint only, built with shadow
     % only, is chosen randomly, is built to classify, etc.
-    decodeInfoOut = ExtractedRMSEAnalysis(decodeInfoOut,theData);
+    ExtractedRMSEAnalysis(doRMSEAnalysis,decodeInfoOut,theData);
     
     % *******
     % Analyze decoding as a function of the number of units used to build
     % decoder.
-    decodeInfoOut = ExtractedRMSEVersusNUnits(decodeInfoOut,theData);
+    ExtractedRMSEVersusNUnits(doRMSEVersusNUnits,decodeInfoOut,theData);
     
     % *******
     % Study decoding performance as a function of number of PCA dimensions
-    decodeInfoOut = ExtractedRMSEVersusNPCA(decodeInfoOut,theData);
+    ExtractedRMSEVersusNPCA(doRMSEVersusNPCA,decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of the number of units
-    decodeInfoOut = ExtractedClassificationVersusNUnits(decodeInfoOut,theData);
+    ExtractedClassificationVersusNUnits(doClassificationVersusNUnits,decodeInfoOut,theData);
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
-    decodeInfoOut = ExtractedClassificationVersusNPCA(decodeInfoOut,theData);
+    ExtractedClassificationVersusNPCA(doClassificationVersusNPCA,decodeInfoOut,theData);
     
     % Save the output for this directory.  Good for checkpointing
     decodeInfoOut.runTime = toc(tstart);
