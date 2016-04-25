@@ -1,5 +1,5 @@
-function [decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin)
-% [decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin)
+function [decodeInfoIn] = ParseDecodeInfo(varargin)
+% [decodeInfoIn] = ParseDecodeInfo(varargin)
 %
 % Set up the decodeInfoIn structure.
 %
@@ -8,8 +8,7 @@ function [decodeInfoIn,COMPUTE] = ParseDecodeInfo(varargin)
 % Check for the number of arguments and parse optional args.
 %
 % The arg strings match the fields set in the decodeInfo structure
-% below, with the exception of COMPUTE which is not a field in
-% that structure.
+% below.
 %
 % Defaults are given here.  Options are described in comments
 % with each field/variable below.
@@ -32,20 +31,9 @@ parser.addParamValue('shadowCondition',2,@isnumeric);
 parser.addParamValue('paintShadowFitType','intcpt',@ischar);
 parser.addParamValue('decodeNFolds',10,@isnumeric);
 parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
-parser.addParamValue('minTrials',20,@isnumeric);
-parser.addParamValue('filterMaxRMSE',0.2,@isnumeric);
-parser.addParamValue('doIndElectrodeRFPlots',false,@islogical);
-parser.addParamValue('COMPUTE',true,@islogical);
-parser.addParamValue('plotV4Only',false,@islogical);
-parser.addParamValue('DATASTYLE','new',@ischar);
-
+parser.addParamValue('minTrials',5,@isnumeric);
+parser.addParamValue('filterMaxRMSE',0.25,@isnumeric);
 parser.parse(varargin{:});
-
-% Compute for each individual data file, or just read what was already done and do 
-% the summary analysis?  Usefule because the file-by-file stuff takes some time,
-% and often we are screwing around with the summarizing code and don't need to
-% redo everything just to get that part fixed up.
-COMPUTE = parser.Results.COMPUTE;
 
 % Type of input
 %   'spksrt'             - After Doug did the manual spike sorting
@@ -84,23 +72,6 @@ decodeInfoIn.classifyType = parser.Results.classifyType;
 %   'no'                 - Don't do pca.
 decodeInfoIn.pcaType = parser.Results.pcaType;
 decodeInfoIn.pcaKeep = parser.Results.pcaKeep;
-
-% Type of RF analysis
-%   'std'                 - Our standard analysis.
-%   'no'                  - Don't do it.
-%
-% The second one here controls not only plots but also some analyses
-% that are naturally associated with those plots.  So it is a bit
-% misnamed.  We can indpendently control whether the plots are drawn
-% and saved, as just below
-decodeInfoIn.rfAnalysisType = parser.Results.rfAnalysisType;
-decodeInfoIn.doIndElectrodeRFPlots = parser.Results.doIndElectrodeRFPlots;
-
-% Control whether we dump out individual plots.  This is very time
-% consuming so it is nice to turn it off if we just want the summary
-% RF analyses
-decodeInfoIn.reallyDoIRFPlots = parser.Results.reallyDoIRFPlots;
-decodeInfoIn.reallyDoRFPlots = parser.Results.reallyDoRFPlots;
 
 % Use paint, shadow, or both for building decoder?
 %
@@ -145,11 +116,8 @@ decodeInfoIn.decodedIntensityFitSmoothingParam = 0.995;
 decodeInfoIn.paintCondition = parser.Results.paintCondition;
 decodeInfoIn.shadowCondition = parser.Results.shadowCondition;
 
-% Control what gets plotted in the summary plots
-decodeInfoIn.plotV4Only = parser.Results.plotV4Only;
-
 % What data to read
-decodeInfoIn.DATASTYLE = parser.Results.DATASTYLE;
+decodeInfoIn.DATASTYLE = 'new';
 
 % Paint/shadow fit type
 %
