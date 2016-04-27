@@ -287,21 +287,13 @@ end
  
 % And also deal with the fact that we found the best decoding for two at a
 % time, so slip this into the maximum.
+%
+% Cross validation and/or different trial shuffling can lead to a  small
+% amount of variation so that it could be that the best classification when
+% we search over all pairs of units sometimes is slightly worse than the
+% best we get when we get the minimum across random draws.  We just take
+% the from the exhaustive check of two at a time.
 index = find(decodeInfo.maxUnits == 2);
-if (strcmp(decodeInfo.trialShuffleType,'none') & strcmp(decodeInfo.paintShadowShuffleType,'none'))
-    if (decodeInfo.bestTwoPerformance < decodeInfo.maxPerformance(index))
-        % This should not happen, but sometimes does.  My current theory is
-        % that the SVM classifier may behave differently given [a,b] as
-        % dimensions than when given [b,a].  When we use K-fold cross-validation,
-        % this might also occur.
-        %
-        % Because it happens rarely and is hard to debug on the cluster,
-        % this code now saves out the workspace when this occurs, for
-        % looking at later.
-        % error('Oops.  Best two at a time not the best in the no shuffle case.');
-        save(fullfile(decodeInfo.writeDataDir,'extCLASSDEBUGBESTTWOUNITSCODE'),'-v7.3');
-    end
-end
 decodeInfo.maxPerformance(index) = decodeInfo.bestTwoPerformance;
  
 %% Fit an exponential through the upper envelope of the performance versus units

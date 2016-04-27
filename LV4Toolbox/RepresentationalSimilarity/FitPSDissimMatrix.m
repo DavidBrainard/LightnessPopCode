@@ -169,7 +169,17 @@ predTriang = modelTriang*additiveParams;
 predTriang(predTriang < 0) = eps;
 
 % Evaulate
-tau = corr(dissimTriang,predTriang,'type','Kendall');
+%
+% Apparently Matlab's implementation is Kendall's tau type B, while
+% the rsatoolbox computes Kendall's tau type A.  The difference, I believe,
+% has to do with how ties in the rank ordering are handled.
+tauType = 'rsatoolbox';
+switch (tauType)
+    case 'rsatoolbox'
+        tau = rankCorr_Kendall_taua(dissimTriang(:),predTriang(:));
+    case 'matlab'    
+        tau = corr(dissimTriang,predTriang,'type','Kendall');
+end
 f = -10*tau;
 
 end

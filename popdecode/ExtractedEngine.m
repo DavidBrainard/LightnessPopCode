@@ -10,13 +10,17 @@ function decodeInfoOut = ExtractedEngine(readDataDir,decodeInfoIn)
 close all;
 
 %% Control what we do
-doPaintShadowEffect = 'always';
+% Options are:
+%   'always' -- always do the analsyis
+%   'never' -- never do the analysis
+%   'ifmissing' -- do the analysis if there isn't currently a corresponding output file.
+doPaintShadowEffect = 'never';
 doRepSim = 'always';
-doRMSEAnalysis = 'always';
-doRMSEVersusNUnits = 'always';
-doRMSEVersusNPCA= 'ifmissing';
-doClassificationVersusNUnits = 'ifmissing';
-doClassificationVersusNPCA = 'ifmissing';
+doRMSEAnalysis = 'never';
+doRMSEVersusNUnits = 'never';
+doRMSEVersusNPCA= 'never';
+doClassificationVersusNUnits = 'never';
+doClassificationVersusNPCA = 'never';
 
 %% Start getting info to pass on back
 decodeInfoOut = decodeInfoIn;
@@ -152,7 +156,8 @@ if (decodeInfoOut.OK)
     % Save the output for this directory.  Good for checkpointing
     decodeInfoOut.runTime = toc(tstart);
     curDir = pwd; cd(readDataDir);
-    save('extDecodeInfoOut','decodeInfoOut','-v7.3');
+    decodeSave = decodeInfoOut;
+    save('extEngine','decodeSave','-v7.3');
     cd(curDir);
 
 end
