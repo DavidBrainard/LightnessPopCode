@@ -6,12 +6,20 @@ function ExtractedClassificationVersusNPCA(doIt,decodeInfo,theData)
 % 3/29/16  dhb  Pulled this out into its own function
 
 %% Are we doing it?
+%
+% Rename buggy filename if it exists
+if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat'),'file'))
+    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
+end
+if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA .mat'),'file'))
+    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA.mat')]);
+end
 switch (doIt)
     case 'always'
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA.mat'),'file'))
             return;
         end
 end

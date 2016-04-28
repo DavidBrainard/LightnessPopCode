@@ -7,12 +7,17 @@ function ExtractedRMSEVersusNPCA(doIt,decodeInfo,theData)
 % 4/5/16   dhb  Cleaned up to use new conventions.
 
 %% Are we doing it?
+%
+% Rename buggy filename if it exists
+if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat'),'file'))
+    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
+end
 switch (doIt)
     case 'always'
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat'),'file'))
             return;
         end
 end

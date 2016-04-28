@@ -11,7 +11,7 @@ switch (doIt)
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extPaintShadowEffect'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extPaintShadowEffect.mat'),'file'))
             return;
         end
 end
