@@ -173,7 +173,7 @@ predTriang(predTriang < 0) = eps;
 % Apparently Matlab's implementation is Kendall's tau type B, while
 % the rsatoolbox computes Kendall's tau type A.  The difference, I believe,
 % has to do with how ties in the rank ordering are handled.
-tauType = 'matlab';
+tauType = 'rsatoolbox';
 switch (tauType)
     case 'rsatoolbox'
         tau = rankCorr_Kendall_taua(dissimTriang(:),predTriang(:));
