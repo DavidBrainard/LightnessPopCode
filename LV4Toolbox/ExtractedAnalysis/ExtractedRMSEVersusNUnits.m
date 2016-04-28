@@ -15,7 +15,7 @@ switch (doIt)
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNUnits'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNUnits.mat'),'file'))
             return;
         end
 end

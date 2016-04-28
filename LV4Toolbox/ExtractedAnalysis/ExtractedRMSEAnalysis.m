@@ -18,7 +18,7 @@ switch (doIt)
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEAnalysis'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEAnalysis.mat'),'file'))
             return;
         end
 end

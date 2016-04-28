@@ -15,7 +15,7 @@ switch (doIt)
     case 'never'
         return;
     case 'ifmissing'
-        if (exist(fullfile(decodeInfo.writeDataDir,'extRepSim'),'file'))
+        if (exist(fullfile(decodeInfo.writeDataDir,'extRepSim.mat'),'file'))
             return;
         end
 end
