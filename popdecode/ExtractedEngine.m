@@ -14,8 +14,8 @@ close all;
 %   'always' -- always do the analsyis
 %   'never' -- never do the analysis
 %   'ifmissing' -- do the analysis if there isn't currently a corresponding output file.
-doPaintShadowEffect = 'ifmissing';
-doRepSim = 'always';
+doPaintShadowEffect = 'always';
+doRepSim = 'ifmissing';
 doRMSEAnalysis = 'ifmissing';
 doRMSEVersusNUnits = 'ifmissing';
 doRMSEVersusNPCA= 'ifmissing';
