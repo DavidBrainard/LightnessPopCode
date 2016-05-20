@@ -1,5 +1,5 @@
-function RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams)
-% RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams)
+function RepSimSummaryPlots(basicInfoAll,paintShadowEffect,repSim,summaryDir,figParams)
+% RepSimSummaryPlots(basicInfoAll,paintShadowEffect,repSim,summaryDir,figParams)
 %
 % Summary plots of the representational similarity analysis.
 %
@@ -7,10 +7,10 @@ function RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figPar
 
 %% Additional parameters
 figParams.bumpSizeForMean = 6;
-figureSubdir = 'RepSim';
-figureDir = fullfile(summaryDir,figureSubdir,'');
-if (~exist(figureDir,'dir'))
-    mkdir(figureDir);
+repSimSubdir = 'RepSim';
+repSimDir = fullfile(summaryDir,repSimSubdir,'');
+if (~exist(repSimDir,'dir'))
+    mkdir(repSimDir);
 end
 
 %% Get the inclusion boolean based on decoding RMSE
@@ -18,107 +18,150 @@ end
 % Extract the decode both results from the top level structure, and also get
 % the boolean for inclusion based on decoded RMSE.
 paintShadowEffectDecodeBoth = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
-if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
+if (length(basicInfoAll) ~= length(paintShadowEffectDecodeBoth))
     error('Length mismatch on struct arrays that should be the same');
 end
-[~,booleanRMSEInclude] = GetFilteringIndex(paintShadowEffectDecodeBoth,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
+[~,booleanRMSEInclude] = GetFilteringIndex(paintShadowEffectDecodeBoth,{'paintRMSE' 'shadowRMSE'},{basicInfoAll(1).filterMaxRMSE basicInfoAll(1).filterMaxRMSE}, {'<=' '<='});
+
+%% Start up overall figures
+tauPlotFig = figure; clf; hold on
+set(gcf,'Position',figParams.sqPosition);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 
 %% Compute and plot the average dissimilarity matrix, JD
 whichSubject = 'JD';
 figParams.plotSymbol = 'o';
 figParams.plotColor = 'r';
 figParams.outlineColor = 'r';
-[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
+basicInfo = basicInfoAll(index);
 
-meanDissimMatrixJD = 0;
-dissimMatrixCellArrayJD = {repSim(index).dissimMatrix};
-if (length(index) ~= length(dissimMatrixCellArrayJD))
+% Compute mean dissim matrix, and plot
+meanDissimMatrix = 0;
+dissimMatrixCellArray = {repSim(index).dissimMatrix};
+if (length(index) ~= length(dissimMatrixCellArray))
     error('Length mismatch on things that should be the same');
 end
 for ii = 1:length(index)
-    meanDissimMatrixJD = meanDissimMatrixJD + dissimMatrixCellArrayJD{ii};
+    meanDissimMatrix = meanDissimMatrix + dissimMatrixCellArray{ii};
 end
-meanDissimMatrixJD = meanDissimMatrixJD/length(index);
+meanDissimMatrix = meanDissimMatrix/length(index);
 
-figureRepSimDissimMatrixJD = figure; hold on
-imagesc(meanDissimMatrixJD); colorbar; axis('square');
+figureRepSimDissimMatrix = figure; hold on
+imagesc(meanDissimMatrix); colorbar; axis('square');
 title({'Mean Dissimilarity Matrix, JD'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryfigureRepSimDissimMatrixJD ','');
-FigureSave(figFilename,figureRepSimDissimMatrixJD ,figParams.figType);
+figFilename = fullfile(repSimDir,'repsimAvgDissimMatrixJD','');
+FigureSave(figFilename,figureRepSimDissimMatrix ,figParams.figType);
+
+% Add variables to summary plots
+figure(tauPlotFig);
+plot([repSim(index).fitTau],[repSim(index).noShiftTau],[figParams.plotSymbol figParams.plotColor],'MarkerSize',figParams.markerSize-6,'MarkerFaceColor',figParams.plotColor);
+
+% Save information for further analysis
+save(fullfile(repSimDir,'dissimMatricesJD'),'dissimMatrixCellArray','meanDissimMatrix','basicInfo','-v7.3');
 
 %% Compute and plot the average dissimilarity matrix, SY
 whichSubject = 'SY';
-figParams.plotSymbol = 'o';
+figParams.plotSymbol = 's';
 figParams.plotColor = 'r';
 figParams.outlineColor = 'r';
-[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+[~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
 
-meanDissimMatrixSY = 0;
-dissimMatrixCellArraySY = {repSim(index).dissimMatrix};
-if (length(index) ~= length(dissimMatrixCellArraySY))
+% Compute mean dissim matrix, and plot
+meanDissimMatrix = 0;
+dissimMatrixCellArray = {repSim(index).dissimMatrix};
+if (length(index) ~= length(dissimMatrixCellArray))
     error('Length mismatch on things that should be the same');
 end
 for ii = 1:length(index)
-    meanDissimMatrixSY = meanDissimMatrixSY + dissimMatrixCellArraySY{ii};
+    meanDissimMatrix = meanDissimMatrix + dissimMatrixCellArray{ii};
 end
-meanDissimMatrixSY = meanDissimMatrixSY/length(index);
+meanDissimMatrix = meanDissimMatrix/length(index);
 
-figureRepSimDissimMatrixSY = figure; hold on
-imagesc(meanDissimMatrixSY); colorbar; axis('square');
+figureRepSimDissimMatrix = figure; hold on
+imagesc(meanDissimMatrix); colorbar; axis('square');
 title({'Mean Dissimilarity Matrix, SY'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryfigureRepSimDissimMatrixSY ','');
-FigureSave(figFilename,figureRepSimDissimMatrixSY ,figParams.figType);
+figFilename = fullfile(repSimDir,'repsimAvgDissimMatrixSY','');
+FigureSave(figFilename,figureRepSimDissimMatrix ,figParams.figType);
+
+% Add variables to summary plots
+figure(tauPlotFig);
+plot([repSim(index).fitTau],[repSim(index).noShiftTau],[figParams.plotSymbol figParams.plotColor],'MarkerSize',figParams.markerSize-6,'MarkerFaceColor',figParams.plotColor);
+
+% Save information for further analysis
+save(fullfile(repSimDir,'dissimMatricesSY'),'dissimMatrixCellArray','meanDissimMatrix','basicInfo','-v7.3');
 
 %% Compute and plot the average dissimilarity matrix, BR
 whichSubject = 'BR';
-figParams.plotSymbol = 'o';
-figParams.plotColor = 'r';
-figParams.outlineColor = 'r';
-[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+figParams.plotSymbol = 's';
+figParams.plotColor = 'k';
+figParams.outlineColor = 'k';
+[~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
 
-meanDissimMatrixBR = 0;
-dissimMatrixCellArrayBR = {repSim(index).dissimMatrix};
-if (length(index) ~= length(dissimMatrixCellArrayBR))
+% Compute mean dissim matrix, and plot
+meanDissimMatrix = 0;
+dissimMatrixCellArray = {repSim(index).dissimMatrix};
+if (length(index) ~= length(dissimMatrixCellArray))
     error('Length mismatch on things that should be the same');
 end
 for ii = 1:length(index)
-    meanDissimMatrixBR = meanDissimMatrixBR + dissimMatrixCellArrayBR{ii};
+    meanDissimMatrix = meanDissimMatrix + dissimMatrixCellArray{ii};
 end
-meanDissimMatrixBR = meanDissimMatrixBR/length(index);
+meanDissimMatrix = meanDissimMatrix/length(index);
 
-figureRepSimDissimMatrixBR = figure; hold on
-imagesc(meanDissimMatrixBR); colorbar; axis('square');
+figureRepSimDissimMatrix = figure; hold on
+imagesc(meanDissimMatrix); colorbar; axis('square');
 title({'Mean Dissimilarity Matrix, BR'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryfigureRepSimDissimMatrixBR ','');
-FigureSave(figFilename,figureRepSimDissimMatrixBR ,figParams.figType);
+figFilename = fullfile(repSimDir,'repsimAvgDissimMatrixBR','');
+FigureSave(figFilename,figureRepSimDissimMatrix ,figParams.figType);
+
+% Add variables to summary plots
+figure(tauPlotFig);
+plot([repSim(index).fitTau],[repSim(index).noShiftTau],[figParams.plotSymbol figParams.plotColor],'MarkerSize',figParams.markerSize-6,'MarkerFaceColor',figParams.plotColor);
+
+% Save information for further analysis
+save(fullfile(repSimDir,'dissimMatricesBR'),'dissimMatrixCellArray','meanDissimMatrix','basicInfo','-v7.3');
 
 %% Compute and plot the average dissimilarity matrix, ST
 whichSubject = 'ST';
-figParams.plotSymbol = 'o';
-figParams.plotColor = 'r';
-figParams.outlineColor = 'r';
-[~,booleanSubject] = GetFilteringIndex(basicInfo,{'subjectStr'},{whichSubject});
+figParams.plotSymbol = '^';
+figParams.plotColor = 'k';
+figParams.outlineColor = 'k';
+[~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
 
-meanDissimMatrixST = 0;
-dissimMatrixCellArrayST = {repSim(index).dissimMatrix};
-if (length(index) ~= length(dissimMatrixCellArrayST))
+% Compute mean dissim matrix, and plot
+meanDissimMatrix = 0;
+dissimMatrixCellArray = {repSim(index).dissimMatrix};
+if (length(index) ~= length(dissimMatrixCellArray))
     error('Length mismatch on things that should be the same');
 end
 for ii = 1:length(index)
-    meanDissimMatrixST = meanDissimMatrixST + dissimMatrixCellArrayST{ii};
+    meanDissimMatrix = meanDissimMatrix + dissimMatrixCellArray{ii};
 end
-meanDissimMatrixST = meanDissimMatrixST/length(index);
+meanDissimMatrix = meanDissimMatrix/length(index);
 
-figureRepSimDissimMatrixST = figure; hold on
-imagesc(meanDissimMatrixST); colorbar; axis('square');
+figureRepSimDissimMatrix = figure; hold on
+imagesc(meanDissimMatrix); colorbar; axis('square');
 title({'Mean Dissimilarity Matrix, ST'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryfigureRepSimDissimMatrixST ','');
-FigureSave(figFilename,figureRepSimDissimMatrixST ,figParams.figType);
+figFilename = fullfile(repSimDir,'repsimAvgDissimMatrixST','');
+FigureSave(figFilename,figureRepSimDissimMatrix ,figParams.figType);
 
-end
+% Add variables to summary plots
+figure(tauPlotFig);
+plot([repSim(index).fitTau],[repSim(index).noShiftTau],[figParams.plotSymbol figParams.plotColor],'MarkerSize',figParams.markerSize-6,'MarkerFaceColor',figParams.plotColor);
 
-%
+% Save information for further analysis
+save(fullfile(repSimDir,'dissimMatricesST'),'dissimMatrixCellArray','meanDissimMatrix','basicInfo','-v7.3');
+
+%% Finish up summary plots
+figure(tauPlotFig);
+xlabel('Best Fit Tau');
+ylabel('Best Fit Tau No Shift');
+xlim([0 1]); ylim([0 1]);
+plot([0 1],[0 1],'k','LineWidth',1);
+figFilename = fullfile(repSimDir,'repsimFitTauValues','');
+FigureSave(figFilename,tauPlotFig,figParams.figType);

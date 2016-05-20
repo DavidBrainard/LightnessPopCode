@@ -51,58 +51,41 @@ if (~exist(extractedDataRootDir,'dir'))
     error('Extracted analysis output condition dir doesn''t exist');
 end
 curDir = pwd; cd(extractedDataRootDir);
-theExtractedDirs = dir('*00*');
+theExtractedDirsRaw = dir('*00*');
 cd(curDir);
 
-%% Get all the processed data so we plot or otherwise analyze them.
-%
-% There are two identical loops here, one for when we're on a cluster
-% (parfor) and one for when we are not.  The code should be identical
-% within each loop.
-if (exist('IsCluster','file') & IsCluster)
-    parfor runIndex = 1:length(theExtractedDirs)
-        % We can have more proprocessed dirs than extracted dirs, but there
-        % should be a preprocessed dir with the same name as the
-        % corresponding extracted dir.  Set up both.
-        thePreprocessedDir = fullfile(preprocessedDataRootDir,theExtractedDirs(runIndex).name,'');
-        theExtractedDir = fullfile(extractedDataRootDir,theExtractedDirs(runIndex).name,'');
-        
-        % Basic information we'll need for indexing is stored with the
-        % preprocessed data.  Grab that.
-        basicInfo(runIndex) = SummarizeGetExtractedStructs(thePreprocessedDir,'basicInfo.mat');
-        
-        % Get the output of the various analyses that get run over the
-        % preprocessed data.
-        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
-        repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
-        RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
-        RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
-        %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
-        %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
-        %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
+% Filter for dirs that actually have valid output
+outIndex = 1;
+for inIndex = 1:length(theExtractedDirsRaw)
+    if (exist(fullfile(extractedDataRootDir,theExtractedDirsRaw(inIndex).name,'extPaintShadowEffect.mat'),'file'))
+        theExtractedDirs(outIndex) = theExtractedDirsRaw(inIndex);
+        outIndex = outIndex + 1;
+    else
+        fprintf('No valid data in %s\n',theExtractedDirsRaw(inIndex).name);
     end
-else
-    for runIndex = 1:length(theExtractedDirs)
-        % We can have more proprocessed dirs than extracted dirs, but there
-        % should be a preprocessed dir with the same name as the
-        % corresponding extracted dir.  Set up both.
-        thePreprocessedDir = fullfile(preprocessedDataRootDir,theExtractedDirs(runIndex).name,'');
-        theExtractedDir = fullfile(extractedDataRootDir,theExtractedDirs(runIndex).name,'');
-        
-        % Basic information we'll need for indexing is stored with the
-        % preprocessed data.  Grab that.
-        basicInfo(runIndex) = SummarizeGetExtractedStructs(thePreprocessedDir,'basicInfo.mat');
+end
 
-        % Get the output of the various analyses that get run over the
-        % preprocessed data.
-        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
-        repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
-        RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
-        RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
-        %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
-        %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
-        %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
-    end
+%% Get all the processed data so we plot or otherwise analyze them.
+for runIndex = 1:length(theExtractedDirs)
+    % We can have more proprocessed dirs than extracted dirs, but there
+    % should be a preprocessed dir with the same name as the
+    % corresponding extracted dir.  Set up both.
+    thePreprocessedDir = fullfile(preprocessedDataRootDir,theExtractedDirs(runIndex).name,'');
+    theExtractedDir = fullfile(extractedDataRootDir,theExtractedDirs(runIndex).name,'');
+    
+    % Basic information we'll need for indexing is stored with the
+    % preprocessed data.  Grab that.
+    basicInfo(runIndex) = SummarizeGetExtractedStructs(thePreprocessedDir,'basicInfo.mat');
+    
+    % Get the output of the various analyses that get run over the
+    % preprocessed data.
+    paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
+    repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
+    RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
+    RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
+    %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
+    %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
+    %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
 end
 
 % Check that everyone is the same length
