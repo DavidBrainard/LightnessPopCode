@@ -10,7 +10,7 @@ function ExtractedRMSEVersusNPCA(doIt,decodeInfo,theData)
 %
 % Rename buggy filename if it exists
 if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat'),'file'))
-    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
+    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA\ .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
 end
 switch (doIt)
     case 'always'

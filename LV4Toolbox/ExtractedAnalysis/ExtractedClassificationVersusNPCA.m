@@ -8,11 +8,8 @@ function ExtractedClassificationVersusNPCA(doIt,decodeInfo,theData)
 %% Are we doing it?
 %
 % Rename buggy filename if it exists
-if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat'),'file'))
-    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
-end
 if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA .mat'),'file'))
-    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA .mat') ' ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA.mat')]);
+    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA\ .mat') ' ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA.mat')]);
 end
 switch (doIt)
     case 'always'

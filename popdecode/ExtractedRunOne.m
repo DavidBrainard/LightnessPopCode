@@ -39,7 +39,8 @@ thePreprocessedDirs = dir('*00*');
 cd(curDir);
 
 %% Run the extracted analysis over each preprocessed directory
-if (exist('IsCluster','file') & IsCluster)
+allowParfor = true;
+if (allowParfor & exist('IsCluster','file') & IsCluster)
     parfor runIndex = 1:length(thePreprocessedDirs)
         theDir = fullfile(preprocessedDataRootDir,thePreprocessedDirs(runIndex).name,'');
         decodeInfoOut{runIndex} = ExtractedEngine(theDir,decodeInfoIn);

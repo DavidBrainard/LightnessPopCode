@@ -1,0 +1,2447 @@
+Starting SMPD on node01 node03  ...
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null node01 "/cm/shared/apps/Matlab/R2016a/bin/mw_smpd" -s -phrase MATLAB -port 21149
+Warning: Permanently added 'node01,192.168.1.1' (ECDSA) to the list of known hosts.
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null node03 "/cm/shared/apps/Matlab/R2016a/bin/mw_smpd" -s -phrase MATLAB -port 21149
+Warning: Permanently added 'node03,192.168.1.3' (ECDSA) to the list of known hosts.
+All SMPDs launched
+"/cm/shared/apps/Matlab/R2016a/bin/mw_mpiexec" -phrase MATLAB -port 21149 -l -n 40 -machinefile /tmp/1149.1.all.q/machines -genvlist MDCE_DECODE_FUNCTION,MDCE_STORAGE_LOCATION,MDCE_STORAGE_CONSTRUCTOR,MDCE_JOB_LOCATION,MDCE_DEBUG,MDCE_LICENSE_NUMBER,MLM_WEB_LICENSE,MLM_WEB_USER_CRED,MLM_WEB_ID "/cm/shared/apps/Matlab/R2016a/bin/worker" -parallel
+[34]                            < M A T L A B (R) >
+[34]                  Copyright 1984-2016 The MathWorks, Inc.
+[34]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[34]                             February 11, 2016
+[32]                            < M A T L A B (R) >
+[32]                  Copyright 1984-2016 The MathWorks, Inc.
+[32]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[32]                             February 11, 2016
+[37]                            < M A T L A B (R) >
+[37]                  Copyright 1984-2016 The MathWorks, Inc.
+[37]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[37]                             February 11, 2016
+[35]                            < M A T L A B (R) >
+[35]                  Copyright 1984-2016 The MathWorks, Inc.
+[35]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[35]                             February 11, 2016
+[38]                            < M A T L A B (R) >
+[38]                  Copyright 1984-2016 The MathWorks, Inc.
+[38]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[38]                             February 11, 2016
+[39]                            < M A T L A B (R) >
+[39]                  Copyright 1984-2016 The MathWorks, Inc.
+[39]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[39]                             February 11, 2016
+[33]                            < M A T L A B (R) >
+[33]                  Copyright 1984-2016 The MathWorks, Inc.
+[33]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[33]                             February 11, 2016
+[36]                            < M A T L A B (R) >
+[36]                  Copyright 1984-2016 The MathWorks, Inc.
+[36]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[36]                             February 11, 2016
+[6]                            < M A T L A B (R) >
+[6]                  Copyright 1984-2016 The MathWorks, Inc.
+[6]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[6]                             February 11, 2016
+[2]                            < M A T L A B (R) >
+[2]                  Copyright 1984-2016 The MathWorks, Inc.
+[2]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[2]                             February 11, 2016
+[10]                            < M A T L A B (R) >
+[10]                  Copyright 1984-2016 The MathWorks, Inc.
+[10]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[10]                             February 11, 2016
+[23]                            < M A T L A B (R) >
+[23]                  Copyright 1984-2016 The MathWorks, Inc.
+[23]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[23]                             February 11, 2016
+[11]                            < M A T L A B (R) >
+[11]                  Copyright 1984-2016 The MathWorks, Inc.
+[11]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[11]                             February 11, 2016
+[9]                            < M A T L A B (R) >
+[9]                  Copyright 1984-2016 The MathWorks, Inc.
+[9]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[9]                             February 11, 2016
+[27]                            < M A T L A B (R) >
+[27]                  Copyright 1984-2016 The MathWorks, Inc.
+[27]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[27]                             February 11, 2016
+[16]                            < M A T L A B (R) >
+[16]                  Copyright 1984-2016 The MathWorks, Inc.
+[16]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[16]                             February 11, 2016
+[22]                            < M A T L A B (R) >
+[22]                  Copyright 1984-2016 The MathWorks, Inc.
+[22]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[22]                             February 11, 2016
+[4]                            < M A T L A B (R) >
+[4]                  Copyright 1984-2016 The MathWorks, Inc.
+[4]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[4]                             February 11, 2016
+[17]                            < M A T L A B (R) >
+[17]                  Copyright 1984-2016 The MathWorks, Inc.
+[17]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[17]                             February 11, 2016
+[7]                            < M A T L A B (R) >
+[7]                  Copyright 1984-2016 The MathWorks, Inc.
+[7]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[7]                             February 11, 2016
+[19]                            < M A T L A B (R) >
+[19]                  Copyright 1984-2016 The MathWorks, Inc.
+[19]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[19]                             February 11, 2016
+[30]                            < M A T L A B (R) >
+[30]                  Copyright 1984-2016 The MathWorks, Inc.
+[30]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[30]                             February 11, 2016
+[12]                            < M A T L A B (R) >
+[12]                  Copyright 1984-2016 The MathWorks, Inc.
+[12]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[12]                             February 11, 2016
+[0]                            < M A T L A B (R) >
+[0]                  Copyright 1984-2016 The MathWorks, Inc.
+[0]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[0]                             February 11, 2016
+[31]                            < M A T L A B (R) >
+[31]                  Copyright 1984-2016 The MathWorks, Inc.
+[31]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[31]                             February 11, 2016
+[14]                            < M A T L A B (R) >
+[14]                  Copyright 1984-2016 The MathWorks, Inc.
+[14]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[14]                             February 11, 2016
+[8]                            < M A T L A B (R) >
+[8]                  Copyright 1984-2016 The MathWorks, Inc.
+[8]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[8]                             February 11, 2016
+[15]                            < M A T L A B (R) >
+[15]                  Copyright 1984-2016 The MathWorks, Inc.
+[15]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[15]                             February 11, 2016
+[26]                            < M A T L A B (R) >
+[26]                  Copyright 1984-2016 The MathWorks, Inc.
+[26]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[26]                             February 11, 2016
+[20]                            < M A T L A B (R) >
+[20]                  Copyright 1984-2016 The MathWorks, Inc.
+[20]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[20]                             February 11, 2016
+[1]                            < M A T L A B (R) >
+[1]                  Copyright 1984-2016 The MathWorks, Inc.
+[1]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[1]                             February 11, 2016
+[3]                            < M A T L A B (R) >
+[3]                  Copyright 1984-2016 The MathWorks, Inc.
+[3]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[3]                             February 11, 2016
+[29]                            < M A T L A B (R) >
+[29]                  Copyright 1984-2016 The MathWorks, Inc.
+[29]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[29]                             February 11, 2016
+[28]                            < M A T L A B (R) >
+[28]                  Copyright 1984-2016 The MathWorks, Inc.
+[28]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[28]                             February 11, 2016
+[18]                            < M A T L A B (R) >
+[18]                  Copyright 1984-2016 The MathWorks, Inc.
+[18]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[18]                             February 11, 2016
+[21]                            < M A T L A B (R) >
+[21]                  Copyright 1984-2016 The MathWorks, Inc.
+[21]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[21]                             February 11, 2016
+[5]                            < M A T L A B (R) >
+[5]                  Copyright 1984-2016 The MathWorks, Inc.
+[5]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[5]                             February 11, 2016
+[24]                            < M A T L A B (R) >
+[24]                  Copyright 1984-2016 The MathWorks, Inc.
+[24]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[24]                             February 11, 2016
+[13]                            < M A T L A B (R) >
+[13]                  Copyright 1984-2016 The MathWorks, Inc.
+[13]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[13]                             February 11, 2016
+[25]                            < M A T L A B (R) >
+[25]                  Copyright 1984-2016 The MathWorks, Inc.
+[25]                   R2016a (9.0.0.341360) 64-bit (glnxa64)
+[25]                             February 11, 2016
+[32] 
+[32]To get started, type one of these: helpwin, helpdesk, or demo.
+[32]For product information, visit www.mathworks.com.
+[32] 
+[32]Startup: Standard Brainard GPC configuration
+[32]Removing .../.svn... from Matlab path
+[32]Removing .../.git... from Matlab path
+[32]Removing ...xOld... from Matlab path
+[32]Removing ...xTests... from Matlab path
+[32]Removing ...zOld... from Matlab path
+[32]Removing .../tmp... from Matlab path
+[32]Removing .../temp... from Matlab path
+[32]Removing ...xSource... from Matlab path
+[32]Removing ...xOmniDriver... from Matlab path
+[32]Removing ...xOneLightSDK... from Matlab path
+[32]Removing ...xOneLightDriver... from Matlab path
+[32]Removing ...xTunerSource... from Matlab path
+[32]Removing ...xCalibrationData... from Matlab path
+[32]Removing ...xCalibrateOmni... from Matlab path
+[32]Removing ...OLDemos... from Matlab path
+[32]Removing ...OneLightToolbox/Source... from Matlab path
+[32]Removing ...OneLightToolbox/Documentation... from Matlab path
+[32]Removing ...xOcieanOpticsJava... from Matlab path
+[32]Removing ...xOneLightDocumentation... from Matlab path
+[32]Removing ...xOneLightEngineSourceMac... from Matlab path
+[32]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[32]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[32]Removing ...Plots... from Matlab path
+[32]Ready to roll!
+[33] 
+[33]To get started, type one of these: helpwin, helpdesk, or demo.
+[33]For product information, visit www.mathworks.com.
+[33] 
+[33]Startup: Standard Brainard GPC configuration
+[33]Removing .../.svn... from Matlab path
+[33]Removing .../.git... from Matlab path
+[33]Removing ...xOld... from Matlab path
+[33]Removing ...xTests... from Matlab path
+[33]Removing ...zOld... from Matlab path
+[33]Removing .../tmp... from Matlab path
+[33]Removing .../temp... from Matlab path
+[33]Removing ...xSource... from Matlab path
+[33]Removing ...xOmniDriver... from Matlab path
+[33]Removing ...xOneLightSDK... from Matlab path
+[33]Removing ...xOneLightDriver... from Matlab path
+[33]Removing ...xTunerSource... from Matlab path
+[33]Removing ...xCalibrationData... from Matlab path
+[33]Removing ...xCalibrateOmni... from Matlab path
+[33]Removing ...OLDemos... from Matlab path
+[33]Removing ...OneLightToolbox/Source... from Matlab path
+[33]Removing ...OneLightToolbox/Documentation... from Matlab path
+[33]Removing ...xOcieanOpticsJava... from Matlab path
+[33]Removing ...xOneLightDocumentation... from Matlab path
+[33]Removing ...xOneLightEngineSourceMac... from Matlab path
+[33]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[33]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[33]Removing ...Plots... from Matlab path
+[33]Ready to roll!
+[36] 
+[36]To get started, type one of these: helpwin, helpdesk, or demo.
+[36]For product information, visit www.mathworks.com.
+[36] 
+[36]Startup: Standard Brainard GPC configuration
+[36]Removing .../.svn... from Matlab path
+[36]Removing .../.git... from Matlab path
+[36]Removing ...xOld... from Matlab path
+[36]Removing ...xTests... from Matlab path
+[36]Removing ...zOld... from Matlab path
+[36]Removing .../tmp... from Matlab path
+[36]Removing .../temp... from Matlab path
+[36]Removing ...xSource... from Matlab path
+[36]Removing ...xOmniDriver... from Matlab path
+[36]Removing ...xOneLightSDK... from Matlab path
+[36]Removing ...xOneLightDriver... from Matlab path
+[36]Removing ...xTunerSource... from Matlab path
+[36]Removing ...xCalibrationData... from Matlab path
+[36]Removing ...xCalibrateOmni... from Matlab path
+[36]Removing ...OLDemos... from Matlab path
+[36]Removing ...OneLightToolbox/Source... from Matlab path
+[36]Removing ...OneLightToolbox/Documentation... from Matlab path
+[36]Removing ...xOcieanOpticsJava... from Matlab path
+[36]Removing ...xOneLightDocumentation... from Matlab path
+[36]Removing ...xOneLightEngineSourceMac... from Matlab path
+[36]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[36]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[36]Removing ...Plots... from Matlab path
+[36]Ready to roll!
+[38] 
+[38]To get started, type one of these: helpwin, helpdesk, or demo.
+[38]For product information, visit www.mathworks.com.
+[38] 
+[38]Startup: Standard Brainard GPC configuration
+[38]Removing .../.svn... from Matlab path
+[38]Removing .../.git... from Matlab path
+[38]Removing ...xOld... from Matlab path
+[38]Removing ...xTests... from Matlab path
+[38]Removing ...zOld... from Matlab path
+[38]Removing .../tmp... from Matlab path
+[38]Removing .../temp... from Matlab path
+[38]Removing ...xSource... from Matlab path
+[38]Removing ...xOmniDriver... from Matlab path
+[38]Removing ...xOneLightSDK... from Matlab path
+[38]Removing ...xOneLightDriver... from Matlab path
+[38]Removing ...xTunerSource... from Matlab path
+[38]Removing ...xCalibrationData... from Matlab path
+[38]Removing ...xCalibrateOmni... from Matlab path
+[38]Removing ...OLDemos... from Matlab path
+[38]Removing ...OneLightToolbox/Source... from Matlab path
+[38]Removing ...OneLightToolbox/Documentation... from Matlab path
+[38]Removing ...xOcieanOpticsJava... from Matlab path
+[38]Removing ...xOneLightDocumentation... from Matlab path
+[38]Removing ...xOneLightEngineSourceMac... from Matlab path
+[38]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[38]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[38]Removing ...Plots... from Matlab path
+[38]Ready to roll!
+[37] 
+[37]To get started, type one of these: helpwin, helpdesk, or demo.
+[37]For product information, visit www.mathworks.com.
+[37] 
+[37]Startup: Standard Brainard GPC configuration
+[37]Removing .../.svn... from Matlab path
+[37]Removing .../.git... from Matlab path
+[37]Removing ...xOld... from Matlab path
+[37]Removing ...xTests... from Matlab path
+[37]Removing ...zOld... from Matlab path
+[37]Removing .../tmp... from Matlab path
+[37]Removing .../temp... from Matlab path
+[37]Removing ...xSource... from Matlab path
+[37]Removing ...xOmniDriver... from Matlab path
+[37]Removing ...xOneLightSDK... from Matlab path
+[37]Removing ...xOneLightDriver... from Matlab path
+[37]Removing ...xTunerSource... from Matlab path
+[37]Removing ...xCalibrationData... from Matlab path
+[37]Removing ...xCalibrateOmni... from Matlab path
+[37]Removing ...OLDemos... from Matlab path
+[37]Removing ...OneLightToolbox/Source... from Matlab path
+[37]Removing ...OneLightToolbox/Documentation... from Matlab path
+[37]Removing ...xOcieanOpticsJava... from Matlab path
+[37]Removing ...xOneLightDocumentation... from Matlab path
+[37]Removing ...xOneLightEngineSourceMac... from Matlab path
+[37]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[37]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[37]Removing ...Plots... from Matlab path
+[37]Ready to roll!
+[35] 
+[35]To get started, type one of these: helpwin, helpdesk, or demo.
+[35]For product information, visit www.mathworks.com.
+[35] 
+[35]Startup: Standard Brainard GPC configuration
+[35]Removing .../.svn... from Matlab path
+[35]Removing .../.git... from Matlab path
+[35]Removing ...xOld... from Matlab path
+[35]Removing ...xTests... from Matlab path
+[35]Removing ...zOld... from Matlab path
+[35]Removing .../tmp... from Matlab path
+[35]Removing .../temp... from Matlab path
+[35]Removing ...xSource... from Matlab path
+[35]Removing ...xOmniDriver... from Matlab path
+[35]Removing ...xOneLightSDK... from Matlab path
+[35]Removing ...xOneLightDriver... from Matlab path
+[35]Removing ...xTunerSource... from Matlab path
+[35]Removing ...xCalibrationData... from Matlab path
+[35]Removing ...xCalibrateOmni... from Matlab path
+[35]Removing ...OLDemos... from Matlab path
+[35]Removing ...OneLightToolbox/Source... from Matlab path
+[35]Removing ...OneLightToolbox/Documentation... from Matlab path
+[35]Removing ...xOcieanOpticsJava... from Matlab path
+[35]Removing ...xOneLightDocumentation... from Matlab path
+[35]Removing ...xOneLightEngineSourceMac... from Matlab path
+[35]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[35]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[35]Removing ...Plots... from Matlab path
+[35]Ready to roll!
+[39] 
+[39]To get started, type one of these: helpwin, helpdesk, or demo.
+[39]For product information, visit www.mathworks.com.
+[39] 
+[39]Startup: Standard Brainard GPC configuration
+[39]Removing .../.svn... from Matlab path
+[39]Removing .../.git... from Matlab path
+[39]Removing ...xOld... from Matlab path
+[39]Removing ...xTests... from Matlab path
+[39]Removing ...zOld... from Matlab path
+[39]Removing .../tmp... from Matlab path
+[39]Removing .../temp... from Matlab path
+[39]Removing ...xSource... from Matlab path
+[39]Removing ...xOmniDriver... from Matlab path
+[39]Removing ...xOneLightSDK... from Matlab path
+[39]Removing ...xOneLightDriver... from Matlab path
+[39]Removing ...xTunerSource... from Matlab path
+[39]Removing ...xCalibrationData... from Matlab path
+[39]Removing ...xCalibrateOmni... from Matlab path
+[39]Removing ...OLDemos... from Matlab path
+[39]Removing ...OneLightToolbox/Source... from Matlab path
+[39]Removing ...OneLightToolbox/Documentation... from Matlab path
+[39]Removing ...xOcieanOpticsJava... from Matlab path
+[39]Removing ...xOneLightDocumentation... from Matlab path
+[39]Removing ...xOneLightEngineSourceMac... from Matlab path
+[39]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[39]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[39]Removing ...Plots... from Matlab path
+[39]Ready to roll!
+[34] 
+[34]To get started, type one of these: helpwin, helpdesk, or demo.
+[34]For product information, visit www.mathworks.com.
+[34] 
+[34]Startup: Standard Brainard GPC configuration
+[34]Removing .../.svn... from Matlab path
+[34]Removing .../.git... from Matlab path
+[34]Removing ...xOld... from Matlab path
+[34]Removing ...xTests... from Matlab path
+[34]Removing ...zOld... from Matlab path
+[34]Removing .../tmp... from Matlab path
+[34]Removing .../temp... from Matlab path
+[34]Removing ...xSource... from Matlab path
+[34]Removing ...xOmniDriver... from Matlab path
+[34]Removing ...xOneLightSDK... from Matlab path
+[34]Removing ...xOneLightDriver... from Matlab path
+[34]Removing ...xTunerSource... from Matlab path
+[34]Removing ...xCalibrationData... from Matlab path
+[34]Removing ...xCalibrateOmni... from Matlab path
+[34]Removing ...OLDemos... from Matlab path
+[34]Removing ...OneLightToolbox/Source... from Matlab path
+[34]Removing ...OneLightToolbox/Documentation... from Matlab path
+[34]Removing ...xOcieanOpticsJava... from Matlab path
+[34]Removing ...xOneLightDocumentation... from Matlab path
+[34]Removing ...xOneLightEngineSourceMac... from Matlab path
+[34]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[34]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[34]Removing ...Plots... from Matlab path
+[34]Ready to roll!
+[32]	Academic License
+[33]	Academic License
+[36]	Academic License
+[37]	Academic License
+[38]	Academic License
+[35]	Academic License
+[39]	Academic License
+[34]	Academic License
+[33]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[32]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[38]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[35]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[37]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[36]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[39]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[33]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[32]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[38]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[33]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[32]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[38]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[33]2016-04-28 10:50:53 | This process will exit on any fault.
+[32]2016-04-28 10:50:53 | This process will exit on any fault.
+[38]2016-04-28 10:50:53 | This process will exit on any fault.
+[35]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[34]2016-04-28 10:50:53 | About to evaluate task with DistcompEvaluateFileTask
+[35]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[35]2016-04-28 10:50:53 | This process will exit on any fault.
+[36]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[33]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[32]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[38]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[36]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[36]2016-04-28 10:50:53 | This process will exit on any fault.
+[37]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[33]2016-04-28 10:50:53 | About to initialize MPI.
+[38]2016-04-28 10:50:53 | About to initialize MPI.
+[32]2016-04-28 10:50:53 | About to initialize MPI.
+[35]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[37]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[35]2016-04-28 10:50:53 | About to initialize MPI.
+[37]2016-04-28 10:50:53 | This process will exit on any fault.
+[39]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[39]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[36]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[39]2016-04-28 10:50:53 | This process will exit on any fault.
+[36]2016-04-28 10:50:53 | About to initialize MPI.
+[34]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core
+[34]2016-04-28 10:50:53 | Enter distcomp_evaluate_filetask_core/iSetup
+[34]2016-04-28 10:50:53 | This process will exit on any fault.
+[37]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[37]2016-04-28 10:50:53 | About to initialize MPI.
+[39]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[39]2016-04-28 10:50:53 | About to initialize MPI.
+[34]2016-04-28 10:50:53 | This process will exit when its parent process dies.
+[34]2016-04-28 10:50:53 | About to initialize MPI.
+[2] 
+[2]To get started, type one of these: helpwin, helpdesk, or demo.
+[2]For product information, visit www.mathworks.com.
+[2] 
+[2]Startup: Standard Brainard GPC configuration
+[2]Removing .../.svn... from Matlab path
+[2]Removing .../.git... from Matlab path
+[2]Removing ...xOld... from Matlab path
+[2]Removing ...xTests... from Matlab path
+[2]Removing ...zOld... from Matlab path
+[2]Removing .../tmp... from Matlab path
+[2]Removing .../temp... from Matlab path
+[2]Removing ...xSource... from Matlab path
+[2]Removing ...xOmniDriver... from Matlab path
+[2]Removing ...xOneLightSDK... from Matlab path
+[2]Removing ...xOneLightDriver... from Matlab path
+[2]Removing ...xTunerSource... from Matlab path
+[2]Removing ...xCalibrationData... from Matlab path
+[2]Removing ...xCalibrateOmni... from Matlab path
+[2]Removing ...OLDemos... from Matlab path
+[2]Removing ...OneLightToolbox/Source... from Matlab path
+[2]Removing ...OneLightToolbox/Documentation... from Matlab path
+[2]Removing ...xOcieanOpticsJava... from Matlab path
+[2]Removing ...xOneLightDocumentation... from Matlab path
+[2]Removing ...xOneLightEngineSourceMac... from Matlab path
+[2]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[2]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[2]Removing ...Plots... from Matlab path
+[2]Ready to roll!
+[23] 
+[23]To get started, type one of these: helpwin, helpdesk, or demo.
+[23]For product information, visit www.mathworks.com.
+[23] 
+[23]Startup: Standard Brainard GPC configuration
+[23]Removing .../.svn... from Matlab path
+[23]Removing .../.git... from Matlab path
+[23]Removing ...xOld... from Matlab path
+[23]Removing ...xTests... from Matlab path
+[23]Removing ...zOld... from Matlab path
+[23]Removing .../tmp... from Matlab path
+[23]Removing .../temp... from Matlab path
+[23]Removing ...xSource... from Matlab path
+[23]Removing ...xOmniDriver... from Matlab path
+[23]Removing ...xOneLightSDK... from Matlab path
+[23]Removing ...xOneLightDriver... from Matlab path
+[23]Removing ...xTunerSource... from Matlab path
+[23]Removing ...xCalibrationData... from Matlab path
+[23]Removing ...xCalibrateOmni... from Matlab path
+[23]Removing ...OLDemos... from Matlab path
+[23]Removing ...OneLightToolbox/Source... from Matlab path
+[23]Removing ...OneLightToolbox/Documentation... from Matlab path
+[23]Removing ...xOcieanOpticsJava... from Matlab path
+[23]Removing ...xOneLightDocumentation... from Matlab path
+[23]Removing ...xOneLightEngineSourceMac... from Matlab path
+[23]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[23]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[23]Removing ...Plots... from Matlab path
+[23]Ready to roll!
+[9] 
+[9]To get started, type one of these: helpwin, helpdesk, or demo.
+[9]For product information, visit www.mathworks.com.
+[9] 
+[9]Startup: Standard Brainard GPC configuration
+[9]Removing .../.svn... from Matlab path
+[9]Removing .../.git... from Matlab path
+[9]Removing ...xOld... from Matlab path
+[9]Removing ...xTests... from Matlab path
+[9]Removing ...zOld... from Matlab path
+[9]Removing .../tmp... from Matlab path
+[9]Removing .../temp... from Matlab path
+[9]Removing ...xSource... from Matlab path
+[9]Removing ...xOmniDriver... from Matlab path
+[9]Removing ...xOneLightSDK... from Matlab path
+[9]Removing ...xOneLightDriver... from Matlab path
+[9]Removing ...xTunerSource... from Matlab path
+[9]Removing ...xCalibrationData... from Matlab path
+[9]Removing ...xCalibrateOmni... from Matlab path
+[9]Removing ...OLDemos... from Matlab path
+[9]Removing ...OneLightToolbox/Source... from Matlab path
+[9]Removing ...OneLightToolbox/Documentation... from Matlab path
+[9]Removing ...xOcieanOpticsJava... from Matlab path
+[9]Removing ...xOneLightDocumentation... from Matlab path
+[9]Removing ...xOneLightEngineSourceMac... from Matlab path
+[9]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[9]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[9]Removing ...Plots... from Matlab path
+[9]Ready to roll!
+[16] 
+[16]To get started, type one of these: helpwin, helpdesk, or demo.
+[16]For product information, visit www.mathworks.com.
+[16] 
+[16]Startup: Standard Brainard GPC configuration
+[16]Removing .../.svn... from Matlab path
+[16]Removing .../.git... from Matlab path
+[16]Removing ...xOld... from Matlab path
+[16]Removing ...xTests... from Matlab path
+[16]Removing ...zOld... from Matlab path
+[16]Removing .../tmp... from Matlab path
+[16]Removing .../temp... from Matlab path
+[16]Removing ...xSource... from Matlab path
+[16]Removing ...xOmniDriver... from Matlab path
+[16]Removing ...xOneLightSDK... from Matlab path
+[16]Removing ...xOneLightDriver... from Matlab path
+[16]Removing ...xTunerSource... from Matlab path
+[16]Removing ...xCalibrationData... from Matlab path
+[16]Removing ...xCalibrateOmni... from Matlab path
+[16]Removing ...OLDemos... from Matlab path
+[16]Removing ...OneLightToolbox/Source... from Matlab path
+[16]Removing ...OneLightToolbox/Documentation... from Matlab path
+[16]Removing ...xOcieanOpticsJava... from Matlab path
+[16]Removing ...xOneLightDocumentation... from Matlab path
+[16]Removing ...xOneLightEngineSourceMac... from Matlab path
+[16]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[16]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[16]Removing ...Plots... from Matlab path
+[16]Ready to roll!
+[10] 
+[10]To get started, type one of these: helpwin, helpdesk, or demo.
+[10]For product information, visit www.mathworks.com.
+[10] 
+[10]Startup: Standard Brainard GPC configuration
+[10]Removing .../.svn... from Matlab path
+[10]Removing .../.git... from Matlab path
+[10]Removing ...xOld... from Matlab path
+[10]Removing ...xTests... from Matlab path
+[10]Removing ...zOld... from Matlab path
+[10]Removing .../tmp... from Matlab path
+[10]Removing .../temp... from Matlab path
+[10]Removing ...xSource... from Matlab path
+[10]Removing ...xOmniDriver... from Matlab path
+[10]Removing ...xOneLightSDK... from Matlab path
+[10]Removing ...xOneLightDriver... from Matlab path
+[10]Removing ...xTunerSource... from Matlab path
+[10]Removing ...xCalibrationData... from Matlab path
+[10]Removing ...xCalibrateOmni... from Matlab path
+[10]Removing ...OLDemos... from Matlab path
+[10]Removing ...OneLightToolbox/Source... from Matlab path
+[10]Removing ...OneLightToolbox/Documentation... from Matlab path
+[10]Removing ...xOcieanOpticsJava... from Matlab path
+[10]Removing ...xOneLightDocumentation... from Matlab path
+[10]Removing ...xOneLightEngineSourceMac... from Matlab path
+[10]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[10]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[10]Removing ...Plots... from Matlab path
+[10]Ready to roll!
+[11] 
+[11]To get started, type one of these: helpwin, helpdesk, or demo.
+[11]For product information, visit www.mathworks.com.
+[11] 
+[11]Startup: Standard Brainard GPC configuration
+[11]Removing .../.svn... from Matlab path
+[11]Removing .../.git... from Matlab path
+[11]Removing ...xOld... from Matlab path
+[11]Removing ...xTests... from Matlab path
+[11]Removing ...zOld... from Matlab path
+[11]Removing .../tmp... from Matlab path
+[11]Removing .../temp... from Matlab path
+[11]Removing ...xSource... from Matlab path
+[11]Removing ...xOmniDriver... from Matlab path
+[11]Removing ...xOneLightSDK... from Matlab path
+[11]Removing ...xOneLightDriver... from Matlab path
+[11]Removing ...xTunerSource... from Matlab path
+[11]Removing ...xCalibrationData... from Matlab path
+[11]Removing ...xCalibrateOmni... from Matlab path
+[11]Removing ...OLDemos... from Matlab path
+[11]Removing ...OneLightToolbox/Source... from Matlab path
+[11]Removing ...OneLightToolbox/Documentation... from Matlab path
+[11]Removing ...xOcieanOpticsJava... from Matlab path
+[11]Removing ...xOneLightDocumentation... from Matlab path
+[11]Removing ...xOneLightEngineSourceMac... from Matlab path
+[11]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[11]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[11]Removing ...Plots... from Matlab path
+[11]Ready to roll!
+[27] 
+[27]To get started, type one of these: helpwin, helpdesk, or demo.
+[27]For product information, visit www.mathworks.com.
+[27] 
+[27]Startup: Standard Brainard GPC configuration
+[27]Removing .../.svn... from Matlab path
+[27]Removing .../.git... from Matlab path
+[27]Removing ...xOld... from Matlab path
+[27]Removing ...xTests... from Matlab path
+[27]Removing ...zOld... from Matlab path
+[27]Removing .../tmp... from Matlab path
+[27]Removing .../temp... from Matlab path
+[27]Removing ...xSource... from Matlab path
+[27]Removing ...xOmniDriver... from Matlab path
+[27]Removing ...xOneLightSDK... from Matlab path
+[27]Removing ...xOneLightDriver... from Matlab path
+[27]Removing ...xTunerSource... from Matlab path
+[27]Removing ...xCalibrationData... from Matlab path
+[27]Removing ...xCalibrateOmni... from Matlab path
+[27]Removing ...OLDemos... from Matlab path
+[27]Removing ...OneLightToolbox/Source... from Matlab path
+[27]Removing ...OneLightToolbox/Documentation... from Matlab path
+[27]Removing ...xOcieanOpticsJava... from Matlab path
+[27]Removing ...xOneLightDocumentation... from Matlab path
+[27]Removing ...xOneLightEngineSourceMac... from Matlab path
+[27]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[27]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[27]Removing ...Plots... from Matlab path
+[27]Ready to roll!
+[6] 
+[6]To get started, type one of these: helpwin, helpdesk, or demo.
+[6]For product information, visit www.mathworks.com.
+[6] 
+[6]Startup: Standard Brainard GPC configuration
+[6]Removing .../.svn... from Matlab path
+[6]Removing .../.git... from Matlab path
+[6]Removing ...xOld... from Matlab path
+[6]Removing ...xTests... from Matlab path
+[6]Removing ...zOld... from Matlab path
+[6]Removing .../tmp... from Matlab path
+[6]Removing .../temp... from Matlab path
+[6]Removing ...xSource... from Matlab path
+[6]Removing ...xOmniDriver... from Matlab path
+[6]Removing ...xOneLightSDK... from Matlab path
+[6]Removing ...xOneLightDriver... from Matlab path
+[6]Removing ...xTunerSource... from Matlab path
+[6]Removing ...xCalibrationData... from Matlab path
+[6]Removing ...xCalibrateOmni... from Matlab path
+[6]Removing ...OLDemos... from Matlab path
+[6]Removing ...OneLightToolbox/Source... from Matlab path
+[6]Removing ...OneLightToolbox/Documentation... from Matlab path
+[6]Removing ...xOcieanOpticsJava... from Matlab path
+[6]Removing ...xOneLightDocumentation... from Matlab path
+[6]Removing ...xOneLightEngineSourceMac... from Matlab path
+[6]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[6]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[6]Removing ...Plots... from Matlab path
+[6]Ready to roll!
+[29] 
+[29]To get started, type one of these: helpwin, helpdesk, or demo.
+[29]For product information, visit www.mathworks.com.
+[29] 
+[29]Startup: Standard Brainard GPC configuration
+[29]Removing .../.svn... from Matlab path
+[29]Removing .../.git... from Matlab path
+[29]Removing ...xOld... from Matlab path
+[29]Removing ...xTests... from Matlab path
+[29]Removing ...zOld... from Matlab path
+[29]Removing .../tmp... from Matlab path
+[29]Removing .../temp... from Matlab path
+[29]Removing ...xSource... from Matlab path
+[29]Removing ...xOmniDriver... from Matlab path
+[29]Removing ...xOneLightSDK... from Matlab path
+[29]Removing ...xOneLightDriver... from Matlab path
+[29]Removing ...xTunerSource... from Matlab path
+[29]Removing ...xCalibrationData... from Matlab path
+[29]Removing ...xCalibrateOmni... from Matlab path
+[29]Removing ...OLDemos... from Matlab path
+[29]Removing ...OneLightToolbox/Source... from Matlab path
+[29]Removing ...OneLightToolbox/Documentation... from Matlab path
+[29]Removing ...xOcieanOpticsJava... from Matlab path
+[29]Removing ...xOneLightDocumentation... from Matlab path
+[29]Removing ...xOneLightEngineSourceMac... from Matlab path
+[29]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[29]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[29]Removing ...Plots... from Matlab path
+[29]Ready to roll!
+[2]	Academic License
+[16]	Academic License
+[23]	Academic License
+[9]	Academic License
+[11]	Academic License
+[10]	Academic License
+[7] 
+[7]To get started, type one of these: helpwin, helpdesk, or demo.
+[7]For product information, visit www.mathworks.com.
+[7] 
+[7]Startup: Standard Brainard GPC configuration
+[7]Removing .../.svn... from Matlab path
+[7]Removing .../.git... from Matlab path
+[7]Removing ...xOld... from Matlab path
+[7]Removing ...xTests... from Matlab path
+[7]Removing ...zOld... from Matlab path
+[7]Removing .../tmp... from Matlab path
+[7]Removing .../temp... from Matlab path
+[7]Removing ...xSource... from Matlab path
+[7]Removing ...xOmniDriver... from Matlab path
+[7]Removing ...xOneLightSDK... from Matlab path
+[7]Removing ...xOneLightDriver... from Matlab path
+[7]Removing ...xTunerSource... from Matlab path
+[7]Removing ...xCalibrationData... from Matlab path
+[7]Removing ...xCalibrateOmni... from Matlab path
+[7]Removing ...OLDemos... from Matlab path
+[7]Removing ...OneLightToolbox/Source... from Matlab path
+[7]Removing ...OneLightToolbox/Documentation... from Matlab path
+[7]Removing ...xOcieanOpticsJava... from Matlab path
+[7]Removing ...xOneLightDocumentation... from Matlab path
+[7]Removing ...xOneLightEngineSourceMac... from Matlab path
+[7]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[7]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[7]Removing ...Plots... from Matlab path
+[7]Ready to roll!
+[29]	Academic License
+[6]	Academic License
+[27]	Academic License
+[31] 
+[31]To get started, type one of these: helpwin, helpdesk, or demo.
+[31]For product information, visit www.mathworks.com.
+[31] 
+[31]Startup: Standard Brainard GPC configuration
+[31]Removing .../.svn... from Matlab path
+[31]Removing .../.git... from Matlab path
+[31]Removing ...xOld... from Matlab path
+[31]Removing ...xTests... from Matlab path
+[31]Removing ...zOld... from Matlab path
+[31]Removing .../tmp... from Matlab path
+[31]Removing .../temp... from Matlab path
+[31]Removing ...xSource... from Matlab path
+[31]Removing ...xOmniDriver... from Matlab path
+[31]Removing ...xOneLightSDK... from Matlab path
+[31]Removing ...xOneLightDriver... from Matlab path
+[31]Removing ...xTunerSource... from Matlab path
+[31]Removing ...xCalibrationData... from Matlab path
+[31]Removing ...xCalibrateOmni... from Matlab path
+[31]Removing ...OLDemos... from Matlab path
+[31]Removing ...OneLightToolbox/Source... from Matlab path
+[31]Removing ...OneLightToolbox/Documentation... from Matlab path
+[31]Removing ...xOcieanOpticsJava... from Matlab path
+[31]Removing ...xOneLightDocumentation... from Matlab path
+[31]Removing ...xOneLightEngineSourceMac... from Matlab path
+[31]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[31]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[31]Removing ...Plots... from Matlab path
+[31]Ready to roll!
+[7]	Academic License
+[2]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[23]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[9]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[11]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[16]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[10]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[19] 
+[19]To get started, type one of these: helpwin, helpdesk, or demo.
+[19]For product information, visit www.mathworks.com.
+[19] 
+[19]Startup: Standard Brainard GPC configuration
+[19]Removing .../.svn... from Matlab path
+[19]Removing .../.git... from Matlab path
+[19]Removing ...xOld... from Matlab path
+[19]Removing ...xTests... from Matlab path
+[19]Removing ...zOld... from Matlab path
+[19]Removing .../tmp... from Matlab path
+[19]Removing .../temp... from Matlab path
+[19]Removing ...xSource... from Matlab path
+[19]Removing ...xOmniDriver... from Matlab path
+[19]Removing ...xOneLightSDK... from Matlab path
+[19]Removing ...xOneLightDriver... from Matlab path
+[19]Removing ...xTunerSource... from Matlab path
+[19]Removing ...xCalibrationData... from Matlab path
+[19]Removing ...xCalibrateOmni... from Matlab path
+[19]Removing ...OLDemos... from Matlab path
+[19]Removing ...OneLightToolbox/Source... from Matlab path
+[19]Removing ...OneLightToolbox/Documentation... from Matlab path
+[19]Removing ...xOcieanOpticsJava... from Matlab path
+[19]Removing ...xOneLightDocumentation... from Matlab path
+[19]Removing ...xOneLightEngineSourceMac... from Matlab path
+[19]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[19]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[19]Removing ...Plots... from Matlab path
+[19]Ready to roll!
+[31]	Academic License
+[29]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[27]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[2]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[6]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[23]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[9]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[2]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[23]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[9]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[11]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[2]2016-04-28 10:50:56 | This process will exit on any fault.
+[11]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[23]2016-04-28 10:50:56 | This process will exit on any fault.
+[16]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[9]2016-04-28 10:50:56 | This process will exit on any fault.
+[16]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[11]2016-04-28 10:50:56 | This process will exit on any fault.
+[10]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[16]2016-04-28 10:50:56 | This process will exit on any fault.
+[19]	Academic License
+[7]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[30] 
+[30]To get started, type one of these: helpwin, helpdesk, or demo.
+[30]For product information, visit www.mathworks.com.
+[30] 
+[30]Startup: Standard Brainard GPC configuration
+[30]Removing .../.svn... from Matlab path
+[30]Removing .../.git... from Matlab path
+[30]Removing ...xOld... from Matlab path
+[30]Removing ...xTests... from Matlab path
+[30]Removing ...zOld... from Matlab path
+[30]Removing .../tmp... from Matlab path
+[30]Removing .../temp... from Matlab path
+[30]Removing ...xSource... from Matlab path
+[30]Removing ...xOmniDriver... from Matlab path
+[30]Removing ...xOneLightSDK... from Matlab path
+[30]Removing ...xOneLightDriver... from Matlab path
+[30]Removing ...xTunerSource... from Matlab path
+[30]Removing ...xCalibrationData... from Matlab path
+[30]Removing ...xCalibrateOmni... from Matlab path
+[30]Removing ...OLDemos... from Matlab path
+[30]Removing ...OneLightToolbox/Source... from Matlab path
+[30]Removing ...OneLightToolbox/Documentation... from Matlab path
+[30]Removing ...xOcieanOpticsJava... from Matlab path
+[30]Removing ...xOneLightDocumentation... from Matlab path
+[30]Removing ...xOneLightEngineSourceMac... from Matlab path
+[30]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[30]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[30]Removing ...Plots... from Matlab path
+[30]Ready to roll!
+[10]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[18] 
+[18]To get started, type one of these: helpwin, helpdesk, or demo.
+[18]For product information, visit www.mathworks.com.
+[18] 
+[18]Startup: Standard Brainard GPC configuration
+[18]Removing .../.svn... from Matlab path
+[18]Removing .../.git... from Matlab path
+[18]Removing ...xOld... from Matlab path
+[18]Removing ...xTests... from Matlab path
+[18]Removing ...zOld... from Matlab path
+[18]Removing .../tmp... from Matlab path
+[18]Removing .../temp... from Matlab path
+[18]Removing ...xSource... from Matlab path
+[18]Removing ...xOmniDriver... from Matlab path
+[18]Removing ...xOneLightSDK... from Matlab path
+[18]Removing ...xOneLightDriver... from Matlab path
+[18]Removing ...xTunerSource... from Matlab path
+[18]Removing ...xCalibrationData... from Matlab path
+[18]Removing ...xCalibrateOmni... from Matlab path
+[18]Removing ...OLDemos... from Matlab path
+[18]Removing ...OneLightToolbox/Source... from Matlab path
+[18]Removing ...OneLightToolbox/Documentation... from Matlab path
+[18]Removing ...xOcieanOpticsJava... from Matlab path
+[18]Removing ...xOneLightDocumentation... from Matlab path
+[18]Removing ...xOneLightEngineSourceMac... from Matlab path
+[18]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[18]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[18]Removing ...Plots... from Matlab path
+[18]Ready to roll!
+[2]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[10]2016-04-28 10:50:56 | This process will exit on any fault.
+[23]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[9]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[2]2016-04-28 10:50:56 | About to initialize MPI.
+[9]2016-04-28 10:50:56 | About to initialize MPI.
+[23]2016-04-28 10:50:56 | About to initialize MPI.
+[16]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[11]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[16]2016-04-28 10:50:56 | About to initialize MPI.
+[11]2016-04-28 10:50:56 | About to initialize MPI.
+[29]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[6]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[29]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[10]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[6]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[27]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[29]2016-04-28 10:50:56 | This process will exit on any fault.
+[27]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[10]2016-04-28 10:50:56 | About to initialize MPI.
+[6]2016-04-28 10:50:56 | This process will exit on any fault.
+[27]2016-04-28 10:50:56 | This process will exit on any fault.
+[0] 
+[0]To get started, type one of these: helpwin, helpdesk, or demo.
+[0]For product information, visit www.mathworks.com.
+[0] 
+[0]Startup: Standard Brainard GPC configuration
+[0]Removing .../.svn... from Matlab path
+[0]Removing .../.git... from Matlab path
+[0]Removing ...xOld... from Matlab path
+[0]Removing ...xTests... from Matlab path
+[0]Removing ...zOld... from Matlab path
+[0]Removing .../tmp... from Matlab path
+[0]Removing .../temp... from Matlab path
+[0]Removing ...xSource... from Matlab path
+[0]Removing ...xOmniDriver... from Matlab path
+[0]Removing ...xOneLightSDK... from Matlab path
+[0]Removing ...xOneLightDriver... from Matlab path
+[0]Removing ...xTunerSource... from Matlab path
+[0]Removing ...xCalibrationData... from Matlab path
+[0]Removing ...xCalibrateOmni... from Matlab path
+[0]Removing ...OLDemos... from Matlab path
+[0]Removing ...OneLightToolbox/Source... from Matlab path
+[0]Removing ...OneLightToolbox/Documentation... from Matlab path
+[0]Removing ...xOcieanOpticsJava... from Matlab path
+[0]Removing ...xOneLightDocumentation... from Matlab path
+[0]Removing ...xOneLightEngineSourceMac... from Matlab path
+[0]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[0]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[0]Removing ...Plots... from Matlab path
+[0]Ready to roll!
+[29]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[31]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[6]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[7]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core
+[26] 
+[26]To get started, type one of these: helpwin, helpdesk, or demo.
+[26]For product information, visit www.mathworks.com.
+[26] 
+[26]Startup: Standard Brainard GPC configuration
+[26]Removing .../.svn... from Matlab path
+[26]Removing .../.git... from Matlab path
+[26]Removing ...xOld... from Matlab path
+[26]Removing ...xTests... from Matlab path
+[26]Removing ...zOld... from Matlab path
+[26]Removing .../tmp... from Matlab path
+[26]Removing .../temp... from Matlab path
+[26]Removing ...xSource... from Matlab path
+[26]Removing ...xOmniDriver... from Matlab path
+[26]Removing ...xOneLightSDK... from Matlab path
+[26]Removing ...xOneLightDriver... from Matlab path
+[26]Removing ...xTunerSource... from Matlab path
+[26]Removing ...xCalibrationData... from Matlab path
+[26]Removing ...xCalibrateOmni... from Matlab path
+[26]Removing ...OLDemos... from Matlab path
+[26]Removing ...OneLightToolbox/Source... from Matlab path
+[26]Removing ...OneLightToolbox/Documentation... from Matlab path
+[26]Removing ...xOcieanOpticsJava... from Matlab path
+[26]Removing ...xOneLightDocumentation... from Matlab path
+[26]Removing ...xOneLightEngineSourceMac... from Matlab path
+[26]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[26]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[26]Removing ...Plots... from Matlab path
+[26]Ready to roll!
+[29]2016-04-28 10:50:56 | About to initialize MPI.
+[7]2016-04-28 10:50:56 | Enter distcomp_evaluate_filetask_core/iSetup
+[6]2016-04-28 10:50:56 | About to initialize MPI.
+[18]	Academic License
+[27]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[7]2016-04-28 10:50:56 | This process will exit on any fault.
+[30]	Academic License
+[21] 
+[21]To get started, type one of these: helpwin, helpdesk, or demo.
+[21]For product information, visit www.mathworks.com.
+[21] 
+[21]Startup: Standard Brainard GPC configuration
+[21]Removing .../.svn... from Matlab path
+[21]Removing .../.git... from Matlab path
+[21]Removing ...xOld... from Matlab path
+[21]Removing ...xTests... from Matlab path
+[21]Removing ...zOld... from Matlab path
+[21]Removing .../tmp... from Matlab path
+[21]Removing .../temp... from Matlab path
+[21]Removing ...xSource... from Matlab path
+[21]Removing ...xOmniDriver... from Matlab path
+[21]Removing ...xOneLightSDK... from Matlab path
+[21]Removing ...xOneLightDriver... from Matlab path
+[21]Removing ...xTunerSource... from Matlab path
+[21]Removing ...xCalibrationData... from Matlab path
+[21]Removing ...xCalibrateOmni... from Matlab path
+[21]Removing ...OLDemos... from Matlab path
+[21]Removing ...OneLightToolbox/Source... from Matlab path
+[21]Removing ...OneLightToolbox/Documentation... from Matlab path
+[21]Removing ...xOcieanOpticsJava... from Matlab path
+[21]Removing ...xOneLightDocumentation... from Matlab path
+[21]Removing ...xOneLightEngineSourceMac... from Matlab path
+[21]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[21]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[21]Removing ...Plots... from Matlab path
+[21]Ready to roll!
+[1] 
+[1]To get started, type one of these: helpwin, helpdesk, or demo.
+[1]For product information, visit www.mathworks.com.
+[1] 
+[1]Startup: Standard Brainard GPC configuration
+[1]Removing .../.svn... from Matlab path
+[1]Removing .../.git... from Matlab path
+[1]Removing ...xOld... from Matlab path
+[1]Removing ...xTests... from Matlab path
+[1]Removing ...zOld... from Matlab path
+[1]Removing .../tmp... from Matlab path
+[1]Removing .../temp... from Matlab path
+[1]Removing ...xSource... from Matlab path
+[1]Removing ...xOmniDriver... from Matlab path
+[1]Removing ...xOneLightSDK... from Matlab path
+[1]Removing ...xOneLightDriver... from Matlab path
+[1]Removing ...xTunerSource... from Matlab path
+[1]Removing ...xCalibrationData... from Matlab path
+[1]Removing ...xCalibrateOmni... from Matlab path
+[1]Removing ...OLDemos... from Matlab path
+[1]Removing ...OneLightToolbox/Source... from Matlab path
+[1]Removing ...OneLightToolbox/Documentation... from Matlab path
+[1]Removing ...xOcieanOpticsJava... from Matlab path
+[1]Removing ...xOneLightDocumentation... from Matlab path
+[1]Removing ...xOneLightEngineSourceMac... from Matlab path
+[1]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[1]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[1]Removing ...Plots... from Matlab path
+[1]Ready to roll!
+[27]2016-04-28 10:50:56 | About to initialize MPI.
+[14] 
+[14]To get started, type one of these: helpwin, helpdesk, or demo.
+[14]For product information, visit www.mathworks.com.
+[14] 
+[14]Startup: Standard Brainard GPC configuration
+[14]Removing .../.svn... from Matlab path
+[14]Removing .../.git... from Matlab path
+[14]Removing ...xOld... from Matlab path
+[14]Removing ...xTests... from Matlab path
+[14]Removing ...zOld... from Matlab path
+[14]Removing .../tmp... from Matlab path
+[14]Removing .../temp... from Matlab path
+[14]Removing ...xSource... from Matlab path
+[14]Removing ...xOmniDriver... from Matlab path
+[14]Removing ...xOneLightSDK... from Matlab path
+[14]Removing ...xOneLightDriver... from Matlab path
+[14]Removing ...xTunerSource... from Matlab path
+[14]Removing ...xCalibrationData... from Matlab path
+[14]Removing ...xCalibrateOmni... from Matlab path
+[14]Removing ...OLDemos... from Matlab path
+[14]Removing ...OneLightToolbox/Source... from Matlab path
+[14]Removing ...OneLightToolbox/Documentation... from Matlab path
+[14]Removing ...xOcieanOpticsJava... from Matlab path
+[14]Removing ...xOneLightDocumentation... from Matlab path
+[14]Removing ...xOneLightEngineSourceMac... from Matlab path
+[14]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[14]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[14]Removing ...Plots... from Matlab path
+[14]Ready to roll!
+[19]2016-04-28 10:50:56 | About to evaluate task with DistcompEvaluateFileTask
+[15] 
+[15]To get started, type one of these: helpwin, helpdesk, or demo.
+[15]For product information, visit www.mathworks.com.
+[15] 
+[15]Startup: Standard Brainard GPC configuration
+[15]Removing .../.svn... from Matlab path
+[15]Removing .../.git... from Matlab path
+[15]Removing ...xOld... from Matlab path
+[15]Removing ...xTests... from Matlab path
+[15]Removing ...zOld... from Matlab path
+[15]Removing .../tmp... from Matlab path
+[15]Removing .../temp... from Matlab path
+[15]Removing ...xSource... from Matlab path
+[15]Removing ...xOmniDriver... from Matlab path
+[15]Removing ...xOneLightSDK... from Matlab path
+[15]Removing ...xOneLightDriver... from Matlab path
+[15]Removing ...xTunerSource... from Matlab path
+[15]Removing ...xCalibrationData... from Matlab path
+[15]Removing ...xCalibrateOmni... from Matlab path
+[15]Removing ...OLDemos... from Matlab path
+[15]Removing ...OneLightToolbox/Source... from Matlab path
+[15]Removing ...OneLightToolbox/Documentation... from Matlab path
+[15]Removing ...xOcieanOpticsJava... from Matlab path
+[15]Removing ...xOneLightDocumentation... from Matlab path
+[15]Removing ...xOneLightEngineSourceMac... from Matlab path
+[15]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[15]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[15]Removing ...Plots... from Matlab path
+[15]Ready to roll!
+[7]2016-04-28 10:50:56 | This process will exit when its parent process dies.
+[7]2016-04-28 10:50:57 | About to initialize MPI.
+[0]	Academic License
+[31]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[17] 
+[17]To get started, type one of these: helpwin, helpdesk, or demo.
+[17]For product information, visit www.mathworks.com.
+[17] 
+[17]Startup: Standard Brainard GPC configuration
+[17]Removing .../.svn... from Matlab path
+[17]Removing .../.git... from Matlab path
+[17]Removing ...xOld... from Matlab path
+[17]Removing ...xTests... from Matlab path
+[17]Removing ...zOld... from Matlab path
+[17]Removing .../tmp... from Matlab path
+[17]Removing .../temp... from Matlab path
+[17]Removing ...xSource... from Matlab path
+[17]Removing ...xOmniDriver... from Matlab path
+[17]Removing ...xOneLightSDK... from Matlab path
+[17]Removing ...xOneLightDriver... from Matlab path
+[17]Removing ...xTunerSource... from Matlab path
+[17]Removing ...xCalibrationData... from Matlab path
+[17]Removing ...xCalibrateOmni... from Matlab path
+[17]Removing ...OLDemos... from Matlab path
+[17]Removing ...OneLightToolbox/Source... from Matlab path
+[17]Removing ...OneLightToolbox/Documentation... from Matlab path
+[17]Removing ...xOcieanOpticsJava... from Matlab path
+[17]Removing ...xOneLightDocumentation... from Matlab path
+[17]Removing ...xOneLightEngineSourceMac... from Matlab path
+[17]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[17]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[17]Removing ...Plots... from Matlab path
+[17]Ready to roll!
+[26]	Academic License
+[31]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[31]2016-04-28 10:50:57 | This process will exit on any fault.
+[22] 
+[22]To get started, type one of these: helpwin, helpdesk, or demo.
+[22]For product information, visit www.mathworks.com.
+[22] 
+[22]Startup: Standard Brainard GPC configuration
+[22]Removing .../.svn... from Matlab path
+[22]Removing .../.git... from Matlab path
+[22]Removing ...xOld... from Matlab path
+[22]Removing ...xTests... from Matlab path
+[22]Removing ...zOld... from Matlab path
+[22]Removing .../tmp... from Matlab path
+[22]Removing .../temp... from Matlab path
+[22]Removing ...xSource... from Matlab path
+[22]Removing ...xOmniDriver... from Matlab path
+[22]Removing ...xOneLightSDK... from Matlab path
+[22]Removing ...xOneLightDriver... from Matlab path
+[22]Removing ...xTunerSource... from Matlab path
+[22]Removing ...xCalibrationData... from Matlab path
+[22]Removing ...xCalibrateOmni... from Matlab path
+[22]Removing ...OLDemos... from Matlab path
+[22]Removing ...OneLightToolbox/Source... from Matlab path
+[22]Removing ...OneLightToolbox/Documentation... from Matlab path
+[22]Removing ...xOcieanOpticsJava... from Matlab path
+[22]Removing ...xOneLightDocumentation... from Matlab path
+[22]Removing ...xOneLightEngineSourceMac... from Matlab path
+[22]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[22]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[22]Removing ...Plots... from Matlab path
+[22]Ready to roll!
+[19]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[20] 
+[20]To get started, type one of these: helpwin, helpdesk, or demo.
+[20]For product information, visit www.mathworks.com.
+[20] 
+[20]Startup: Standard Brainard GPC configuration
+[20]Removing .../.svn... from Matlab path
+[20]Removing .../.git... from Matlab path
+[20]Removing ...xOld... from Matlab path
+[20]Removing ...xTests... from Matlab path
+[20]Removing ...zOld... from Matlab path
+[20]Removing .../tmp... from Matlab path
+[20]Removing .../temp... from Matlab path
+[20]Removing ...xSource... from Matlab path
+[20]Removing ...xOmniDriver... from Matlab path
+[20]Removing ...xOneLightSDK... from Matlab path
+[20]Removing ...xOneLightDriver... from Matlab path
+[20]Removing ...xTunerSource... from Matlab path
+[20]Removing ...xCalibrationData... from Matlab path
+[20]Removing ...xCalibrateOmni... from Matlab path
+[20]Removing ...OLDemos... from Matlab path
+[20]Removing ...OneLightToolbox/Source... from Matlab path
+[20]Removing ...OneLightToolbox/Documentation... from Matlab path
+[20]Removing ...xOcieanOpticsJava... from Matlab path
+[20]Removing ...xOneLightDocumentation... from Matlab path
+[20]Removing ...xOneLightEngineSourceMac... from Matlab path
+[20]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[20]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[20]Removing ...Plots... from Matlab path
+[20]Ready to roll!
+[1]	Academic License
+[19]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[19]2016-04-28 10:50:57 | This process will exit on any fault.
+[5] 
+[5]To get started, type one of these: helpwin, helpdesk, or demo.
+[5]For product information, visit www.mathworks.com.
+[5] 
+[5]Startup: Standard Brainard GPC configuration
+[5]Removing .../.svn... from Matlab path
+[5]Removing .../.git... from Matlab path
+[5]Removing ...xOld... from Matlab path
+[5]Removing ...xTests... from Matlab path
+[5]Removing ...zOld... from Matlab path
+[5]Removing .../tmp... from Matlab path
+[5]Removing .../temp... from Matlab path
+[5]Removing ...xSource... from Matlab path
+[5]Removing ...xOmniDriver... from Matlab path
+[5]Removing ...xOneLightSDK... from Matlab path
+[5]Removing ...xOneLightDriver... from Matlab path
+[5]Removing ...xTunerSource... from Matlab path
+[5]Removing ...xCalibrationData... from Matlab path
+[5]Removing ...xCalibrateOmni... from Matlab path
+[5]Removing ...OLDemos... from Matlab path
+[5]Removing ...OneLightToolbox/Source... from Matlab path
+[5]Removing ...OneLightToolbox/Documentation... from Matlab path
+[5]Removing ...xOcieanOpticsJava... from Matlab path
+[5]Removing ...xOneLightDocumentation... from Matlab path
+[5]Removing ...xOneLightEngineSourceMac... from Matlab path
+[5]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[5]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[5]Removing ...Plots... from Matlab path
+[5]Ready to roll!
+[21]	Academic License
+[14]	Academic License
+[31]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[15]	Academic License
+[28] 
+[28]To get started, type one of these: helpwin, helpdesk, or demo.
+[28]For product information, visit www.mathworks.com.
+[28] 
+[28]Startup: Standard Brainard GPC configuration
+[28]Removing .../.svn... from Matlab path
+[28]Removing .../.git... from Matlab path
+[28]Removing ...xOld... from Matlab path
+[28]Removing ...xTests... from Matlab path
+[28]Removing ...zOld... from Matlab path
+[28]Removing .../tmp... from Matlab path
+[28]Removing .../temp... from Matlab path
+[28]Removing ...xSource... from Matlab path
+[28]Removing ...xOmniDriver... from Matlab path
+[28]Removing ...xOneLightSDK... from Matlab path
+[28]Removing ...xOneLightDriver... from Matlab path
+[28]Removing ...xTunerSource... from Matlab path
+[28]Removing ...xCalibrationData... from Matlab path
+[28]Removing ...xCalibrateOmni... from Matlab path
+[28]Removing ...OLDemos... from Matlab path
+[28]Removing ...OneLightToolbox/Source... from Matlab path
+[28]Removing ...OneLightToolbox/Documentation... from Matlab path
+[28]Removing ...xOcieanOpticsJava... from Matlab path
+[28]Removing ...xOneLightDocumentation... from Matlab path
+[28]Removing ...xOneLightEngineSourceMac... from Matlab path
+[28]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[28]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[28]Removing ...Plots... from Matlab path
+[28]Ready to roll!
+[31]2016-04-28 10:50:57 | About to initialize MPI.
+[19]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[18]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[19]2016-04-28 10:50:57 | About to initialize MPI.
+[30]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[0]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[4] 
+[4]To get started, type one of these: helpwin, helpdesk, or demo.
+[4]For product information, visit www.mathworks.com.
+[4] 
+[4]Startup: Standard Brainard GPC configuration
+[4]Removing .../.svn... from Matlab path
+[4]Removing .../.git... from Matlab path
+[4]Removing ...xOld... from Matlab path
+[4]Removing ...xTests... from Matlab path
+[4]Removing ...zOld... from Matlab path
+[4]Removing .../tmp... from Matlab path
+[4]Removing .../temp... from Matlab path
+[4]Removing ...xSource... from Matlab path
+[4]Removing ...xOmniDriver... from Matlab path
+[4]Removing ...xOneLightSDK... from Matlab path
+[4]Removing ...xOneLightDriver... from Matlab path
+[4]Removing ...xTunerSource... from Matlab path
+[4]Removing ...xCalibrationData... from Matlab path
+[4]Removing ...xCalibrateOmni... from Matlab path
+[4]Removing ...OLDemos... from Matlab path
+[4]Removing ...OneLightToolbox/Source... from Matlab path
+[4]Removing ...OneLightToolbox/Documentation... from Matlab path
+[4]Removing ...xOcieanOpticsJava... from Matlab path
+[4]Removing ...xOneLightDocumentation... from Matlab path
+[4]Removing ...xOneLightEngineSourceMac... from Matlab path
+[4]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[4]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[4]Removing ...Plots... from Matlab path
+[4]Ready to roll!
+[3] 
+[3]To get started, type one of these: helpwin, helpdesk, or demo.
+[3]For product information, visit www.mathworks.com.
+[3] 
+[3]Startup: Standard Brainard GPC configuration
+[3]Removing .../.svn... from Matlab path
+[3]Removing .../.git... from Matlab path
+[3]Removing ...xOld... from Matlab path
+[3]Removing ...xTests... from Matlab path
+[3]Removing ...zOld... from Matlab path
+[3]Removing .../tmp... from Matlab path
+[3]Removing .../temp... from Matlab path
+[3]Removing ...xSource... from Matlab path
+[3]Removing ...xOmniDriver... from Matlab path
+[3]Removing ...xOneLightSDK... from Matlab path
+[3]Removing ...xOneLightDriver... from Matlab path
+[3]Removing ...xTunerSource... from Matlab path
+[3]Removing ...xCalibrationData... from Matlab path
+[3]Removing ...xCalibrateOmni... from Matlab path
+[3]Removing ...OLDemos... from Matlab path
+[3]Removing ...OneLightToolbox/Source... from Matlab path
+[3]Removing ...OneLightToolbox/Documentation... from Matlab path
+[3]Removing ...xOcieanOpticsJava... from Matlab path
+[3]Removing ...xOneLightDocumentation... from Matlab path
+[3]Removing ...xOneLightEngineSourceMac... from Matlab path
+[3]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[3]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[3]Removing ...Plots... from Matlab path
+[3]Ready to roll!
+[12] 
+[12]To get started, type one of these: helpwin, helpdesk, or demo.
+[12]For product information, visit www.mathworks.com.
+[12] 
+[12]Startup: Standard Brainard GPC configuration
+[12]Removing .../.svn... from Matlab path
+[12]Removing .../.git... from Matlab path
+[12]Removing ...xOld... from Matlab path
+[12]Removing ...xTests... from Matlab path
+[12]Removing ...zOld... from Matlab path
+[12]Removing .../tmp... from Matlab path
+[12]Removing .../temp... from Matlab path
+[12]Removing ...xSource... from Matlab path
+[12]Removing ...xOmniDriver... from Matlab path
+[12]Removing ...xOneLightSDK... from Matlab path
+[12]Removing ...xOneLightDriver... from Matlab path
+[12]Removing ...xTunerSource... from Matlab path
+[12]Removing ...xCalibrationData... from Matlab path
+[12]Removing ...xCalibrateOmni... from Matlab path
+[12]Removing ...OLDemos... from Matlab path
+[12]Removing ...OneLightToolbox/Source... from Matlab path
+[12]Removing ...OneLightToolbox/Documentation... from Matlab path
+[12]Removing ...xOcieanOpticsJava... from Matlab path
+[12]Removing ...xOneLightDocumentation... from Matlab path
+[12]Removing ...xOneLightEngineSourceMac... from Matlab path
+[12]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[12]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[12]Removing ...Plots... from Matlab path
+[12]Ready to roll!
+[17]	Academic License
+[20]	Academic License
+[26]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[5]	Academic License
+[22]	Academic License
+[24] 
+[24]To get started, type one of these: helpwin, helpdesk, or demo.
+[24]For product information, visit www.mathworks.com.
+[24] 
+[24]Startup: Standard Brainard GPC configuration
+[24]Removing .../.svn... from Matlab path
+[24]Removing .../.git... from Matlab path
+[24]Removing ...xOld... from Matlab path
+[24]Removing ...xTests... from Matlab path
+[24]Removing ...zOld... from Matlab path
+[24]Removing .../tmp... from Matlab path
+[24]Removing .../temp... from Matlab path
+[24]Removing ...xSource... from Matlab path
+[24]Removing ...xOmniDriver... from Matlab path
+[24]Removing ...xOneLightSDK... from Matlab path
+[24]Removing ...xOneLightDriver... from Matlab path
+[24]Removing ...xTunerSource... from Matlab path
+[24]Removing ...xCalibrationData... from Matlab path
+[24]Removing ...xCalibrateOmni... from Matlab path
+[24]Removing ...OLDemos... from Matlab path
+[24]Removing ...OneLightToolbox/Source... from Matlab path
+[24]Removing ...OneLightToolbox/Documentation... from Matlab path
+[24]Removing ...xOcieanOpticsJava... from Matlab path
+[24]Removing ...xOneLightDocumentation... from Matlab path
+[24]Removing ...xOneLightEngineSourceMac... from Matlab path
+[24]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[24]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[24]Removing ...Plots... from Matlab path
+[24]Ready to roll!
+[8] 
+[8]To get started, type one of these: helpwin, helpdesk, or demo.
+[8]For product information, visit www.mathworks.com.
+[8] 
+[8]Startup: Standard Brainard GPC configuration
+[8]Removing .../.svn... from Matlab path
+[8]Removing .../.git... from Matlab path
+[8]Removing ...xOld... from Matlab path
+[8]Removing ...xTests... from Matlab path
+[8]Removing ...zOld... from Matlab path
+[8]Removing .../tmp... from Matlab path
+[8]Removing .../temp... from Matlab path
+[8]Removing ...xSource... from Matlab path
+[8]Removing ...xOmniDriver... from Matlab path
+[8]Removing ...xOneLightSDK... from Matlab path
+[8]Removing ...xOneLightDriver... from Matlab path
+[8]Removing ...xTunerSource... from Matlab path
+[8]Removing ...xCalibrationData... from Matlab path
+[8]Removing ...xCalibrateOmni... from Matlab path
+[8]Removing ...OLDemos... from Matlab path
+[8]Removing ...OneLightToolbox/Source... from Matlab path
+[8]Removing ...OneLightToolbox/Documentation... from Matlab path
+[8]Removing ...xOcieanOpticsJava... from Matlab path
+[8]Removing ...xOneLightDocumentation... from Matlab path
+[8]Removing ...xOneLightEngineSourceMac... from Matlab path
+[8]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[8]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[8]Removing ...Plots... from Matlab path
+[8]Ready to roll!
+[28]	Academic License
+[18]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[1]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[18]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[30]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[0]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[30]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[0]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[18]2016-04-28 10:50:57 | This process will exit on any fault.
+[0]2016-04-28 10:50:57 | This process will exit on any fault.
+[30]2016-04-28 10:50:57 | This process will exit on any fault.
+[21]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[15]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[4]	Academic License
+[26]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[0]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[26]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[14]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[26]2016-04-28 10:50:57 | This process will exit on any fault.
+[0]2016-04-28 10:50:57 | About to initialize MPI.
+[18]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[30]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[12]	Academic License
+[3]	Academic License
+[24]	Academic License
+[8]	Academic License
+[25] 
+[25]To get started, type one of these: helpwin, helpdesk, or demo.
+[25]For product information, visit www.mathworks.com.
+[25] 
+[25]Startup: Standard Brainard GPC configuration
+[25]Removing .../.svn... from Matlab path
+[25]Removing .../.git... from Matlab path
+[25]Removing ...xOld... from Matlab path
+[25]Removing ...xTests... from Matlab path
+[25]Removing ...zOld... from Matlab path
+[25]Removing .../tmp... from Matlab path
+[25]Removing .../temp... from Matlab path
+[25]Removing ...xSource... from Matlab path
+[25]Removing ...xOmniDriver... from Matlab path
+[25]Removing ...xOneLightSDK... from Matlab path
+[25]Removing ...xOneLightDriver... from Matlab path
+[25]Removing ...xTunerSource... from Matlab path
+[25]Removing ...xCalibrationData... from Matlab path
+[25]Removing ...xCalibrateOmni... from Matlab path
+[25]Removing ...OLDemos... from Matlab path
+[25]Removing ...OneLightToolbox/Source... from Matlab path
+[25]Removing ...OneLightToolbox/Documentation... from Matlab path
+[25]Removing ...xOcieanOpticsJava... from Matlab path
+[25]Removing ...xOneLightDocumentation... from Matlab path
+[25]Removing ...xOneLightEngineSourceMac... from Matlab path
+[25]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[25]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[25]Removing ...Plots... from Matlab path
+[25]Ready to roll!
+[18]2016-04-28 10:50:57 | About to initialize MPI.
+[30]2016-04-28 10:50:57 | About to initialize MPI.
+[17]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[26]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[1]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[13] 
+[13]To get started, type one of these: helpwin, helpdesk, or demo.
+[13]For product information, visit www.mathworks.com.
+[13] 
+[13]Startup: Standard Brainard GPC configuration
+[13]Removing .../.svn... from Matlab path
+[13]Removing .../.git... from Matlab path
+[13]Removing ...xOld... from Matlab path
+[13]Removing ...xTests... from Matlab path
+[13]Removing ...zOld... from Matlab path
+[13]Removing .../tmp... from Matlab path
+[13]Removing .../temp... from Matlab path
+[13]Removing ...xSource... from Matlab path
+[13]Removing ...xOmniDriver... from Matlab path
+[13]Removing ...xOneLightSDK... from Matlab path
+[13]Removing ...xOneLightDriver... from Matlab path
+[13]Removing ...xTunerSource... from Matlab path
+[13]Removing ...xCalibrationData... from Matlab path
+[13]Removing ...xCalibrateOmni... from Matlab path
+[13]Removing ...OLDemos... from Matlab path
+[13]Removing ...OneLightToolbox/Source... from Matlab path
+[13]Removing ...OneLightToolbox/Documentation... from Matlab path
+[13]Removing ...xOcieanOpticsJava... from Matlab path
+[13]Removing ...xOneLightDocumentation... from Matlab path
+[13]Removing ...xOneLightEngineSourceMac... from Matlab path
+[13]Removing ...xOneLightEngineSourceSDK... from Matlab path
+[13]Removing ...xOneLightTunerApplicationSource... from Matlab path
+[13]Removing ...Plots... from Matlab path
+[13]Ready to roll!
+[1]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[21]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[26]2016-04-28 10:50:57 | About to initialize MPI.
+[21]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[1]2016-04-28 10:50:57 | This process will exit on any fault.
+[22]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[20]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[21]2016-04-28 10:50:57 | This process will exit on any fault.
+[15]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[15]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[15]2016-04-28 10:50:57 | This process will exit on any fault.
+[5]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[4]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[1]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[14]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[14]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[1]2016-04-28 10:50:57 | About to initialize MPI.
+[21]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[28]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[14]2016-04-28 10:50:57 | This process will exit on any fault.
+[21]2016-04-28 10:50:57 | About to initialize MPI.
+[17]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[15]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[17]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[17]2016-04-28 10:50:57 | This process will exit on any fault.
+[15]2016-04-28 10:50:57 | About to initialize MPI.
+[24]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[14]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[3]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[25]	Academic License
+[13]	Academic License
+[14]2016-04-28 10:50:57 | About to initialize MPI.
+[22]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[20]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[22]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[20]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[17]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[12]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[22]2016-04-28 10:50:57 | This process will exit on any fault.
+[20]2016-04-28 10:50:57 | This process will exit on any fault.
+[4]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[8]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[17]2016-04-28 10:50:57 | About to initialize MPI.
+[4]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[5]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[5]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[4]2016-04-28 10:50:57 | This process will exit on any fault.
+[5]2016-04-28 10:50:57 | This process will exit on any fault.
+[20]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[28]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[22]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[28]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[20]2016-04-28 10:50:57 | About to initialize MPI.
+[22]2016-04-28 10:50:57 | About to initialize MPI.
+[28]2016-04-28 10:50:57 | This process will exit on any fault.
+[24]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[24]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[4]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[5]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[24]2016-04-28 10:50:57 | This process will exit on any fault.
+[4]2016-04-28 10:50:57 | About to initialize MPI.
+[5]2016-04-28 10:50:57 | About to initialize MPI.
+[3]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[28]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[3]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[12]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[3]2016-04-28 10:50:57 | This process will exit on any fault.
+[28]2016-04-28 10:50:57 | About to initialize MPI.
+[12]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[24]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[12]2016-04-28 10:50:57 | This process will exit on any fault.
+[24]2016-04-28 10:50:57 | About to initialize MPI.
+[8]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[8]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[25]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[3]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[8]2016-04-28 10:50:57 | This process will exit on any fault.
+[3]2016-04-28 10:50:57 | About to initialize MPI.
+[12]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[12]2016-04-28 10:50:57 | About to initialize MPI.
+[8]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[13]2016-04-28 10:50:57 | About to evaluate task with DistcompEvaluateFileTask
+[8]2016-04-28 10:50:57 | About to initialize MPI.
+[25]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[25]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[25]2016-04-28 10:50:57 | This process will exit on any fault.
+[13]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core
+[25]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[13]2016-04-28 10:50:57 | Enter distcomp_evaluate_filetask_core/iSetup
+[13]2016-04-28 10:50:57 | This process will exit on any fault.
+[25]2016-04-28 10:50:57 | About to initialize MPI.
+[13]2016-04-28 10:50:57 | This process will exit when its parent process dies.
+[13]2016-04-28 10:50:57 | About to initialize MPI.
+[2]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[29]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[28]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[27]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[26]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[25]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[24]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[20]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[16]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[13]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[12]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[11]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[10]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[9]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[8]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[6]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[5]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[31]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[18]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[1]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[21]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[38]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[7]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[30]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[17]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[22]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[15]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[4]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[3]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[0]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[36]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[32]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[37]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[39]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[33]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[34]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[19]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[23]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[35]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[14]2016-04-28 10:50:58 | About to call mpiParallelSessionStarting.
+[2]2016-04-28 10:50:58 | Finished initializing MPI.
+[26]2016-04-28 10:50:58 | Finished initializing MPI.
+[36]2016-04-28 10:50:58 | Finished initializing MPI.
+[22]2016-04-28 10:50:58 | Finished initializing MPI.
+[16]2016-04-28 10:50:58 | Finished initializing MPI.
+[10]2016-04-28 10:50:58 | Finished initializing MPI.
+[29]2016-04-28 10:50:58 | Finished initializing MPI.
+[24]2016-04-28 10:50:58 | Finished initializing MPI.
+[27]2016-04-28 10:50:58 | Finished initializing MPI.
+[20]2016-04-28 10:50:58 | Finished initializing MPI.
+[6]2016-04-28 10:50:58 | Finished initializing MPI.
+[12]2016-04-28 10:50:58 | Finished initializing MPI.
+[9]2016-04-28 10:50:58 | Finished initializing MPI.
+[11]2016-04-28 10:50:58 | Finished initializing MPI.
+[0]2016-04-28 10:50:58 | Finished initializing MPI.
+[13]2016-04-28 10:50:58 | Finished initializing MPI.
+[28]2016-04-28 10:50:58 | Finished initializing MPI.
+[8]2016-04-28 10:50:58 | Finished initializing MPI.
+[37]2016-04-28 10:50:58 | Finished initializing MPI.
+[32]2016-04-28 10:50:58 | Finished initializing MPI.
+[35]2016-04-28 10:50:58 | Finished initializing MPI.
+[38]2016-04-28 10:50:58 | Finished initializing MPI.
+[1]2016-04-28 10:50:58 | Finished initializing MPI.
+[23]2016-04-28 10:50:58 | Finished initializing MPI.
+[33]2016-04-28 10:50:58 | Finished initializing MPI.
+[15]2016-04-28 10:50:58 | Finished initializing MPI.
+[39]2016-04-28 10:50:58 | Finished initializing MPI.
+[31]2016-04-28 10:50:58 | Finished initializing MPI.
+[21]2016-04-28 10:50:58 | Finished initializing MPI.
+[18]2016-04-28 10:50:58 | Finished initializing MPI.
+[34]2016-04-28 10:50:58 | Finished initializing MPI.
+[19]2016-04-28 10:50:58 | Finished initializing MPI.
+[7]2016-04-28 10:50:58 | Finished initializing MPI.
+[14]2016-04-28 10:50:58 | Finished initializing MPI.
+[5]2016-04-28 10:50:58 | Finished initializing MPI.
+[3]2016-04-28 10:50:58 | Finished initializing MPI.
+[30]2016-04-28 10:50:58 | Finished initializing MPI.
+[17]2016-04-28 10:50:58 | Finished initializing MPI.
+[4]2016-04-28 10:50:58 | Finished initializing MPI.
+[25]2016-04-28 10:50:58 | Finished initializing MPI.
+[29]2016-04-28 10:50:58 | About to call decode function.
+[29]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[33]2016-04-28 10:50:58 | About to call decode function.
+[26]2016-04-28 10:50:58 | About to call decode function.
+[37]2016-04-28 10:50:58 | About to call decode function.
+[33]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[22]2016-04-28 10:50:58 | About to call decode function.
+[37]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[2]2016-04-28 10:50:58 | About to call decode function.
+[36]2016-04-28 10:50:58 | About to call decode function.
+[26]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[22]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[6]2016-04-28 10:50:58 | About to call decode function.
+[36]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[2]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[13]2016-04-28 10:50:58 | About to call decode function.
+[9]2016-04-28 10:50:58 | About to call decode function.
+[38]2016-04-28 10:50:58 | About to call decode function.
+[32]2016-04-28 10:50:58 | About to call decode function.
+[28]2016-04-28 10:50:58 | About to call decode function.
+[25]2016-04-28 10:50:58 | About to call decode function.
+[6]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[34]2016-04-28 10:50:58 | About to call decode function.
+[39]2016-04-28 10:50:58 | About to call decode function.
+[11]2016-04-28 10:50:58 | About to call decode function.
+[13]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[38]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[27]2016-04-28 10:50:58 | About to call decode function.
+[32]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[28]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[9]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[35]2016-04-28 10:50:58 | About to call decode function.
+[14]2016-04-28 10:50:58 | About to call decode function.
+[25]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[34]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[39]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[11]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[27]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[16]2016-04-28 10:50:58 | About to call decode function.
+[14]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[35]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[10]2016-04-28 10:50:58 | About to call decode function.
+[24]2016-04-28 10:50:58 | About to call decode function.
+[4]2016-04-28 10:50:58 | About to call decode function.
+[16]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[17]2016-04-28 10:50:58 | About to call decode function.
+[10]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[4]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[18]2016-04-28 10:50:58 | About to call decode function.
+[24]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[21]2016-04-28 10:50:58 | About to call decode function.
+[17]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[5]2016-04-28 10:50:58 | About to call decode function.
+[20]2016-04-28 10:50:58 | About to call decode function.
+[31]2016-04-28 10:50:58 | About to call decode function.
+[15]2016-04-28 10:50:58 | About to call decode function.
+[18]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[1]2016-04-28 10:50:58 | About to call decode function.
+[21]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[20]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[5]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[8]2016-04-28 10:50:58 | About to call decode function.
+[23]2016-04-28 10:50:58 | About to call decode function.
+[30]2016-04-28 10:50:58 | About to call decode function.
+[15]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[31]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[12]2016-04-28 10:50:58 | About to call decode function.
+[3]2016-04-28 10:50:58 | About to call decode function.
+[1]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[19]2016-04-28 10:50:58 | About to call decode function.
+[23]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[30]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[3]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[12]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[8]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[19]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[7]2016-04-28 10:50:58 | About to call decode function.
+[0]2016-04-28 10:50:58 | About to call decode function.
+[7]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[0]2016-04-28 10:50:58 | In parallel.cluster.generic.communicatingDecodeFcn
+[33]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[37]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[33]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[32]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[37]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[36]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[32]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[36]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[38]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[38]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[34]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[39]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[34]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[39]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[35]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[35]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[15]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[14]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[29]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[15]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[14]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[29]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[22]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[22]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[28]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[28]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[26]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[11]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[26]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[11]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[2]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[0]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[9]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[2]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[9]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[0]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[25]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[13]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[25]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[10]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[1]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[6]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[10]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[1]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[13]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[24]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[6]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[24]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[27]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[20]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[4]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[20]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[30]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[27]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[4]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[23]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[30]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[23]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[19]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[18]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[31]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[19]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[5]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[31]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[5]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[18]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[21]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[21]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[17]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[17]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[7]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[7]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[8]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[3]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[12]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[3]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[8]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[12]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[16]2016-04-28 10:50:58 | Setting the desktop client to a new client with username 
+[16]2016-04-28 10:50:58 | About to construct the storage object using constructor "makeFileStorageObject" and location "PC{}:UNIX{/data/home/dhb/experiments/LightnessV4/LightnessPopCode/popdecode}:"
+[38]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task39"
+[36]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task37"
+[37]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task38"
+[35]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task36"
+[33]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task34"
+[39]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task40"
+[34]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task35"
+[32]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task33"
+[37]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[36]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[33]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[35]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[36]2016-04-28 10:50:59 | Completed pre-execution phase
+[37]2016-04-28 10:50:59 | Completed pre-execution phase
+[33]2016-04-28 10:50:59 | Completed pre-execution phase
+[35]2016-04-28 10:50:59 | Completed pre-execution phase
+[39]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[38]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[32]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[33]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[36]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[39]2016-04-28 10:50:59 | Completed pre-execution phase
+[35]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[34]2016-04-28 10:50:59 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[37]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[32]2016-04-28 10:50:59 | Completed pre-execution phase
+[38]2016-04-28 10:50:59 | Completed pre-execution phase
+[34]2016-04-28 10:50:59 | Completed pre-execution phase
+[11]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task12"
+[32]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[24]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task25"
+[6]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task7"
+[39]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[38]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[34]2016-04-28 10:50:59 | About to pPreJobEvaluate
+[14]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task15"
+[0]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task1"
+[22]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task23"
+[29]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task30"
+[9]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task10"
+[28]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task29"
+[23]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task24"
+[26]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task27"
+[13]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task14"
+[2]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task3"
+[30]2016-04-28 10:50:59 | About to find job and task using locations "Job5" and "Job5/Task31"
+[27]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task28"
+[10]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task11"
+[1]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task2"
+[16]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task17"
+[17]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task18"
+[21]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task22"
+[4]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task5"
+[25]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task26"
+[5]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task6"
+[8]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task9"
+[15]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task16"
+[20]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task21"
+[18]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task19"
+[19]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task20"
+[7]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task8"
+[12]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task13"
+[31]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task32"
+[3]2016-04-28 10:51:00 | About to find job and task using locations "Job5" and "Job5/Task4"
+[0]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[6]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[0]2016-04-28 10:51:00 | Completed pre-execution phase
+[23]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[6]2016-04-28 10:51:00 | Completed pre-execution phase
+[0]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[2]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[23]2016-04-28 10:51:00 | Completed pre-execution phase
+[24]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[1]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[29]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[11]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[2]2016-04-28 10:51:00 | Completed pre-execution phase
+[1]2016-04-28 10:51:00 | Completed pre-execution phase
+[29]2016-04-28 10:51:00 | Completed pre-execution phase
+[16]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[24]2016-04-28 10:51:00 | Completed pre-execution phase
+[6]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[14]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[11]2016-04-28 10:51:00 | Completed pre-execution phase
+[23]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[16]2016-04-28 10:51:00 | Completed pre-execution phase
+[4]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[14]2016-04-28 10:51:00 | Completed pre-execution phase
+[1]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[29]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[4]2016-04-28 10:51:00 | Completed pre-execution phase
+[11]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[2]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[24]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[28]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[14]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[13]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[16]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[22]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[21]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[26]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[28]2016-04-28 10:51:00 | Completed pre-execution phase
+[13]2016-04-28 10:51:00 | Completed pre-execution phase
+[9]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[4]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[22]2016-04-28 10:51:00 | Completed pre-execution phase
+[30]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[21]2016-04-28 10:51:00 | Completed pre-execution phase
+[26]2016-04-28 10:51:00 | Completed pre-execution phase
+[27]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[9]2016-04-28 10:51:00 | Completed pre-execution phase
+[10]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[13]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[30]2016-04-28 10:51:00 | Completed pre-execution phase
+[12]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[28]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[25]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[5]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[22]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[27]2016-04-28 10:51:00 | Completed pre-execution phase
+[17]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[12]2016-04-28 10:51:00 | Completed pre-execution phase
+[10]2016-04-28 10:51:00 | Completed pre-execution phase
+[31]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[21]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[26]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[25]2016-04-28 10:51:00 | Completed pre-execution phase
+[9]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[5]2016-04-28 10:51:00 | Completed pre-execution phase
+[17]2016-04-28 10:51:00 | Completed pre-execution phase
+[8]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[31]2016-04-28 10:51:00 | Completed pre-execution phase
+[30]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[12]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[27]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[20]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[8]2016-04-28 10:51:00 | Completed pre-execution phase
+[15]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[10]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[25]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[20]2016-04-28 10:51:00 | Completed pre-execution phase
+[3]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[5]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[18]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[17]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[31]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[8]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[15]2016-04-28 10:51:00 | Completed pre-execution phase
+[3]2016-04-28 10:51:00 | Completed pre-execution phase
+[7]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[18]2016-04-28 10:51:00 | Completed pre-execution phase
+[20]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[3]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[7]2016-04-28 10:51:00 | Completed pre-execution phase
+[19]2016-04-28 10:51:00 | Setting the TaskEvaluator to the CJSStreamingEvaluator
+[15]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[18]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[19]2016-04-28 10:51:00 | Completed pre-execution phase
+[7]2016-04-28 10:51:00 | About to pPreJobEvaluate
+[19]2016-04-28 10:51:01 | About to pPreJobEvaluate
+[20]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[27]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[32]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[39]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[1]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[38]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[37]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[36]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[35]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[14]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[11]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[34]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[7]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[9]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[6]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[17]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[8]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[24]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[25]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[15]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[22]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[26]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[18]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[13]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[12]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[4]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[3]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[28]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[10]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[30]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[5]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[21]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[16]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[19]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[2]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[31]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[23]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[0]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[29]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[33]2016-04-28 10:51:01 | About to pPreTaskEvaluate
+[38]2016-04-28 10:51:01 | About to add job dependencies
+[34]2016-04-28 10:51:01 | About to add job dependencies
+[35]2016-04-28 10:51:01 | About to add job dependencies
+[32]2016-04-28 10:51:01 | About to add job dependencies
+[1]2016-04-28 10:51:01 | About to add job dependencies
+[6]2016-04-28 10:51:01 | About to add job dependencies
+[36]2016-04-28 10:51:01 | About to add job dependencies
+[27]2016-04-28 10:51:01 | About to add job dependencies
+[11]2016-04-28 10:51:01 | About to add job dependencies
+[37]2016-04-28 10:51:01 | About to add job dependencies
+[39]2016-04-28 10:51:01 | About to add job dependencies
+[9]2016-04-28 10:51:01 | About to add job dependencies
+[0]2016-04-28 10:51:01 | About to add job dependencies
+[22]2016-04-28 10:51:01 | About to add job dependencies
+[20]2016-04-28 10:51:01 | About to add job dependencies
+[14]2016-04-28 10:51:01 | About to add job dependencies
+[23]2016-04-28 10:51:01 | About to add job dependencies
+[7]2016-04-28 10:51:01 | About to add job dependencies
+[16]2016-04-28 10:51:01 | About to add job dependencies
+[2]2016-04-28 10:51:01 | About to add job dependencies
+[19]2016-04-28 10:51:01 | About to add job dependencies
+[12]2016-04-28 10:51:01 | About to add job dependencies
+[17]2016-04-28 10:51:01 | About to add job dependencies
+[31]2016-04-28 10:51:01 | About to add job dependencies
+[28]2016-04-28 10:51:01 | About to add job dependencies
+[3]2016-04-28 10:51:01 | About to add job dependencies
+[18]2016-04-28 10:51:01 | About to add job dependencies
+[25]2016-04-28 10:51:01 | About to add job dependencies
+[4]2016-04-28 10:51:01 | About to add job dependencies
+[24]2016-04-28 10:51:01 | About to add job dependencies
+[13]2016-04-28 10:51:01 | About to add job dependencies
+[26]2016-04-28 10:51:01 | About to add job dependencies
+[10]2016-04-28 10:51:01 | About to add job dependencies
+[29]2016-04-28 10:51:01 | About to add job dependencies
+[15]2016-04-28 10:51:01 | About to add job dependencies
+[8]2016-04-28 10:51:01 | About to add job dependencies
+[30]2016-04-28 10:51:01 | About to add job dependencies
+[33]2016-04-28 10:51:01 | About to add job dependencies
+[21]2016-04-28 10:51:01 | About to add job dependencies
+[5]2016-04-28 10:51:01 | About to add job dependencies
+[34]2016-04-28 10:51:01 | About to call jobStartup
+[35]2016-04-28 10:51:01 | About to call jobStartup
+[32]2016-04-28 10:51:01 | About to call jobStartup
+[34]2016-04-28 10:51:01 | About to push FileWriter on stack
+[35]2016-04-28 10:51:01 | About to push FileWriter on stack
+[32]2016-04-28 10:51:01 | About to push FileWriter on stack
+[38]2016-04-28 10:51:01 | About to call jobStartup
+[34]2016-04-28 10:51:01 | FileWriter popped off stack
+[35]2016-04-28 10:51:01 | FileWriter popped off stack
+[0]2016-04-28 10:51:01 | About to call jobStartup
+[34]2016-04-28 10:51:01 | About to call taskStartup
+[35]2016-04-28 10:51:01 | About to call taskStartup
+[6]2016-04-28 10:51:01 | About to call jobStartup
+[32]2016-04-28 10:51:01 | FileWriter popped off stack
+[1]2016-04-28 10:51:01 | About to call jobStartup
+[39]2016-04-28 10:51:01 | About to call jobStartup
+[32]2016-04-28 10:51:01 | About to call taskStartup
+[38]2016-04-28 10:51:01 | About to push FileWriter on stack
+[0]2016-04-28 10:51:01 | About to push FileWriter on stack
+[31]2016-04-28 10:51:01 | About to call jobStartup
+[6]2016-04-28 10:51:01 | About to push FileWriter on stack
+[37]2016-04-28 10:51:01 | About to call jobStartup
+[39]2016-04-28 10:51:01 | About to push FileWriter on stack
+[38]2016-04-28 10:51:01 | FileWriter popped off stack
+[0]2016-04-28 10:51:01 | FileWriter popped off stack
+[36]2016-04-28 10:51:01 | About to call jobStartup
+[31]2016-04-28 10:51:01 | About to push FileWriter on stack
+[38]2016-04-28 10:51:01 | About to call taskStartup
+[1]2016-04-28 10:51:01 | About to push FileWriter on stack
+[34]2016-04-28 10:51:01 | About to push FileWriter on stack
+[39]2016-04-28 10:51:01 | FileWriter popped off stack
+[0]2016-04-28 10:51:01 | About to call taskStartup
+[35]2016-04-28 10:51:01 | About to push FileWriter on stack
+[6]2016-04-28 10:51:01 | FileWriter popped off stack
+[34]2016-04-28 10:51:01 | FileWriter popped off stack
+[35]2016-04-28 10:51:01 | FileWriter popped off stack
+[37]2016-04-28 10:51:01 | About to push FileWriter on stack
+[34]2016-04-28 10:51:01 | About to get evaluation data
+[39]2016-04-28 10:51:01 | About to call taskStartup
+[35]2016-04-28 10:51:01 | About to get evaluation data
+[31]2016-04-28 10:51:01 | FileWriter popped off stack
+[6]2016-04-28 10:51:01 | About to call taskStartup
+[23]2016-04-28 10:51:01 | About to call jobStartup
+[36]2016-04-28 10:51:01 | About to push FileWriter on stack
+[32]2016-04-28 10:51:01 | About to push FileWriter on stack
+[31]2016-04-28 10:51:01 | About to call taskStartup
+[32]2016-04-28 10:51:01 | FileWriter popped off stack
+[32]2016-04-28 10:51:01 | About to get evaluation data
+[1]2016-04-28 10:51:01 | FileWriter popped off stack
+[37]2016-04-28 10:51:01 | FileWriter popped off stack
+[23]2016-04-28 10:51:01 | About to push FileWriter on stack
+[36]2016-04-28 10:51:01 | FileWriter popped off stack
+[37]2016-04-28 10:51:01 | About to call taskStartup
+[1]2016-04-28 10:51:01 | About to call taskStartup
+[0]2016-04-28 10:51:01 | About to push FileWriter on stack
+[36]2016-04-28 10:51:01 | About to call taskStartup
+[38]2016-04-28 10:51:01 | About to push FileWriter on stack
+[39]2016-04-28 10:51:01 | About to push FileWriter on stack
+[0]2016-04-28 10:51:01 | FileWriter popped off stack
+[23]2016-04-28 10:51:01 | FileWriter popped off stack
+[38]2016-04-28 10:51:01 | FileWriter popped off stack
+[0]2016-04-28 10:51:01 | About to get evaluation data
+[39]2016-04-28 10:51:01 | FileWriter popped off stack
+[38]2016-04-28 10:51:01 | About to get evaluation data
+[39]2016-04-28 10:51:01 | About to get evaluation data
+[23]2016-04-28 10:51:01 | About to call taskStartup
+[31]2016-04-28 10:51:01 | About to push FileWriter on stack
+[31]2016-04-28 10:51:01 | FileWriter popped off stack
+[31]2016-04-28 10:51:01 | About to get evaluation data
+[33]2016-04-28 10:51:01 | About to call jobStartup
+[6]2016-04-28 10:51:01 | About to push FileWriter on stack
+[33]2016-04-28 10:51:01 | About to push FileWriter on stack
+[6]2016-04-28 10:51:01 | FileWriter popped off stack
+[14]2016-04-28 10:51:01 | About to call jobStartup
+[6]2016-04-28 10:51:01 | About to get evaluation data
+[37]2016-04-28 10:51:01 | About to push FileWriter on stack
+[19]2016-04-28 10:51:01 | About to call jobStartup
+[23]2016-04-28 10:51:01 | About to push FileWriter on stack
+[36]2016-04-28 10:51:01 | About to push FileWriter on stack
+[37]2016-04-28 10:51:01 | FileWriter popped off stack
+[33]2016-04-28 10:51:01 | FileWriter popped off stack
+[37]2016-04-28 10:51:01 | About to get evaluation data
+[23]2016-04-28 10:51:01 | FileWriter popped off stack
+[36]2016-04-28 10:51:01 | FileWriter popped off stack
+[23]2016-04-28 10:51:01 | About to get evaluation data
+[14]2016-04-28 10:51:01 | About to push FileWriter on stack
+[36]2016-04-28 10:51:01 | About to get evaluation data
+[1]2016-04-28 10:51:01 | About to push FileWriter on stack
+[33]2016-04-28 10:51:01 | About to call taskStartup
+[8]2016-04-28 10:51:01 | About to call jobStartup
+[1]2016-04-28 10:51:01 | FileWriter popped off stack
+[19]2016-04-28 10:51:01 | About to push FileWriter on stack
+[1]2016-04-28 10:51:02 | About to get evaluation data
+[14]2016-04-28 10:51:02 | FileWriter popped off stack
+[27]2016-04-28 10:51:01 | About to call jobStartup
+[8]2016-04-28 10:51:02 | About to push FileWriter on stack
+[11]2016-04-28 10:51:01 | About to call jobStartup
+[14]2016-04-28 10:51:02 | About to call taskStartup
+[9]2016-04-28 10:51:01 | About to call jobStartup
+[19]2016-04-28 10:51:02 | FileWriter popped off stack
+[2]2016-04-28 10:51:01 | About to call jobStartup
+[3]2016-04-28 10:51:02 | About to call jobStartup
+[8]2016-04-28 10:51:02 | FileWriter popped off stack
+[19]2016-04-28 10:51:02 | About to call taskStartup
+[28]2016-04-28 10:51:01 | About to call jobStartup
+[18]2016-04-28 10:51:01 | About to call jobStartup
+[12]2016-04-28 10:51:02 | About to call jobStartup
+[16]2016-04-28 10:51:01 | About to call jobStartup
+[33]2016-04-28 10:51:02 | About to push FileWriter on stack
+[27]2016-04-28 10:51:02 | About to push FileWriter on stack
+[8]2016-04-28 10:51:02 | About to call taskStartup
+[25]2016-04-28 10:51:02 | About to call jobStartup
+[10]2016-04-28 10:51:02 | About to call jobStartup
+[33]2016-04-28 10:51:02 | FileWriter popped off stack
+[9]2016-04-28 10:51:02 | About to push FileWriter on stack
+[33]2016-04-28 10:51:02 | About to get evaluation data
+[17]2016-04-28 10:51:02 | About to call jobStartup
+[11]2016-04-28 10:51:02 | About to push FileWriter on stack
+[4]2016-04-28 10:51:02 | About to call jobStartup
+[26]2016-04-28 10:51:02 | About to call jobStartup
+[22]2016-04-28 10:51:02 | About to call jobStartup
+[30]2016-04-28 10:51:02 | About to call jobStartup
+[13]2016-04-28 10:51:02 | About to call jobStartup
+[2]2016-04-28 10:51:02 | About to push FileWriter on stack
+[24]2016-04-28 10:51:02 | About to call jobStartup
+[20]2016-04-28 10:51:02 | About to call jobStartup
+[3]2016-04-28 10:51:02 | About to push FileWriter on stack
+[28]2016-04-28 10:51:02 | About to push FileWriter on stack
+[14]2016-04-28 10:51:02 | About to push FileWriter on stack
+[18]2016-04-28 10:51:02 | About to push FileWriter on stack
+[27]2016-04-28 10:51:02 | FileWriter popped off stack
+[15]2016-04-28 10:51:02 | About to call jobStartup
+[16]2016-04-28 10:51:02 | About to push FileWriter on stack
+[9]2016-04-28 10:51:02 | FileWriter popped off stack
+[29]2016-04-28 10:51:02 | About to call jobStartup
+[14]2016-04-28 10:51:02 | FileWriter popped off stack
+[12]2016-04-28 10:51:02 | About to push FileWriter on stack
+[14]2016-04-28 10:51:02 | About to get evaluation data
+[25]2016-04-28 10:51:02 | About to push FileWriter on stack
+[10]2016-04-28 10:51:02 | About to push FileWriter on stack
+[30]2016-04-28 10:51:02 | About to push FileWriter on stack
+[17]2016-04-28 10:51:02 | About to push FileWriter on stack
+[11]2016-04-28 10:51:02 | FileWriter popped off stack
+[20]2016-04-28 10:51:02 | About to push FileWriter on stack
+[27]2016-04-28 10:51:02 | About to call taskStartup
+[2]2016-04-28 10:51:02 | FileWriter popped off stack
+[9]2016-04-28 10:51:02 | About to call taskStartup
+[4]2016-04-28 10:51:02 | About to push FileWriter on stack
+[26]2016-04-28 10:51:02 | About to push FileWriter on stack
+[19]2016-04-28 10:51:02 | About to push FileWriter on stack
+[22]2016-04-28 10:51:02 | About to push FileWriter on stack
+[15]2016-04-28 10:51:02 | About to push FileWriter on stack
+[3]2016-04-28 10:51:02 | FileWriter popped off stack
+[24]2016-04-28 10:51:02 | About to push FileWriter on stack
+[13]2016-04-28 10:51:02 | About to push FileWriter on stack
+[28]2016-04-28 10:51:02 | FileWriter popped off stack
+[19]2016-04-28 10:51:02 | FileWriter popped off stack
+[2]2016-04-28 10:51:02 | About to call taskStartup
+[18]2016-04-28 10:51:02 | FileWriter popped off stack
+[19]2016-04-28 10:51:02 | About to get evaluation data
+[20]2016-04-28 10:51:02 | FileWriter popped off stack
+[11]2016-04-28 10:51:02 | About to call taskStartup
+[16]2016-04-28 10:51:02 | FileWriter popped off stack
+[12]2016-04-28 10:51:02 | FileWriter popped off stack
+[29]2016-04-28 10:51:02 | About to push FileWriter on stack
+[30]2016-04-28 10:51:02 | FileWriter popped off stack
+[10]2016-04-28 10:51:02 | FileWriter popped off stack
+[3]2016-04-28 10:51:02 | About to call taskStartup
+[25]2016-04-28 10:51:02 | FileWriter popped off stack
+[20]2016-04-28 10:51:02 | About to call taskStartup
+[15]2016-04-28 10:51:02 | FileWriter popped off stack
+[28]2016-04-28 10:51:02 | About to call taskStartup
+[17]2016-04-28 10:51:02 | FileWriter popped off stack
+[18]2016-04-28 10:51:02 | About to call taskStartup
+[8]2016-04-28 10:51:02 | About to push FileWriter on stack
+[4]2016-04-28 10:51:02 | FileWriter popped off stack
+[26]2016-04-28 10:51:02 | FileWriter popped off stack
+[22]2016-04-28 10:51:02 | FileWriter popped off stack
+[15]2016-04-28 10:51:02 | About to call taskStartup
+[16]2016-04-28 10:51:02 | About to call taskStartup
+[24]2016-04-28 10:51:02 | FileWriter popped off stack
+[13]2016-04-28 10:51:02 | FileWriter popped off stack
+[12]2016-04-28 10:51:02 | About to call taskStartup
+[21]2016-04-28 10:51:02 | About to call jobStartup
+[8]2016-04-28 10:51:02 | FileWriter popped off stack
+[10]2016-04-28 10:51:02 | About to call taskStartup
+[30]2016-04-28 10:51:02 | About to call taskStartup
+[25]2016-04-28 10:51:02 | About to call taskStartup
+[17]2016-04-28 10:51:02 | About to call taskStartup
+[7]2016-04-28 10:51:02 | About to call jobStartup
+[8]2016-04-28 10:51:02 | About to get evaluation data
+[4]2016-04-28 10:51:02 | About to call taskStartup
+[26]2016-04-28 10:51:02 | About to call taskStartup
+[22]2016-04-28 10:51:02 | About to call taskStartup
+[29]2016-04-28 10:51:02 | FileWriter popped off stack
+[24]2016-04-28 10:51:02 | About to call taskStartup
+[13]2016-04-28 10:51:02 | About to call taskStartup
+[2]2016-04-28 10:51:02 | About to push FileWriter on stack
+[21]2016-04-28 10:51:02 | About to push FileWriter on stack
+[2]2016-04-28 10:51:02 | FileWriter popped off stack
+[29]2016-04-28 10:51:02 | About to call taskStartup
+[2]2016-04-28 10:51:02 | About to get evaluation data
+[5]2016-04-28 10:51:02 | About to call jobStartup
+[20]2016-04-28 10:51:02 | About to push FileWriter on stack
+[34]2016-04-28 10:51:02 | About to pInstantiatePool
+[7]2016-04-28 10:51:02 | About to push FileWriter on stack
+[27]2016-04-28 10:51:02 | About to push FileWriter on stack
+[21]2016-04-28 10:51:02 | FileWriter popped off stack
+[9]2016-04-28 10:51:02 | About to push FileWriter on stack
+[20]2016-04-28 10:51:02 | FileWriter popped off stack
+[15]2016-04-28 10:51:02 | About to push FileWriter on stack
+[20]2016-04-28 10:51:02 | About to get evaluation data
+[27]2016-04-28 10:51:02 | FileWriter popped off stack
+[9]2016-04-28 10:51:02 | FileWriter popped off stack
+[21]2016-04-28 10:51:02 | About to call taskStartup
+[9]2016-04-28 10:51:02 | About to get evaluation data
+[27]2016-04-28 10:51:02 | About to get evaluation data
+[15]2016-04-28 10:51:02 | FileWriter popped off stack
+[32]2016-04-28 10:51:02 | About to pInstantiatePool
+[15]2016-04-28 10:51:02 | About to get evaluation data
+[11]2016-04-28 10:51:02 | About to push FileWriter on stack
+[3]2016-04-28 10:51:02 | About to push FileWriter on stack
+[28]2016-04-28 10:51:02 | About to push FileWriter on stack
+[5]2016-04-28 10:51:02 | About to push FileWriter on stack
+[7]2016-04-28 10:51:02 | FileWriter popped off stack
+[18]2016-04-28 10:51:02 | About to push FileWriter on stack
+[11]2016-04-28 10:51:02 | FileWriter popped off stack
+[28]2016-04-28 10:51:02 | FileWriter popped off stack
+[3]2016-04-28 10:51:02 | FileWriter popped off stack
+[11]2016-04-28 10:51:02 | About to get evaluation data
+[18]2016-04-28 10:51:02 | FileWriter popped off stack
+[13]2016-04-28 10:51:02 | About to push FileWriter on stack
+[3]2016-04-28 10:51:02 | About to get evaluation data
+[28]2016-04-28 10:51:02 | About to get evaluation data
+[18]2016-04-28 10:51:02 | About to get evaluation data
+[35]2016-04-28 10:51:02 | About to pInstantiatePool
+[12]2016-04-28 10:51:02 | About to push FileWriter on stack
+[10]2016-04-28 10:51:02 | About to push FileWriter on stack
+[13]2016-04-28 10:51:02 | FileWriter popped off stack
+[7]2016-04-28 10:51:02 | About to call taskStartup
+[17]2016-04-28 10:51:02 | About to push FileWriter on stack
+[25]2016-04-28 10:51:02 | About to push FileWriter on stack
+[16]2016-04-28 10:51:02 | About to push FileWriter on stack
+[30]2016-04-28 10:51:02 | About to push FileWriter on stack
+[13]2016-04-28 10:51:02 | About to get evaluation data
+[4]2016-04-28 10:51:02 | About to push FileWriter on stack
+[26]2016-04-28 10:51:02 | About to push FileWriter on stack
+[12]2016-04-28 10:51:02 | FileWriter popped off stack
+[22]2016-04-28 10:51:02 | About to push FileWriter on stack
+[10]2016-04-28 10:51:02 | FileWriter popped off stack
+[39]2016-04-28 10:51:02 | About to pInstantiatePool
+[17]2016-04-28 10:51:02 | FileWriter popped off stack
+[25]2016-04-28 10:51:02 | FileWriter popped off stack
+[38]2016-04-28 10:51:02 | About to pInstantiatePool
+[16]2016-04-28 10:51:02 | FileWriter popped off stack
+[30]2016-04-28 10:51:02 | FileWriter popped off stack
+[5]2016-04-28 10:51:02 | FileWriter popped off stack
+[12]2016-04-28 10:51:02 | About to get evaluation data
+[24]2016-04-28 10:51:02 | About to push FileWriter on stack
+[10]2016-04-28 10:51:02 | About to get evaluation data
+[4]2016-04-28 10:51:02 | FileWriter popped off stack
+[17]2016-04-28 10:51:02 | About to get evaluation data
+[26]2016-04-28 10:51:02 | FileWriter popped off stack
+[25]2016-04-28 10:51:02 | About to get evaluation data
+[30]2016-04-28 10:51:02 | About to get evaluation data
+[21]2016-04-28 10:51:02 | About to push FileWriter on stack
+[22]2016-04-28 10:51:02 | FileWriter popped off stack
+[16]2016-04-28 10:51:02 | About to get evaluation data
+[4]2016-04-28 10:51:02 | About to get evaluation data
+[26]2016-04-28 10:51:02 | About to get evaluation data
+[24]2016-04-28 10:51:02 | FileWriter popped off stack
+[22]2016-04-28 10:51:02 | About to get evaluation data
+[29]2016-04-28 10:51:02 | About to push FileWriter on stack
+[21]2016-04-28 10:51:02 | FileWriter popped off stack
+[24]2016-04-28 10:51:02 | About to get evaluation data
+[21]2016-04-28 10:51:02 | About to get evaluation data
+[5]2016-04-28 10:51:02 | About to call taskStartup
+[29]2016-04-28 10:51:02 | FileWriter popped off stack
+[29]2016-04-28 10:51:02 | About to get evaluation data
+[31]2016-04-28 10:51:02 | About to pInstantiatePool
+[37]2016-04-28 10:51:02 | About to pInstantiatePool
+[36]2016-04-28 10:51:02 | About to pInstantiatePool
+[7]2016-04-28 10:51:02 | About to push FileWriter on stack
+[23]2016-04-28 10:51:02 | About to pInstantiatePool
+[7]2016-04-28 10:51:02 | FileWriter popped off stack
+[7]2016-04-28 10:51:02 | About to get evaluation data
+[5]2016-04-28 10:51:02 | About to push FileWriter on stack
+[5]2016-04-28 10:51:02 | FileWriter popped off stack
+[5]2016-04-28 10:51:02 | About to get evaluation data
+[33]2016-04-28 10:51:02 | About to pInstantiatePool
+[0]2016-04-28 10:51:02 | About to pInstantiatePool
+[14]2016-04-28 10:51:02 | About to pInstantiatePool
+[6]2016-04-28 10:51:02 | About to pInstantiatePool
+[20]2016-04-28 10:51:02 | About to pInstantiatePool
+[19]2016-04-28 10:51:02 | About to pInstantiatePool
+[1]2016-04-28 10:51:02 | About to pInstantiatePool
+[27]2016-04-28 10:51:02 | About to pInstantiatePool
+[2]2016-04-28 10:51:02 | About to pInstantiatePool
+[13]2016-04-28 10:51:02 | About to pInstantiatePool
+[28]2016-04-28 10:51:02 | About to pInstantiatePool
+[33]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[36]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[39]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[34]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[38]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[37]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[35]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[32]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[8]2016-04-28 10:51:02 | About to pInstantiatePool
+[30]2016-04-28 10:51:02 | About to pInstantiatePool
+[0]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[16]2016-04-28 10:51:02 | About to pInstantiatePool
+[15]2016-04-28 10:51:02 | About to pInstantiatePool
+[22]2016-04-28 10:51:02 | About to pInstantiatePool
+[9]2016-04-28 10:51:02 | About to pInstantiatePool
+[11]2016-04-28 10:51:02 | About to pInstantiatePool
+[12]2016-04-28 10:51:02 | About to pInstantiatePool
+[21]2016-04-28 10:51:02 | About to pInstantiatePool
+[4]2016-04-28 10:51:02 | About to pInstantiatePool
+[29]2016-04-28 10:51:02 | About to pInstantiatePool
+[3]2016-04-28 10:51:02 | About to pInstantiatePool
+[18]2016-04-28 10:51:02 | About to pInstantiatePool
+[1]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[26]2016-04-28 10:51:02 | About to pInstantiatePool
+[10]2016-04-28 10:51:02 | About to pInstantiatePool
+[17]2016-04-28 10:51:02 | About to pInstantiatePool
+[2]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[24]2016-04-28 10:51:02 | About to pInstantiatePool
+[25]2016-04-28 10:51:02 | About to pInstantiatePool
+[7]2016-04-28 10:51:02 | About to pInstantiatePool
+[8]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[5]2016-04-28 10:51:02 | About to pInstantiatePool
+[21]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[16]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[23]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[22]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[20]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[6]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[13]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[11]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[9]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[14]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[12]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[15]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[4]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[10]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[17]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[3]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[19]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[18]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[24]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[29]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[26]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[27]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[28]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[30]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[25]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[31]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[5]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
+[7]2016-04-28 10:51:02 | Creating session with strategy: ALL_WORKERS_CONNECT_TO_CLIENT
