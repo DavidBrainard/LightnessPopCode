@@ -68,6 +68,7 @@ figParams.plotColor = 'r';
 figParams.outlineColor = 'r';
 [~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
+basicInfo = basicInfoAll(index);
 
 % Compute mean dissim matrix, and plot
 meanDissimMatrix = 0;
@@ -100,6 +101,7 @@ figParams.plotColor = 'k';
 figParams.outlineColor = 'k';
 [~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
+basicInfo = basicInfoAll(index);
 
 % Compute mean dissim matrix, and plot
 meanDissimMatrix = 0;
@@ -132,6 +134,7 @@ figParams.plotColor = 'k';
 figParams.outlineColor = 'k';
 [~,booleanSubject] = GetFilteringIndex(basicInfoAll,{'subjectStr'},{whichSubject});
 index = find(booleanRMSEInclude & booleanSubject);
+basicInfo = basicInfoAll(index);
 
 % Compute mean dissim matrix, and plot
 meanDissimMatrix = 0;
@@ -159,9 +162,11 @@ save(fullfile(repSimDir,'dissimMatricesST'),'dissimMatrixCellArray','meanDissimM
 
 %% Finish up summary plots
 figure(tauPlotFig);
-xlabel('Best Fit Tau');
-ylabel('Best Fit Tau No Shift');
+xlabel('Best Fit Tau','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+ylabel('Best Fit Tau No Shift','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+title('Effect of Shift in Fit','FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
 xlim([0 1]); ylim([0 1]);
 plot([0 1],[0 1],'k','LineWidth',1);
+h = legend({ 'V4, JD' 'V4, SY' 'V1, BR' 'V1, ST' },'FontSize',figParams.legendFontSize,'Location','NorthWest');
 figFilename = fullfile(repSimDir,'repsimFitTauValues','');
 FigureSave(figFilename,tauPlotFig,figParams.figType);
