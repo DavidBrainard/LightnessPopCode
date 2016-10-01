@@ -10,6 +10,6 @@
 %% Get the name of the m-file we're running.
 mFileName = mfilename;
 myDir = fileparts(which(mFileName));
-pathDir = fullfile(myDir,'..','LV4Toolbox','');
+pathDir = fullfile(myDir,'..','toolbox','');
 AddToMatlabPathDynamically(pathDir);
 
