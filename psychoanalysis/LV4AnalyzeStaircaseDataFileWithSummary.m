@@ -17,20 +17,8 @@ function [dataStruct] = LV4AnalyzeStaircaseDataFileWithSummary(protocol, subject
 %% Keep figures from accumulating
 close all;
 
-%% Dynamically add the program code to the path if it isn't already on it.
-% We do this so we have access to the enumeration classes for this
-% experiment.
-codeDir = fullfile(fileparts(fileparts(which(mfilename))), 'code');
-if isempty(strfind(path, codeDir))
-    fprintf('- Adding %s dynamically to the path...', mfilename);
-    addpath(RemoveSVNPaths(genpath(codeDir)), '-end');
-    fprintf('Done\n');
-end
-
-%% Figure out where the top level data directory is.
-%dataDir = fullfile(fileparts(fileparts(which(mfilename))), 'data', dataSubDir);
-
 %% Figure out where the image configuration file is
+stimulusDefInputBaseDir = getpref('LightnessPopCode','stimulusDefInputBaseDir');
 stimulusDefinitionsFile = fullfile(fileparts(fileparts(which(mfilename))), 'stimuli', 'StimulusDefinitions.txt');
 stimulusDefinitionsStruct = ReadStructsFromText(stimulusDefinitionsFile);
 
@@ -55,7 +43,7 @@ assert(logical(exist(dataFileName, 'file')), 'LV4AnalyzeStaircaseDataFile:FileNo
 data = load(dataFileName);
 
 %% Regenerate the staircase objects found in data.params
-UseClassesDev;
+% UseClassesDev;
 [M, N] = size(data.params.st);
 for row = 1:M
     for col = 1:N
@@ -163,7 +151,15 @@ dataStruct.test.whiteRefl = stimulusDefinitionsStruct(ourTestIndex).whiteRefl;
 % and computes on it.
 for i = 1:data.params.numStims
     fprintf('\n\tImage %d, %s\n',i,data.params.stimInfo(i).imageName);
-    fileName = fullfile(data.params.stimuliDir,[data.params.stimInfo(i).imageName '.mat']);
+    
+    % Older code took the whole directory name from a conditions file.
+    % I've moved directories around, and now take the root from a project
+    % specific preference.  This seems better, but leads to a little
+    % kluginess in piecing togeter the right filenames.
+    %
+    %fileName = fullfile(data.params.stimuliDir,[data.params.stimInfo(i).imageName '.mat']);
+    [a,b] = fileparts(data.params.stimuliDir);
+    fileName = fullfile(getpref('LightnessPopCode','stimulusInputBaseDir'),b,[data.params.stimInfo(i).imageName '.mat']);
     imageData = load(fileName);
     
     % Get image data
@@ -315,10 +311,16 @@ for s = 1:nStimTypes
         dataStruct.data(s).whichFixed = 1;
         dataStruct.data(s).refIntensity = refIntensity(s);
         dataStruct.data(s).testIntensity = pse(s);
+        dataStruct.data(s).loc25 = loc25(s);
+        dataStruct.data(s).loc75 = loc75(s);
+        dataStruct.data(s).threshold = (loc75(s)-loc25(s))/2;
     elseif (stimID(s) == 2)
         dataStruct.data(s).whichFixed = 2;
         dataStruct.data(s).refIntensity = pse(s);
         dataStruct.data(s).testIntensity = refIntensity(s);
+        dataStruct.data(s).loc25 = loc25(s);
+        dataStruct.data(s).loc75 = loc75(s);
+        dataStruct.data(s).threshold = (loc75(s)-loc25(s))/2;
     else
         error('This code assumes only two contextual images.');
     end
@@ -340,6 +342,7 @@ end
 cd(curDir);
 
 %% Close all figs.
+%
 % Comment ths out to look at the staircase plots.
 close all;
 

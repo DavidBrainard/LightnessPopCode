@@ -39,13 +39,15 @@ tbDeployToolboxes('config', config, 'toolboxRoot', projectBaseDir, 'runLocalHook
 
 %% Set preferences for project output
 %
-outputBaseDir = '/Users/Shared/Matlab/Experiments/LightnessV4/PennOutput';
-physiologyInputBaseDir = '/Users1/Shared/Matlab/Experiments/LightnessV4/Pitt';
-psychoInputBaseDir = '/Users/Shared/Matlab/Experiments/LightnessV4/PennPsychoData';
-stimulusInputBaseDir = '/Users1/Shared/Matlab/Experiments/LightnessV4/stimuli';
+outputBaseDir = fullfile(projectBaseDir,'PennOutput');
+physiologyInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/Pitt';
+psychoInputBaseDir = fullfile(projectBaseDir,'PennPsychoData');
+stimulusInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/stimuli';
+stimulusDefInputBaseDir = fullfile(projectBaseDir,'stimuli');
 
 % Set the preferences
 setpref('LightnessPopCode','outputBaseDir',outputBaseDir);
 setpref('LightnessPopCode','physiologyInputBaseDir',physiologyInputBaseDir);
 setpref('LightnessPopCode','psychoInputBaseDir',psychoInputBaseDir);
 setpref('LightnessPopCode','stimulusInputBaseDir',stimulusInputBaseDir);
+setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);

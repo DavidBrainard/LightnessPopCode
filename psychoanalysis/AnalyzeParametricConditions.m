@@ -26,9 +26,6 @@ function summaryDataStruct = AnalyzeParametricConditions(pcCode,subjectToAnalyze
 %% Clear all
 close all;
 
-%% Make sure path is OK
-SetAnalysisPath;
-
 %% Check third arg
 if (nargin < 4 || isempty(analysisFitType))
     analysisFitType = 'intercept';
@@ -51,12 +48,13 @@ analysisParams = SetFigParams(analysisParams,'psychophysics');
 % Dynamically add the program code to the path if it isn't already on it.
 % We do this so we have access to the enumeration classes for this
 % experiment.
-codeDir = fullfile(fileparts(fileparts(which(mfilename))), 'code');
-AddToMatlabPathDynamically(codeDir);
+% codeDir = fullfile(fileparts(fileparts(which(mfilename))), 'code');
+% AddToMatlabPathDynamically(codeDir);
 
 % Figure out where the top level data directory is.
+psychoInputBaseDir = getpref('LightnessPopCode','psychoInputBaseDir');
 dataSubDir = ['parametricConditions' num2str(pcCode)];
-dataDir = fullfile(fileparts(fileparts(which(mfilename))), 'data', dataSubDir,'');
+dataDir = fullfile(psychoInputBaseDir, dataSubDir,'');
 
 curDir = pwd;
 
@@ -152,6 +150,7 @@ for s = subjectToAnalyze
         whichRun = [];
         refData = [];
         testData = [];
+        thresholdData = [];
         if (length(conditionStructs{s,c,2}) > 0)
             
             fprintf('\nCondition struct item %d, %s, %d files\n',c,conditionStructs{s,c,1},length(conditionStructs{s,c,2}));
@@ -165,6 +164,7 @@ for s = subjectToAnalyze
                 whichRun = [whichRun j*ones(size([dataStruct{c,j}.data.refIntensity]))];
                 refData = [refData dataStruct{c,j}.data.refIntensity];
                 testData = [testData dataStruct{c,j}.data.testIntensity];
+                thresholdData = [thresholdData dataStruct{c,j}.data.threshold];
                              
                 % Could check here that condition fields of the returned data structs match as expected.
             end
@@ -175,6 +175,7 @@ for s = subjectToAnalyze
             summaryDataStruct{c1}.whichRun = whichRun';
             summaryDataStruct{c1}.refData = refData';
             summaryDataStruct{c1}.testData = testData';
+            summaryDataStruct{c1}.thresholdData = thresholdData';
             summaryDataStruct{c1}.analysisParams = analysisParams;
             clear whichFixedData whichRun refData testData
             
@@ -329,7 +330,7 @@ for s = subjectToAnalyze
                 cd(figFigDir);
                 FigureSave(['Summary_' analysisParams.fitType '_' subjectNames{s} '_' num2str(protocolNumbers{s,c}) '_example_noline'],dataFig2,analysisParams.figType);
                 cd(curDir);
-                close(dataFig1);
+                close(dataFig2);
             end
         else
             fprintf('\tNo files for condition struct item %d for this subject\n',c);

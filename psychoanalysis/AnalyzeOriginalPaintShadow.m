@@ -13,15 +13,13 @@
 %% Clear
 clear; close all;
 
-%% Analysis path
-SetAnalysisPath;
-
 %% Parameters
 analysisFitType = 'intercept';
 COMPUTE = false;
 
 %% Figure directory
-outputDir = 'xSummary';
+outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
+outputDir = fullfile(outputBaseDir,'xPsychoSummary');
 if (~exist(outputDir,'file'))
     mkdir(outputDir);
 end
@@ -84,6 +82,10 @@ if (COMPUTE)
     switch (analysisFitType)
         case 'intercept'
             save(fullfile(outputDir,'OriginalPaintShadowIntercept'),'theData');
+            save(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
+                'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
+                'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
+                'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
         otherwise
             error('Unknown analysisFitType specified');
     end
@@ -93,6 +95,10 @@ else
     switch (analysisFitType)
         case 'intercept'
             load(fullfile(outputDir,'OriginalPaintShadowIntercept'),'theData');
+            load(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
+                'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
+                'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
+                'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
         otherwise
             error('Unknown analysisFitType specified');
     end
@@ -152,6 +158,185 @@ switch (analysisFitType)
         ylabel('Paint Shadow Effect','FontSize',figParams.labelFontSize);
         legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
         FigureSave(fullfile(outputDir,'OriginalPaintShadowInterceptsWithControl'),interceptFig1,figParams.figType);
+        
+        % Threshold figures
+        %
+        % AQR control
+        conditionColors = ['r' 'b'];
+        controlSlopes = [];
+        paintShadowSlopes = [];
+        controlSlopeIndex = 1;
+        controlSlopeIndex = 1;
+        paintShadowSlopeIndex = 1;
+        theSummaryStruct = aqrSummaryDataStructControl;
+        aqrControlThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            controlSlopeIndex = controlSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('AQR, Paint-Paint Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsControl'),aqrControlThresholdFig,figParams.figType);
+
+        % AQR paint shadow
+        theSummaryStruct = aqrSummaryDataStructPaintShadow;
+        aqrPaintShadowThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('AQR, Paint-Shadow Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsPaintShadow'),aqrPaintShadowThresholdFig,figParams.figType);
+
+        % BAF control
+        conditionColors = ['r' 'b'];
+        theSummaryStruct = bafSummaryDataStructControl;
+        bafControlThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            controlSlopeIndex = controlSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('BAF, Paint-Paint Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsControl'),bafControlThresholdFig,figParams.figType);
+
+        % BAF paint shadow
+        theSummaryStruct = bafSummaryDataStructPaintShadow;
+        bafPaintShadowThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('BAF, Paint-Shadow Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsPaintShadow'),bafPaintShadowThresholdFig,figParams.figType);
+
+        % CNJ control
+        conditionColors = ['r' 'b'];
+        theSummaryStruct = cnjSummaryDataStructControl;
+        cnjControlThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            controlSlopeIndex = controlSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('CNJ, Paint-Paint Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsControl'),cnjControlThresholdFig,figParams.figType);
+
+        % CNJ paint shadow
+        theSummaryStruct = cnjSummaryDataStructPaintShadow;
+        cnjPaintShadowThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('CNJ, Paint-Shadow Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsPaintShadow'),cnjPaintShadowThresholdFig,figParams.figType);
+
+         % EJE control
+        conditionColors = ['r' 'b'];
+        theSummaryStruct = ejeSummaryDataStructControl;
+        ejeControlThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            controlSlopeIndex = controlSlopeIndex+1;
+        end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('EJE, Paint-Paint Condition');
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsControl'),ejeControlThresholdFig,figParams.figType);
+    
+        % EJE  paint shadow
+        theSummaryStruct = ejeSummaryDataStructPaintShadow;
+        ejePaintShadowThresholdFig = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        for whichCondition = 1:length(theSummaryStruct)
+            if (length(theSummaryStruct{whichCondition}) ~= 1)
+                error('Surprising number of runs in summary struct');
+            end
+            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+       end
+        xlim([0 1]);
+        ylim([0 0.2]);
+        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+        title('EJE, Paint-Shadow Condition'); 
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsPaintShadow'),ejePaintShadowThresholdFig,figParams.figType);
+        
+        % Slope figure with control conditions.
+        slopeFig1 = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        plot(paintShadowSlopes,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+        plot(controlSlopes,'k^','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
+        plot(mean(paintShadowSlopes)*ones(size(paintShadowSlopes)),'b','LineWidth',figParams.lineWidth);
+        plot(mean(controlSlopes)*ones(size(controlSlopes)),'k','LineWidth',figParams.lineWidth);
+        axis([figParams.xLimLow figParams.xLimHigh 0 0.2]);
+        set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
+        xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
+        ylabel('TVI Slope','FontSize',figParams.labelFontSize);
+        legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowThresholSlopesWithControl'),slopeFig1,figParams.figType);
+
     otherwise
         error('Unknown analysisFitType specified');
 end
