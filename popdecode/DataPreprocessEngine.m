@@ -47,11 +47,12 @@ switch (decodeInfoIn.dataType)
     case 'spksrt'
         switch (decodeInfoIn.DATASTYLE)
             case 'new'
-                if (exist('IsCluster','file') & IsCluster)
-                    dataDir = '/home/dhb/data/LightnessV4/Pitt/Data';
-                else
-                    dataDir = '/Users1/Shared/Matlab/Experiments/LightnessV4/Pitt/Data';
-                end
+                dataDir = getpref('LightnessPopCode','physiologyInputBaseDir');
+%                 if (exist('IsCluster','file') & IsCluster)
+%                     dataDir = '/home/dhb/data/LightnessV4/Pitt/Data';
+%                 else
+%                     dataDir = '/Users1/Shared/Matlab/Experiments/LightnessV4/Pitt/Data';
+%                 end
                 reducedDataFilename = fullfile(dataDir,[filename '_ReducedData_Share']);
             otherwise
                 error('Unknown data style');
