@@ -8,9 +8,6 @@
 %% Clear
 clear all; close all;
 
-%% Set path
-SetAnalysisPath;
-
 %% Original/Paint shadow, various shuffles
 %
 % Set range threshold to 0 so that we can look at decoded range for all

@@ -20,9 +20,6 @@ function summaryDataStruct = AnalyzeParametricConditions2(subjectToAnalyze,condi
 %% Clear all
 close all;
 
-%% Make sure path is OK
-SetAnalysisPath;
-
 %% Check third arg
 if (nargin < 3 | isempty(analysisFitType))
     analysisFitType = 'intercept';

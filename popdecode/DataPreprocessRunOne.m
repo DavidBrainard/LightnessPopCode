@@ -12,14 +12,11 @@ function outputSummaryStructs = DataPreprocessRunOne(varargin)
 %% Clear
 close all;
 
-%% Set path
-SetAnalysisPath;
-
 %% Random number generator seed
 ClockRandSeed;
 
 %% Set up decodeInfoIn from args
-decodeInfoIn= ParseDecodeInfo(varargin{:});
+decodeInfoIn = ParseDecodeInfo(varargin{:});
 
 %% Set up files to run
 %

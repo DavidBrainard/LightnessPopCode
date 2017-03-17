@@ -180,3 +180,8 @@ decodeInfoIn = SetFigParams(decodeInfoIn,'popdecode');
 decodeInfoIn.monitorPixelsPerInch = 61;
 decodeInfoIn.monitorDistanceInches = 54/2.54;
 decodeInfoIn.degreesPerPixel = rad2deg(2*atan((1/decodeInfoIn.monitorPixelsPerInch)/(2*decodeInfoIn.monitorDistanceInches)));
+
+% This used to do something, but doesn't anymore.  But defining it here
+% keeps some code the references the field from crashing when it passes the
+% value on to another structure.
+decodeInfoIn.doIndElectrodeRFPlots = false;

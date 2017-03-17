@@ -17,9 +17,6 @@ function summaryStruct = AnalyzeParametricConditions4(subjectToAnalyze,condition
 %% Clear all
 close all;
 
-%% Make sure path is OK
-SetAnalysisPath;
-
 %% Check third arg
 if (nargin < 3 | isempty(analysisFitType))
     analysisFitType = 'intercept';

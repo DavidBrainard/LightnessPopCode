@@ -56,71 +56,73 @@ end
 % return;
 
 % ST data
-theFiles{outIndex} = ['ST140422' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['ST140422RFmap0001_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
-
-theFiles{outIndex} = ['ST140424' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['ST140422RFmap0001_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = false;
-outIndex = outIndex + 1;
-
-theFiles{outIndex} = ['ST140504' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['ST140504RFmap0009_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
-
-theFiles{outIndex} = ['ST140609' insertFilenameStr '0001'];
-theRFFiles{outIndex} = 'None';
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = false;
-outIndex = outIndex + 1;
-
-theFiles{outIndex} = ['ST140621' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['ST140621RFmap0001_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
-
-theFiles{outIndex} = ['ST140623' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['ST140623RFmap0001_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
-decodeInfoInRun{outIndex}.subjectStr = 'ST';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
+%
+% These ST files now seem to be gone, 1404
+% theFiles{outIndex} = ['ST140422' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['ST140422RFmap0001_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
+% 
+% theFiles{outIndex} = ['ST140424' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['ST140422RFmap0001_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = false;
+% outIndex = outIndex + 1;
+% 
+% theFiles{outIndex} = ['ST140504' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['ST140504RFmap0009_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
+% 
+% theFiles{outIndex} = ['ST140609' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = 'None';
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = false;
+% outIndex = outIndex + 1;
+% 
+% theFiles{outIndex} = ['ST140621' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['ST140621RFmap0001_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
+% 
+% theFiles{outIndex} = ['ST140623' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['ST140623RFmap0001_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'ST';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
 
 % Only have these ST files in the new format.
 if (strcmp(decodeInfoIn.DATASTYLE,'new'))

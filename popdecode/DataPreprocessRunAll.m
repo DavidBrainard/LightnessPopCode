@@ -13,9 +13,6 @@ clear; close all;
 myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
-%% Set path
-SetAnalysisPath;
-
 %% Original paint/shadow
 argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:});

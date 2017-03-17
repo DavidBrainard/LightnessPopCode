@@ -8,9 +8,6 @@ function SummarizeRunOne(varargin)
 %% Clear
 close all;
 
-%% Set path
-SetAnalysisPath;
-
 %% Random number generator seed
 ClockRandSeed;
 
