@@ -82,6 +82,17 @@ fprintf('Working on file %s\n',reducedDataFilename);
 %
 % I am not 100% sure that this field is conistently in the old data files, so
 % if this code breaks and you're using old format data files that would be a place to look.
+
+% FixPos got left out when JD's files were fixed, putting it back as [0 0];
+if (~isfield(theData,'FixPos'))
+    if (~strcmp(theData.filename(1:2),'JD'))
+        error('Missing FixPos in non-JD data file\n');
+    end
+    fprintf('\tFilling in FixPos as [0,0]\n');
+    theData.FixPos = [0 0];
+else
+    fprintf('\tFixPos is [%d,%d]\n',theData.FixPos(1),theData.FixPos(2));
+end
 theData.centerX = theData.centerX - theData.FixPos(1);
 theData.centerY = theData.centerY - theData.FixPos(2);
 
