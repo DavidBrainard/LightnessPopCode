@@ -15,7 +15,7 @@ clear; close all;
 
 %% Parameters
 analysisFitType = 'intercept';
-COMPUTE = false;
+COMPUTE = true;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');

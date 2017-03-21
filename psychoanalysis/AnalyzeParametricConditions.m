@@ -59,7 +59,7 @@ dataDir = fullfile(psychoInputBaseDir, dataSubDir,'');
 curDir = pwd;
 
 % Figure directory
-figTopLevelDir = 'xPlots';
+figTopLevelDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPsychoBasic');
 if (~exist(figTopLevelDir,'dir'))
     mkdir(figTopLevelDir);
 end
@@ -67,7 +67,6 @@ figDir = fullfile(figTopLevelDir,dataSubDir,'');
 if (~exist(figDir,'dir'))
     mkdir(figDir);
 end
-
 
 % x values for linear predictions
 predX = linspace(analysisParams.lowerRefThresh,analysisParams.upperRefThresh,100)';
