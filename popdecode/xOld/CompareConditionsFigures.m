@@ -26,7 +26,7 @@ for plotV4Only = plotV4Onlys
     end
     
     %% Set up directory
-    summaryRoot = '../../PennOutput/xSummary';
+    summaryRoot = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xSummary');
     theDir = fullfile(summaryRoot,'xCompare',[]);
     if (~exist(theDir,'file'))
         mkdir(theDir);

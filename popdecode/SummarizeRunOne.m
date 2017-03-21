@@ -15,7 +15,7 @@ ClockRandSeed;
 [decodeInfoIn] = ParseDecodeInfo(varargin{:});
 
 %% Set up summary file directory
-summaryRootDir = '../../PennOutput/xSummary';
+summaryRootDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xSummary');
 if (~exist(summaryRootDir))
     mkdir(summaryRootDir);
 end
@@ -29,7 +29,7 @@ end
 %saveFile = fullfile(summaryDir,['Output' '_' decodeInfoIn.dataType '_' decodeInfoIn.paintShadowFitType],'');
 
 %% Find preprocessed data basic location and get all the directories
-preprocessedDataDir = '../../PennOutput/xPreprocessedData';
+preprocessedDataDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPreprocessedData');
 if (~exist(preprocessedDataDir,'dir'))
     error('Preprocessed data base dir doesn''t exist');
 end
@@ -39,7 +39,7 @@ if (~exist(preprocessedDataRootDir,'dir'))
 end
 
 %% Find extracted output basic location and get all the directories
-extractedDataDir = '../../PennOutput/xExtractedPlots';
+extractedDataDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xExtractedPlots');
 if (~exist(extractedDataDir,'dir'))
     error('Extracted analysis output base dir doesn''t exist');
 end
@@ -114,7 +114,7 @@ figParams = SetFigParams([],'popdecode');
 %% Call routines to make nice summary plots
 
 % Paint/Shadow Effect
-%PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
+PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
 RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams);
 
 

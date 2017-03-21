@@ -39,7 +39,7 @@ decodeInfoOut.titleStr = LiteralUnderscore({filename ; ...
 
 % Where to put extracted plots.  This can differ from where the data come
 % from, if we like.
-extractedPlotBaseDir = '../../PennOutput/xExtractedPlots';
+extractedPlotBaseDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xExtractedPlots');
 if (~exist(extractedPlotBaseDir,'dir'))
     mkdir(extractedPlotBaseDir);
 end

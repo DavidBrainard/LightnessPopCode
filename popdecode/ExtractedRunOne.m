@@ -18,7 +18,7 @@ ClockRandSeed;
 condStr = MakePopDecodeConditionStr(decodeInfoIn);
 
 %% Find preprocessed data basic location
-preprocessedDataDir = '../../PennOutput/xPreprocessedData';
+preprocessedDataDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPreprocessedData');
 if (~exist(preprocessedDataDir,'dir'))
     error('Preprocessed data base dir doesn''t exist');
 end

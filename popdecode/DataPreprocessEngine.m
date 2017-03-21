@@ -28,7 +28,7 @@ titleStr = strrep(condStr,'_',' ');
 
 switch (decodeInfoIn.DATASTYLE)
     case 'new'
-        outputBaseDir = '../../PennOutput/xPreprocessedData';
+        outputBaseDir = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPreprocessedData');
     otherwise
         error('Unknown data style');
 end
@@ -48,11 +48,6 @@ switch (decodeInfoIn.dataType)
         switch (decodeInfoIn.DATASTYLE)
             case 'new'
                 dataDir = getpref('LightnessPopCode','physiologyInputBaseDir');
-%                 if (exist('IsCluster','file') & IsCluster)
-%                     dataDir = '/home/dhb/data/LightnessV4/Pitt/Data';
-%                 else
-%                     dataDir = '/Users1/Shared/Matlab/Experiments/LightnessV4/Pitt/Data';
-%                 end
                 reducedDataFilename = fullfile(dataDir,[filename '_ReducedData_Share']);
             otherwise
                 error('Unknown data style');
