@@ -193,6 +193,10 @@ if (psychoAnalysisParams.generateExampleFigure)
     psychoExampleFig1 = figure;
     set(psychoExampleFig1,'Position',[100 100 2000 round(560/420*2000)]);
 end
+logFig = figure;
+set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
+set(logFig,'Position',[100 100 750 500]);
+
 nPlotRows = 2;
 nPlotCols = nStimTypes/nPlotRows;
 for s = 1:nStimTypes
@@ -240,9 +244,12 @@ for s = 1:nStimTypes
     cd(curDir)
     
     % Fit psychometric function
-    [~,interpStimuli{s},pInterp{s},pse(s),loc25(s),loc75(s)] = FitPsychometricData(valuesStair{s}',responsesStair{s}',ones(size(responsesStair{s}')));
+    [~,interpStimuli{s},pInterp{s},pse(s),loc25(s),loc75(s),paramsValues{s}] = FitYNPsychometricData(valuesStair{s}',responsesStair{s}',ones(size(responsesStair{s}')));
+    PF = @PAL_CumulativeNormal;
+    stimValues{s} = (0.1:0.05:0.9)';
+    pStimValues{s} = PF(paramsValues{s},stimValues{s});
 
-    % Aggregated trials
+    % Get aggregated trials for plotting, and plot
     [meanValues{s},nAbove{s},nTrials{s}] = GetAggregatedStairTrials(valuesStair{s},responsesStair{s},5);
     figure(psychoFig);
     subplot(nPlotRows,nPlotCols,s); hold on
@@ -259,6 +266,45 @@ for s = 1:nStimTypes
     ylim([psychoAnalysisParams.fractionLimLow psychoAnalysisParams.fractionLimHigh]);
     set(gca,'XTick',psychoAnalysisParams.intensityTicks,'XTickLabel',psychoAnalysisParams.intensityTickLabels);
     set(gca,'YTick',psychoAnalysisParams.intensityTicks,'YTickLabel',psychoAnalysisParams.intensityYTickLabels);
+    
+    % Make a version of the plot on a log luminance axis, combining the two
+    % places the comparison might be. This is a bit of a kluge, and relies
+    % on us knowing about how the conditions are ordered within each data
+    % file.  But this will reduce the noise in the log contrast plots, and
+    % the current interest is whether these have about the same shape
+    % across base luminance for the paint-paint conditions.  (The averaging
+    % below really makes little sense for the paint-shadow conditions.)
+    figure(logFig); hold on
+    if (s > 3)
+        hold on;
+        set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize);
+        s1 = s-3;
+        
+        [~,interpStimuli1{s1},pInterp1{s1}] = FitYNPsychometricData([valuesStair{s1}' ; valuesStair{s}'],[responsesStair{s1}' ; responsesStair{s}'],ones(size([responsesStair{s1}' ; responsesStair{s}'])));
+        [meanValues1{s1},nAbove1{s1},nTrials1{s1}] = GetAggregatedStairTrials([valuesStair{s1}' ; valuesStair{s}'],[responsesStair{s1 }' ; responsesStair{s}'],5);
+
+        diffColors = ['r' 'g' 'b'];
+        plot(log10(meanValues1{s1}),nAbove1{s1}./nTrials1{s1},[diffColors(s1) 'o'],'MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor',diffColors(s1));
+        plot(log10(interpStimuli{s1}),pInterp{s1},diffColors(s1),'LineWidth',psychoAnalysisParams.lineWidth);
+        xlabel('Log Comparison Disk Luminance','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+        ylabel('Fraction Comparison Judged Lighter','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+        ylim([psychoAnalysisParams.fractionLimLow psychoAnalysisParams.fractionLimHigh]);
+        set(gca,'YTick',psychoAnalysisParams.intensityTicks,'YTickLabel',psychoAnalysisParams.intensityYTickLabels);
+        xlim([-1 0]);
+    end
+    
+    
+    % TAFC analysis.  I started on for the incremental data, but the number
+    % of trials can get a bit small and I concluded it was not conceptually
+    % a good thing.  Leaving the code here in case it seems worth picking
+    % up at some point in the future.  None of the values here are saved.
+    tafcValuesStair{s} = valuesStair{s}-refIntensity(s);
+    tafcValuesStairIndex = tafcValuesStair{s} > 0;
+    tafcValuesStair{s} = tafcValuesStair{s}(tafcValuesStairIndex);
+    tafcResponsesStair{s} = responsesStair{s}(tafcValuesStairIndex);
+    tafcFitStimLevels{s} = logspace(-2,1,1000);
+    [tafcThreshold{s},tafcFitFractionCorrect{s},tafcParamsValues{s}] = FitTAFCPsychometricData(0.75,tafcValuesStair{s},tafcResponsesStair{s},ones(size(tafcValuesStair{s})),tafcFitStimLevels{s});
+    [tafcMeanValues{s},tafcNAbove{s},tafcNTrials{s}] = GetAggregatedStairTrials(tafcValuesStair{s},tafcResponsesStair{s},5);
     
     if (psychoAnalysisParams.generateExampleFigure)
         % All staircases example, set up for presentations
@@ -314,6 +360,8 @@ for s = 1:nStimTypes
         dataStruct.data(s).loc25 = loc25(s);
         dataStruct.data(s).loc75 = loc75(s);
         dataStruct.data(s).threshold = (loc75(s)-loc25(s))/2;
+        dataStruct.data(s).stimValues = stimValues{s};
+        dataStruct.data(s).pStimValues = pStimValues{s};
     elseif (stimID(s) == 2)
         dataStruct.data(s).whichFixed = 2;
         dataStruct.data(s).refIntensity = pse(s);
@@ -321,6 +369,8 @@ for s = 1:nStimTypes
         dataStruct.data(s).loc25 = loc25(s);
         dataStruct.data(s).loc75 = loc75(s);
         dataStruct.data(s).threshold = (loc75(s)-loc25(s))/2;
+        dataStruct.data(s).stimValues = stimValues{s};
+        dataStruct.data(s).pStimValues = pStimValues{s};
     else
         error('This code assumes only two contextual images.');
     end
@@ -335,6 +385,7 @@ set(h,'FontSize',14);
 curDir = pwd;
 cd(figFileDir);
 FigureSave(figFileName,psychoFig,psychoAnalysisParams.figType);
+FigureSave([figFileName '_log'],logFig,psychoAnalysisParams.figType);
 if (exist('psychoExampleFig','var'))
     FigureSave([figFileName '_exampleOne'],psychoExampleFig,psychoAnalysisParams.figType);
     FigureSave([figFileName '_exampleAll'],psychoExampleFig1,psychoAnalysisParams.figType);

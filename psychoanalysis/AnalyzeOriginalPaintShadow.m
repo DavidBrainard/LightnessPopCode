@@ -19,7 +19,14 @@ COMPUTE = true;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
-outputDir = fullfile(outputBaseDir,'xPsychoSummary');
+ switch (analysisFitType)
+        case 'intercept'
+            outputDir = fullfile(outputBaseDir,'xPsychoSummary','Intercept');
+        case 'gain'
+            outputDir = fullfile(outputBaseDir,'xPsychoSummary','Gain');
+        otherwise
+            error('Unknown analysisFitType specified');
+    end
 if (~exist(outputDir,'file'))
     mkdir(outputDir);
 end
@@ -79,29 +86,20 @@ if (COMPUTE)
     theData.meanPaintShadow = [theData.aqrPaintShadowMean theData.bafPaintShadowMean theData.cnjPaintShadowMean theData.ejePaintShadowMean];
     
     % Save summary info
-    switch (analysisFitType)
-        case 'intercept'
-            save(fullfile(outputDir,'OriginalPaintShadowIntercept'),'theData');
-            save(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
-                'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
-                'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
-                'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
-        otherwise
-            error('Unknown analysisFitType specified');
-    end
-            
+    save(fullfile(outputDir,'OriginalPaintShadow'),'theData');
+    save(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
+        'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
+        'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
+        'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
+    
 else
     % Load summary info
-    switch (analysisFitType)
-        case 'intercept'
-            load(fullfile(outputDir,'OriginalPaintShadowIntercept'),'theData');
-            load(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
-                'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
-                'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
-                'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
-        otherwise
-            error('Unknown analysisFitType specified');
-    end
+    load(fullfile(outputDir,'OriginalPaintShadow'),'theData');
+    load(fullfile(outputDir,'OriginalPaintShadowSummaryStructs'),'aqrSummaryDataStructControl','aqrSummaryDataStructPaintShadow', ...
+        'bafSummaryDataStructControl','bafSummaryDataStructPaintShadow', ...
+        'cnjSummaryDataStructControl','cnjSummaryDataStructPaintShadow', ...
+        'ejeSummaryDataStructControl','ejeSummaryDataStructPaintShadow');
+    
     if (~strcmp(analysisFitType,theData.analysisFitType))
         error('Loaded data analysisFitType does not match that specified currently');
     end
@@ -135,14 +133,14 @@ switch (analysisFitType)
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
         set(gca,'YTick',figParams.yTicks,'YTickLabel',figParams.yTickLabels);
         xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
-        ylabel('Paint/Shadow Effect','FontSize',figParams.labelFontSize);
+        ylabel('Paint/Shadow Offset Effect','FontSize',figParams.labelFontSize);
         % legend({sprintf('Paint/Shadow, Mean %0.2f',mean(theData.allPaintShadow))},'Location','NorthWest','FontSize',figParams.legendFontSize);
         text(0.25,0.012,sprintf('Mean: %0.2f',mean(theData.allPaintShadow)),'FontSize',figParams.legendFontSize);
         FigureSave(fullfile(outputDir,'OriginalPaintShadowIntercepts'),interceptFig,figParams.figType);
         
         % Version with control conditions.
         %
-        % Remake whole figure so that legend work right 
+        % Remake whole figure so that legend work right
         interceptFig1 = figure; clf; hold on
         set(gcf,'Position',figParams.position);
         set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
@@ -155,190 +153,362 @@ switch (analysisFitType)
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
         set(gca,'YTick',figParams.yTicks,'YTickLabel',figParams.yTickLabels);
         xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
-        ylabel('Paint Shadow Effect','FontSize',figParams.labelFontSize);
+        ylabel('Paint Shadow Offset Effect','FontSize',figParams.labelFontSize);
         legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
         FigureSave(fullfile(outputDir,'OriginalPaintShadowInterceptsWithControl'),interceptFig1,figParams.figType);
         
-        % Threshold figures
-        %
-        % AQR control
-        conditionColors = ['r' 'b'];
-        controlSlopes = [];
-        paintShadowSlopes = [];
-        controlSlopeIndex = 1;
-        controlSlopeIndex = 1;
-        paintShadowSlopeIndex = 1;
-        theSummaryStruct = aqrSummaryDataStructControl;
-        aqrControlThresholdFig = figure; clf; hold on
+    case 'gain'
+        % Make a figure showing gains for paint/shadow conditions.
+        gainFig = figure; clf; hold on
         set(gcf,'Position',figParams.position);
         set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            controlSlopeIndex = controlSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('AQR, Paint-Paint Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsControl'),aqrControlThresholdFig,figParams.figType);
-
-        % AQR paint shadow
-        theSummaryStruct = aqrSummaryDataStructPaintShadow;
-        aqrPaintShadowThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('AQR, Paint-Shadow Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsPaintShadow'),aqrPaintShadowThresholdFig,figParams.figType);
-
-        % BAF control
-        conditionColors = ['r' 'b'];
-        theSummaryStruct = bafSummaryDataStructControl;
-        bafControlThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            controlSlopeIndex = controlSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('BAF, Paint-Paint Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsControl'),bafControlThresholdFig,figParams.figType);
-
-        % BAF paint shadow
-        theSummaryStruct = bafSummaryDataStructPaintShadow;
-        bafPaintShadowThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('BAF, Paint-Shadow Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsPaintShadow'),bafPaintShadowThresholdFig,figParams.figType);
-
-        % CNJ control
-        conditionColors = ['r' 'b'];
-        theSummaryStruct = cnjSummaryDataStructControl;
-        cnjControlThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            controlSlopeIndex = controlSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('CNJ, Paint-Paint Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsControl'),cnjControlThresholdFig,figParams.figType);
-
-        % CNJ paint shadow
-        theSummaryStruct = cnjSummaryDataStructPaintShadow;
-        cnjPaintShadowThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('CNJ, Paint-Shadow Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsPaintShadow'),cnjPaintShadowThresholdFig,figParams.figType);
-
-         % EJE control
-        conditionColors = ['r' 'b'];
-        theSummaryStruct = ejeSummaryDataStructControl;
-        ejeControlThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            controlSlopeIndex = controlSlopeIndex+1;
-        end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('EJE, Paint-Paint Condition');
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsControl'),ejeControlThresholdFig,figParams.figType);
-    
-        % EJE  paint shadow
-        theSummaryStruct = ejeSummaryDataStructPaintShadow;
-        ejePaintShadowThresholdFig = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        for whichCondition = 1:length(theSummaryStruct)
-            if (length(theSummaryStruct{whichCondition}) ~= 1)
-                error('Surprising number of runs in summary struct');
-            end
-            paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
-            paintShadowSlopeIndex = paintShadowSlopeIndex+1;
-       end
-        xlim([0 1]);
-        ylim([0 0.2]);
-        xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
-        ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
-        title('EJE, Paint-Shadow Condition'); 
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsPaintShadow'),ejePaintShadowThresholdFig,figParams.figType);
-        
-        % Slope figure with control conditions.
-        slopeFig1 = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(paintShadowSlopes,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
-        plot(controlSlopes,'k^','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
-        plot(mean(paintShadowSlopes)*ones(size(paintShadowSlopes)),'b','LineWidth',figParams.lineWidth);
-        plot(mean(controlSlopes)*ones(size(controlSlopes)),'k','LineWidth',figParams.lineWidth);
-        axis([figParams.xLimLow figParams.xLimHigh 0 0.2]);
+        plot(theData.allPaintShadow,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+        plot(ones(size(theData.allControl)),'k:','LineWidth',figParams.lineWidth);
+        plot(mean(theData.allPaintShadow)*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
+        axis([figParams.xLimLow figParams.xLimHigh 0.79 1.21]);
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
+        set(gca,'YTick',[0.8 0.9 1.0 1.1 1.2],'YTickLabel',{'0.8 ' '0.9 ' '1.0 ' '1.1 ' '1.2 '});
         xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
-        ylabel('TVI Slope','FontSize',figParams.labelFontSize);
+        ylabel('Paint/Shadow Gain Effect','FontSize',figParams.labelFontSize);
+        % legend({sprintf('Paint/Shadow, Mean %0.2f',mean(theData.allPaintShadow))},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        text(0.25,0.012,sprintf('Mean: %0.2f',mean(theData.allPaintShadow)),'FontSize',figParams.legendFontSize);
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowGains'),gainFig,figParams.figType);
+        
+        % Version with control conditions.
+        %
+        % Remake whole figure so that legend work right
+        gainFig1 = figure; clf; hold on
+        set(gcf,'Position',figParams.position);
+        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        plot(theData.allPaintShadow,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+        plot(theData.allControl,'k^','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
+        plot(ones(size(theData.allControl)),'k:','LineWidth',figParams.lineWidth);
+        plot(mean(theData.allPaintShadow)*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
+        plot(mean(theData.allControl)*ones(size(theData.allControl)),'k','LineWidth',figParams.lineWidth);
+        axis([figParams.xLimLow figParams.xLimHigh 0.79 1.21]);
+        set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
+        set(gca,'YTick',[0.8 0.9 1.0 1.1 1.2],'YTickLabel',{'0.8 ' '0.9 ' '1.0 ' '1.1 ' '1.2 '});
+        xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
+        ylabel('Paint Shadow Gain Effect','FontSize',figParams.labelFontSize);
         legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowThresholSlopesWithControl'),slopeFig1,figParams.figType);
-
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowGainssWithControl'),gainFig1,figParams.figType);
+             
     otherwise
         error('Unknown analysisFitType specified');
 end
 
+%% Threshold figures
+%
+% This section analyzes the threshold data from the individual subjects,
+% and for each subject computes the slope of threshold versus base
+% luminance.  It then makes a summary plot of these slopes.
+%
+% It also makes plots and a table of the psychometric functions on evenly
+% spaced stimulus samples, for the paint-paint conditions.
+%
+% AQR control
+conditionColors = ['r' 'b'];
+controlSlopes = [];
+paintShadowSlopes = [];
+stimValuesAll25 = [];
+pStimValuesAll25 = [];
+stimValuesAll50 = [];
+pStimValuesAll50 = [];
+stimValuesAll75 = [];
+pStimValuesAll75 = [];
+controlSlopeIndex = 1;
+controlSlopeIndex = 1;
+paintShadowSlopeIndex = 1;
+theSummaryStruct = aqrSummaryDataStructControl;
+aqrControlThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    
+    % Average and save fit psychometric functions    
+    [stimValues,pStimValues,stdErrPStimValues] = AveragePsychometricFunctions(theSummaryStruct,whichCondition,1);
+    save(fullfile(outputDir,['OriginalPaintShadowAQRPsychometricControl_' num2str(whichCondition)]),'stimValues','pStimValues','stdErrPStimValues');
+    stimValuesAll25 = [stimValuesAll25 stimValues(:,1)];
+    pStimValuesAll25 = [pStimValuesAll25 pStimValues(:,1)];
+    stimValuesAll50 = [stimValuesAll50 stimValues(:,2)];
+    pStimValuesAll50 = [pStimValuesAll50 pStimValues(:,2)];  
+    stimValuesAll75 = [stimValuesAll75 stimValues(:,3)];
+    pStimValuesAll75 = [pStimValuesAll75 pStimValues(:,3)]; 
+    
+    controlSlopeIndex = controlSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('AQR, Paint-Paint Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsControl'),aqrControlThresholdFig,figParams.figType);
+
+% AQR paint shadow
+theSummaryStruct = aqrSummaryDataStructPaintShadow;
+aqrPaintShadowThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('AQR, Paint-Shadow Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowAQRThresholdsPaintShadow'),aqrPaintShadowThresholdFig,figParams.figType);
+
+% BAF control
+conditionColors = ['r' 'b'];
+theSummaryStruct = bafSummaryDataStructControl;
+bafControlThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    
+    % Average and save fit psychometric functions
+    [stimValues,pStimValues,stdErrPStimValues] = AveragePsychometricFunctions(theSummaryStruct,whichCondition,1);
+    save(fullfile(outputDir,['OriginalPaintShadowBAFPsychometricControl_' num2str(whichCondition)]),'stimValues','pStimValues','stdErrPStimValues');
+    stimValuesAll25 = [stimValuesAll25 stimValues(:,1)];
+    pStimValuesAll25 = [pStimValuesAll25 pStimValues(:,1)];
+    stimValuesAll50 = [stimValuesAll50 stimValues(:,2)];
+    pStimValuesAll50 = [pStimValuesAll50 pStimValues(:,2)];  
+    stimValuesAll75 = [stimValuesAll75 stimValues(:,3)];
+    pStimValuesAll75 = [pStimValuesAll75 pStimValues(:,3)]; 
+ 
+    controlSlopeIndex = controlSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('BAF, Paint-Paint Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsControl'),bafControlThresholdFig,figParams.figType);
+
+% BAF paint shadow
+theSummaryStruct = bafSummaryDataStructPaintShadow;
+bafPaintShadowThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('BAF, Paint-Shadow Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowBAFThresholdsPaintShadow'),bafPaintShadowThresholdFig,figParams.figType);
+
+% CNJ control
+conditionColors = ['r' 'b'];
+theSummaryStruct = cnjSummaryDataStructControl;
+cnjControlThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    
+    % Average and save fit psychometric functions
+    [stimValues,pStimValues,stdErrPStimValues] = AveragePsychometricFunctions(theSummaryStruct,whichCondition,1);
+    save(fullfile(outputDir,['OriginalPaintShadowCNJPsychometricControl_' num2str(whichCondition)]),'stimValues','pStimValues','stdErrPStimValues');
+    stimValuesAll25 = [stimValuesAll25 stimValues(:,1)];
+    pStimValuesAll25 = [pStimValuesAll25 pStimValues(:,1)];
+    stimValuesAll50 = [stimValuesAll50 stimValues(:,2)];
+    pStimValuesAll50 = [pStimValuesAll50 pStimValues(:,2)];  
+    stimValuesAll75 = [stimValuesAll75 stimValues(:,3)];
+    pStimValuesAll75 = [pStimValuesAll75 pStimValues(:,3)];  
+    
+    controlSlopeIndex = controlSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('CNJ, Paint-Paint Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsControl'),cnjControlThresholdFig,figParams.figType);
+
+% CNJ paint shadow
+theSummaryStruct = cnjSummaryDataStructPaintShadow;
+cnjPaintShadowThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('CNJ, Paint-Shadow Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowCNJThresholdsPaintShadow'),cnjPaintShadowThresholdFig,figParams.figType);
+
+% EJE control
+conditionColors = ['r' 'b'];
+theSummaryStruct = ejeSummaryDataStructControl;
+ejeControlThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    controlSlopes(controlSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    
+    % Average and save fit psychometric functions
+    [stimValues,pStimValues,stdErrPStimValues] = AveragePsychometricFunctions(theSummaryStruct,whichCondition,1);
+    save(fullfile(outputDir,['OriginalPaintShadowEJEPsychometricControl_' num2str(whichCondition)]),'stimValues','pStimValues','stdErrPStimValues');
+    stimValuesAll25 = [stimValuesAll25 stimValues(:,1)];
+    pStimValuesAll25 = [pStimValuesAll25 pStimValues(:,1)];
+    stimValuesAll50 = [stimValuesAll50 stimValues(:,2)];
+    pStimValuesAll50 = [pStimValuesAll50 pStimValues(:,2)];  
+    stimValuesAll75 = [stimValuesAll75 stimValues(:,3)];
+    pStimValuesAll75 = [pStimValuesAll75 pStimValues(:,3)]; 
+    
+    controlSlopeIndex = controlSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('EJE, Paint-Paint Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsControl'),ejeControlThresholdFig,figParams.figType);
+
+% EJE  paint shadow
+theSummaryStruct = ejeSummaryDataStructPaintShadow;
+ejePaintShadowThresholdFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+for whichCondition = 1:length(theSummaryStruct)
+    if (length(theSummaryStruct{whichCondition}) ~= 1)
+        error('Surprising number of runs in summary struct');
+    end
+    paintShadowSlopes(paintShadowSlopeIndex) = AddThresholdDataToPlot(theSummaryStruct,whichCondition,1,conditionColors(whichCondition),figParams);
+    paintShadowSlopeIndex = paintShadowSlopeIndex+1;
+end
+xlim([0 1]);
+ylim([0 0.2]);
+xlabel('Probe Luminance','FontSize',figParams.labelFontSize);
+ylabel('Threshold Contrast','FontSize',figParams.labelFontSize);
+title('EJE, Paint-Shadow Condition');
+FigureSave(fullfile(outputDir,'OriginalPaintShadowEJEThresholdsPaintShadow'),ejePaintShadowThresholdFig,figParams.figType);
+
+% Slope figure with control conditions.
+slopeFig1 = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+plot(paintShadowSlopes,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+plot(controlSlopes,'k^','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
+plot(mean(paintShadowSlopes)*ones(size(paintShadowSlopes)),'b','LineWidth',figParams.lineWidth);
+plot(mean(controlSlopes)*ones(size(controlSlopes)),'k','LineWidth',figParams.lineWidth);
+axis([figParams.xLimLow figParams.xLimHigh 0 0.2]);
+set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
+xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
+ylabel('TVI Slope','FontSize',figParams.labelFontSize);
+legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+FigureSave(fullfile(outputDir,'OriginalPaintShadowThresholdSlopesWithControl'),slopeFig1,figParams.figType);
+
+% Average table of the one big overall psychometric function
+stimValuesMean25 = mean(stimValuesAll25,2);
+pStimValuesMean25 = mean(pStimValuesAll25,2);
+stdErrPStimValuesMean25 = std(pStimValuesAll25,[],2)/sqrt(length(pStimValuesAll25(1,:)));
+stimValuesMean50 = mean(stimValuesAll50,2);
+pStimValuesMean50 = mean(pStimValuesAll50,2);
+stdErrPStimValuesMean50 = std(pStimValuesAll50,[],2)/sqrt(length(pStimValuesAll50(1,:)));
+stimValuesMean75 = mean(stimValuesAll75,2);
+pStimValuesMean75 = mean(pStimValuesAll75,2);
+stdErrPStimValuesMean75 = std(pStimValuesAll75,[],2)/sqrt(length(pStimValuesAll75(1,:)));
+save(fullfile(outputDir,'OriginalPaintShadowPsychometricControl'),...
+    'stimValuesMean25','pStimValuesMean25','stdErrPStimValuesMean25', ...
+    'stimValuesMean50','pStimValuesMean50','stdErrPStimValuesMean50', ...
+    'stimValuesMean75','pStimValuesMean75','stdErrPStimValuesMean75');
+
+% Figure of aggregate psychometric functions.  These are weighted by
+% session, so subjects who ran multiple sessions are weighted more.
+allPsychoFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+plot(log10(stimValuesMean25),pStimValuesMean25,'r','LineWidth',figParams.lineWidth+1);
+plot(log10(stimValuesMean50),pStimValuesMean50,'g','LineWidth',figParams.lineWidth+1);
+plot(log10(stimValuesMean75),pStimValuesMean75,'b','LineWidth',figParams.lineWidth+1);
+ylim([figParams.fractionLimLow figParams.fractionLimHigh]);
+set(gca,'YTick',figParams.fractionTicks);
+set(gca,'YTickLabels',figParams.fractionTickLabels);
+xlabel('Log Comparison Luminance','FontSize',figParams.labelFontSize);
+ylabel('Fraction Comparison Lighter','FontSize',figParams.labelFontSize);
+title('Aggregate Paint-Paint Psychometric Functions','FontSize',figParams.labelFontSize);
+legend({'Test Lum 0.25' 'Test Lum 0.50' 'Test Lum 0.75'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+FigureSave(fullfile(outputDir,'OriginalPaintShadowAveragePsychometricLog'),allPsychoFig,figParams.figType);
+
+%% Figure of percent correct for various incremental step sizes, as a
+% function of base luminance.  Same aggregate data as for the psychometric
+% plot just above.
+allProbFig = figure; clf; hold on
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+
+% Pull out the data we want
+theBases = [0.25 0.50 0.75]';
+theIncrs = [0.05 0.10 0.15]';
+for ii = 1:length(theBases)
+    for jj = 1:length(theIncrs)
+        base = theBases(ii);
+        incr = theIncrs(jj);
+        index = find(abs(stimValuesMean25-(base+incr)) < 1e-8);
+        switch (base)
+            case 0.25
+                theProbs(ii,jj) = pStimValuesMean25(index);
+            case 0.50
+                theProbs(ii,jj) = pStimValuesMean50(index);
+            case 0.75
+                theProbs(ii,jj) = pStimValuesMean75(index);
+            otherwise
+                error('This klugy code has gotten the better of you.');
+        end
+    end
+end
+
+% And make the plot
+probColors = ['r' 'g' 'b'];
+for jj = 1:length(theIncrs)
+    plot(theBases,theProbs(:,jj),probColors(jj),'LineWidth',figParams.lineWidth);
+end
+for jj = 1:length(theIncrs)
+    plot(theBases,theProbs(:,jj),[probColors(jj) 'o'],'MarkerFaceColor',probColors(jj),'MarkerSize',figParams.markerSize);
+end
+xlim([0 1]);
+set(gca,'XTick',[0 0.25 0.5 0.75 1]);
+set(gca,'XTickLabels',{'0.00' '0.25' '0.50' '0.75' '1.00'})
+ylim([0.5 1.01]);
+set(gca,'YTick',[0.5 0.75 1.00]);
+set(gca,'YTickLabels',{'0.50 ' '0.75 ' '1.00 '});
+xlabel('Test Luminance','FontSize',figParams.labelFontSize);
+ylabel('Fraction Correct','FontSize',figParams.labelFontSize);
+title('Aggregate Paint-Paint Fraction Correct','FontSize',figParams.labelFontSize);
+legend({'Increment 0.05' 'Increment 0.10' 'Increment 0.15'},'Location','SouthWest','FontSize',figParams.legendFontSize);
+FigureSave(fullfile(outputDir,'OriginalPaintShadowAverageProbCorrect'),allProbFig,figParams.figType);
 

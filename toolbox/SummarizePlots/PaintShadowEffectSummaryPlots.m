@@ -155,7 +155,7 @@ startX = startX + length(paintShadowEffectArray);
 if (basicInfo(1).paintCondition == 1 && basicInfo(1).shadowCondition == 2)
     figParams.plotSymbol = 'v';
     figParams.plotColor = 'b';
-    thePsychoFile = '../psychoanalysis/xSummary/OriginalPaintShadowIntercept';
+    fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPsychoSummary','OriginalPaintShadowIntercept');
     thePsychoData = load(thePsychoFile);
     psychoPaintShadowEffect = thePsychoData.theData.allPaintShadow;
     plot(startX:startX+length(psychoPaintShadowEffect)-1,psychoPaintShadowEffect,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize+1,'MarkerFaceColor',figParams.plotColor);

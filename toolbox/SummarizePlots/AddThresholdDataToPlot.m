@@ -29,7 +29,6 @@ uniqueRefXVals = unique(allRefXVals);
 for kk = 1:length(uniqueRefXVals)
     xTemp{kk} = [];
     yTemp{kk} = [];
-    stdErrYTemp{kk} = [];
     index = find(summaryDataStruct{whichCondition}{whichRun}.whichFixedData == 1 & summaryDataStruct{whichCondition}{whichRun}.refData == uniqueRefXVals(kk));
     xTemp{kk} = [xTemp{kk} ; summaryDataStruct{whichCondition}{whichRun}.testData(index)];
     yTemp{kk} = [yTemp{kk} ; summaryDataStruct{whichCondition}{whichRun}.thresholdData(index)];

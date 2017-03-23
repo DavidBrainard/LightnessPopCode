@@ -150,6 +150,8 @@ for s = subjectToAnalyze
         refData = [];
         testData = [];
         thresholdData = [];
+        stimValues = [];
+        pStimValues = [];
         if (length(conditionStructs{s,c,2}) > 0)
             
             fprintf('\nCondition struct item %d, %s, %d files\n',c,conditionStructs{s,c,1},length(conditionStructs{s,c,2}));
@@ -164,6 +166,8 @@ for s = subjectToAnalyze
                 refData = [refData dataStruct{c,j}.data.refIntensity];
                 testData = [testData dataStruct{c,j}.data.testIntensity];
                 thresholdData = [thresholdData dataStruct{c,j}.data.threshold];
+                stimValues = [stimValues dataStruct{c,j}.data.stimValues];
+                pStimValues = [pStimValues dataStruct{c,j}.data.pStimValues];
                              
                 % Could check here that condition fields of the returned data structs match as expected.
             end
@@ -175,6 +179,8 @@ for s = subjectToAnalyze
             summaryDataStruct{c1}.refData = refData';
             summaryDataStruct{c1}.testData = testData';
             summaryDataStruct{c1}.thresholdData = thresholdData';
+            summaryDataStruct{c1}.stimValues = stimValues;
+            summaryDataStruct{c1}.pStimValues = pStimValues;
             summaryDataStruct{c1}.analysisParams = analysisParams;
             clear whichFixedData whichRun refData testData
             
@@ -354,9 +360,6 @@ for s = subjectToAnalyze
     end
     
 end
-
-
-
 
 end
 
