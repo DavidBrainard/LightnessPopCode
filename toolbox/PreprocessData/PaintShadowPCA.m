@@ -1,5 +1,5 @@
-function [paintResponses,shadowResponses,decodeInfo] = PaintShadowPCA(decodeInfo,paintResponses,shadowResponses)
-% function [paintResponses,shadowResponses,decodeInfo] = PaintShadowPCA(decodeInfo,paintResponses,shadowResponses)
+function [paintResponsesPCA,shadowResponsesPCA,decodeInfo,pcaBasis,meanResponse,meanResponsePCA] = PaintShadowPCA(decodeInfo,paintResponses,shadowResponses)
+% function [paintResponsesPCA,shadowResponsesPCA,decodeInfo,pcaBasis,meanResponse,meanResponsePCA] = PaintShadowPCA(decodeInfo,paintResponses,shadowResponses)
 %
 % PCA on responses.  
 %   decodeInfo.pcaType - type of PCA
@@ -15,8 +15,14 @@ function [paintResponses,shadowResponses,decodeInfo] = PaintShadowPCA(decodeInfo
 %  Matlab's pca by default centers the data around its mean before finding
 %  the principle components.
 %
+%  If you pass shadowResponses as empty, the PCA will be done on the paint
+%  respnoses and the shadowResponsePCA will come back empty.
+%
 % 4/22/14 dhb  Wrote it.
 % 4/17/16 dhb  Switch to Matlab version.
+% 3/31/17 dhb  Return the PCA basis and mean response in pcaBasis coordinates
+%         dhb  Add the mean response back in to the returned PCA coordinates
+%              I think this is conceptually correct.
 
 %% Do PCA on responses
 %
@@ -26,10 +32,17 @@ switch (decodeInfo.pcaType)
     case {'ml'}
         dataForPCA = [paintResponses ; shadowResponses];
         if (~isempty(dataForPCA) & ~any(isnan(dataForPCA)))
-            meanDataForPCA = mean(dataForPCA,1);
+            meanResponse = mean(dataForPCA,1);
             pcaBasis = pca(dataForPCA,'NumComponents',decodeInfo.pcaKeep);
-            paintResponses = (pcaBasis\(paintResponses-meanDataForPCA(ones(size(paintResponses,1),1),:))')';
-            shadowResponses = (pcaBasis\(shadowResponses-meanDataForPCA(ones(size(shadowResponses,1),1),:))')';
+            
+            meanResponsePCA = (pcaBasis\meanResponse')';
+            paintResponsesPCA = PCATransform(decodeInfo,paintResponses,pcaBasis,meanResponse,meanResponsePCA);
+            if (~isempty(shadowResponses))
+                shadowResponsesPCA = PCATransform(decodeInfo,shadowResponses,pcaBasis,meanResponse,meanResponsePCA);
+            else
+                shadowResponsesPCA = [];
+            end
+            
         end
 
     otherwise

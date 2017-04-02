@@ -23,8 +23,8 @@ switch (doIt)
 end
 
 %% Get info about what to do
-nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);
-uniqueNUnitsToStudy = length(nUnitsToUseList);
+%nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);
+
 
 %% Set up needed parameters
 clear decodeSave
@@ -44,59 +44,9 @@ decodeSave.paintShadowShuffleType = 'none';
 [paintIntensities,paintResponses,shadowIntensities,shadowResponses] = ...
     PaintShadowShuffle(decodeInfo,theData.paintIntensities,theData.paintResponses,theData.shadowIntensities,theData.shadowResponses);
 
-%% Get PCA
-dataForPCA = [paintResponses ; shadowResponses];
-clear decodeInfoPCA
-decodeInfoPCA.pcaType = 'ml';
-decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
-meanDataForPCA = mean(dataForPCA,1);
-[paintPCAResponses,shadowPCAResponses] = PaintShadowPCA(decodeInfoPCA,paintResponses,shadowResponses);
-
-% Get RMSE as a function of number of PCA components
-decodeSave.theUnits = zeros(uniqueNUnitsToStudy,1);
-decodeSave.theRMSE = zeros(uniqueNUnitsToStudy,1);
-for uu = 1:uniqueNUnitsToStudy
-    decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
-    [~,~,paintPCAPreds,shadowPCAPreds] = PaintShadowDecode(decodeSave, ...
-        paintIntensities,paintPCAResponses(:,1:decodeInfo.nUnitsToUse),shadowIntensities,shadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
-    decodeSave.theRMSE(uu) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPCAPreds(:) ; shadowPCAPreds(:)]).^2));
-    decodeSave.theUnits(uu) = decodeInfo.nUnitsToUse;
-end
-
-% Fit an exponential
-a0 = max(decodeSave.theRMSE); b0 = 5; c0 = min(decodeSave.theRMSE);
-ftype = fittype('a*exp(-(x-1)/(b-1)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[0 2 0],'Upper',[5 200 5]);
-index = find(decodeSave.theUnits <= decodeInfo.nFitMaxUnits);
-decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.theRMSE(index),ftype,foptions);
-decodeSave.rmse = c0;
-decodeSave.fitScale = decodeSave.fit.b;
-decodeSave.fitAsymp = decodeSave.fit.c;
-
-% PLOT: RMSE versus number of PCA components used to decode
-RMSEVersusNPCAfig = figure; clf;
-set(gcf,'Position',decodeInfo.sqPosition);
-set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
-hold on;
-smoothX = (1:decodeInfo.nUnits)';
-h = plot(smoothX,decodeSave.fit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
-h = plot(decodeSave.theUnits,decodeSave.theRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-h = plot(decodeSave.fitScale,decodeSave.fit(decodeSave.fitScale),'go','MarkerFaceColor','g','MarkerSize',8);
-xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
-ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);
-title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
-xlim([0,100]);
-ylim([0,0.5]);
-axis square
-figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCA'];
-drawnow;
-FigureSave(figName,RMSEVersusNPCAfig,decodeInfo.figType);
-
-% PLOT: paint/shadow mean responses on PCA 1 and 2, where we compute
-% the PCA on the mean responses.
+%% We want to do the PCA on means responses for each stimulus
 %
-% I am not sure whether this is a useful figure, and if it is whether
-% the pca should be computed on the mean responses or the raw responses.
+% The idea is not to have the PCA output driven by noise.
 for dc = 1:length(decodeInfo.uniqueIntensities)
     theIntensity = decodeInfo.uniqueIntensities(dc);
     paintIndex = find(theData.paintIntensities == theIntensity);
@@ -104,6 +54,234 @@ for dc = 1:length(decodeInfo.uniqueIntensities)
     meanPaintResponses(dc,:) = mean(theData.paintResponses(paintIndex,:),1);
     meanShadowResponses(dc,:) = mean(theData.shadowResponses(shadowIndex,:),1);
 end
+
+%% Get PCA info based on both paint and shadow mean responses
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
+[~,~,~,pcaBasis,meanResponse,meanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
+paintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,pcaBasis,meanResponse,meanResponsePCA);
+shadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,pcaBasis,meanResponse,meanResponsePCA);
+
+%% Get RMSE based on guessing mean intensity
+%
+% Should not do worse than these for any serious estimator
+temp = mean([theData.paintIntensities(:) ; theData.shadowIntensities(:)])*ones(size([theData.paintIntensities(:) ; theData.shadowIntensities(:)]));
+nullRMSE = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-temp(:)).^2));
+temp = mean(theData.paintIntensities(:))*ones(size(theData.paintIntensities));
+nullRMSEPaint = sqrt(mean((theData.paintIntensities(:)-temp(:)).^2));
+temp = mean(theData.shadowIntensities(:))*ones(size(theData.shadowIntensities));
+nullRMSEShadow = sqrt(mean((theData.shadowIntensities(:)-temp(:)).^2));
+
+%% Decide which PCA dimensions to study
+%
+% Because we're doing PCA on mean responses, we're bounded by the
+% number of 
+uniqueNUnitsToStudy = size(pcaBasis,2);
+nUnitsToUseList = 1:uniqueNUnitsToStudy;
+
+%% Get RMSE as a function of number of PCA components
+decodeSave.theUnits = zeros(uniqueNUnitsToStudy,1);
+decodeSave.theRMSE = zeros(uniqueNUnitsToStudy,1);
+for uu = 1:uniqueNUnitsToStudy
+    decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
+    decodeSave.theUnits(uu) = nUnitsToUseList(uu);
+    
+    [~,~,paintPCAPreds,shadowPCAPreds] = PaintShadowDecode(decodeSave, ...
+        paintIntensities,paintPCAResponses(:,1:decodeInfo.nUnitsToUse),shadowIntensities,shadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
+    decodeSave.theRMSE(uu) = sqrt(mean(([theData.paintIntensities(:) ; theData.shadowIntensities(:)]-[paintPCAPreds(:) ; shadowPCAPreds(:)]).^2));
+end
+
+%% Fit an exponential
+a0 = nullRMSE; b0 = 5; c0 = min(decodeSave.theRMSE);
+ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+index = find(decodeSave.theUnits <= decodeInfo.nFitMaxUnits);
+decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.theRMSE(index),ftype,foptions);
+decodeSave.bestRMSE = c0;
+decodeSave.nullRMSE = nullRMSE;
+decodeSave.fitScale = decodeSave.fit.b;
+decodeSave.fitAsymp = decodeSave.fit.c;
+
+%% Do PCA on paint only, and decode both paint and shadow in the PCA basis
+% and the orthogonal basis.
+[~,~,~,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,[]);
+paintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
+paintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
+
+uniqueNUnitsToStudy = size(paintOnlyPCABasis,2);
+nUnitsToUseList = 1:uniqueNUnitsToStudy;
+decodeSave.thePaintOnlyUnits = zeros(uniqueNUnitsToStudy,1);
+decodeSave.thePaintOnlyPaintRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.thePaintOnlyShadowRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.thePaintOnlyOrthPaintRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.thePaintOnlyOrthShadowRMSE = zeros(uniqueNUnitsToStudy,1);
+for uu = 1:uniqueNUnitsToStudy
+    decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
+    decodeSave.thePaintOnlyUnits(uu) = nUnitsToUseList(uu);
+
+    % Decode paint and shadow on 1:N PCA components
+    [~,~,paintPCAPreds,shadowPCAPreds] = PaintShadowDecode(decodeSave, ...
+        paintIntensities,paintOnlyPaintPCAResponses(:,1:decodeInfo.nUnitsToUse),shadowIntensities,paintOnlyShadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
+    decodeSave.thePaintOnlyPaintRMSE(uu) = sqrt(mean((theData.paintIntensities(:)-paintPCAPreds(:)).^2));
+    decodeSave.thePaintOnlyShadowRMSE(uu) = sqrt(mean((theData.shadowIntensities(:)-shadowPCAPreds(:)).^2));
+end
+
+% Fit exponentials to paint only decodings
+a0 = nullRMSEPaint; b0 = 5; c0 = min(decodeSave.thePaintOnlyPaintRMSE);
+ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+index = find(decodeSave.thePaintOnlyUnits <= decodeInfo.nFitMaxUnits);
+decodeSave.paintOnlyPaintFit = fit(decodeSave.thePaintOnlyUnits(index),decodeSave.thePaintOnlyPaintRMSE(index),ftype,foptions);
+decodeSave.paintOnlyPaintBestRMSE = c0;
+decodeSave.paintOnlyPaintNullRMSE = nullRMSEPaint;
+decodeSave.paintOnlyPaintFitScale = decodeSave.paintOnlyPaintFit.b;
+decodeSave.paintOnlyPaintFitAsymp = decodeSave.paintOnlyPaintFit.c;
+
+a0 = nullRMSEShadow; b0 = 5; c0 = min(decodeSave.thePaintOnlyShadowRMSE);
+ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+index = find(decodeSave.thePaintOnlyUnits <= decodeInfo.nFitMaxUnits);
+decodeSave.paintOnlyShadowFit = fit(decodeSave.thePaintOnlyUnits(index),decodeSave.thePaintOnlyShadowRMSE(index),ftype,foptions);
+decodeSave.paintOnlyShadowBestRMSE = c0;
+decodeSave.paintOnlyShadowNullRMSE = nullRMSEShadow;
+decodeSave.paintOnlyShadowFitScale = decodeSave.paintOnlyShadowFit.b;
+decodeSave.paintOnlyShadowFitAsymp = decodeSave.paintOnlyShadowFit.c;
+
+%% Do PCA on shadow only, and decode both paint and shadow in the PCA basis
+% and the orthogonal basis.
+[~,~,~,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanShadowResponses,[]);
+shadowOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA);
+shadowOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA);
+
+uniqueNUnitsToStudy = size(shadowOnlyPCABasis,2);
+nUnitsToUseList = 1:uniqueNUnitsToStudy;
+decodeSave.theShadowOnlyUnits = zeros(uniqueNUnitsToStudy,1);
+decodeSave.theShadowOnlyPaintRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.theShadowOnlyShadowRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.theShadowOnlyOrthPaintRMSE = zeros(uniqueNUnitsToStudy,1);
+decodeSave.theShadowOnlyOrthShadowRMSE = zeros(uniqueNUnitsToStudy,1);
+for uu = 1:uniqueNUnitsToStudy
+    decodeInfo.nUnitsToUse = nUnitsToUseList(uu);
+    decodeSave.theShadowOnlyUnits(uu) = nUnitsToUseList(uu);
+
+    % Decode paint and shadow on 1:N PCA components
+    [~,~,paintPCAPreds,shadowPCAPreds] = PaintShadowDecode(decodeSave, ...
+        paintIntensities,shadowOnlyPaintPCAResponses(:,1:decodeInfo.nUnitsToUse),shadowIntensities,shadowOnlyShadowPCAResponses(:,1:decodeInfo.nUnitsToUse));
+    decodeSave.theShadowOnlyPaintRMSE(uu) = sqrt(mean((theData.paintIntensities(:)-paintPCAPreds(:)).^2));
+    decodeSave.theShadowOnlyShadowRMSE(uu) = sqrt(mean((theData.shadowIntensities(:)-shadowPCAPreds(:)).^2));
+end
+
+% Fit exponentials to shadow only decodings
+a0 = nullRMSEPaint; b0 = 5; c0 = min(decodeSave.theShadowOnlyPaintRMSE);
+ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+index = find(decodeSave.theShadowOnlyUnits <= decodeInfo.nFitMaxUnits);
+decodeSave.shadowOnlyPaintFit = fit(decodeSave.theShadowOnlyUnits(index),decodeSave.theShadowOnlyPaintRMSE(index),ftype,foptions);
+decodeSave.shadowOnlyPaintBestRMSE = c0;
+decodeSave.shadowOnlyPaintNullRMSE = nullRMSEPaint;
+decodeSave.shadowOnlyPaintFitScale = decodeSave.shadowOnlyPaintFit.b;
+decodeSave.shadowOnlyPaintFitAsymp = decodeSave.shadowOnlyPaintFit.c;
+
+a0 = nullRMSEShadow; b0 = 5; c0 = min(decodeSave.theShadowOnlyShadowRMSE);
+ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+index = find(decodeSave.theShadowOnlyUnits <= decodeInfo.nFitMaxUnits);
+decodeSave.shadowOnlyShadowFit = fit(decodeSave.theShadowOnlyUnits(index),decodeSave.theShadowOnlyShadowRMSE(index),ftype,foptions);
+decodeSave.shadowOnlyShadowBestRMSE = c0;
+decodeSave.shadowOnlyShadowNullRMSE = nullRMSEShadow;
+decodeSave.shadowOnlyShadowFitScale = decodeSave.shadowOnlyShadowFit.b;
+decodeSave.shadowOnlyShadowFitAsymp = decodeSave.shadowOnlyShadowFit.c;
+
+%% PLOT: RMSE versus number of PCA components used to decode
+RMSEVersusNPCAfig = figure; clf;
+set(gcf,'Position',decodeInfo.sqPosition);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+hold on;
+smoothX = (0:decodeInfo.nUnits)';
+plot(smoothX,decodeSave.fit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
+plot(decodeSave.theUnits,decodeSave.theRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
+plot(decodeSave.fitScale,decodeSave.fit(decodeSave.fitScale),'go','MarkerFaceColor','g','MarkerSize',8);
+plot(smoothX,nullRMSE*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
+xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+xlim([0,max(decodeSave.theUnits)]);
+ylim([0,0.5]);
+axis square
+figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCA'];
+drawnow;
+FigureSave(figName,RMSEVersusNPCAfig,decodeInfo.figType);
+
+%% PLOT: RMSE versus number of PCA components used to decode for the
+% paintOnly and shadowOnly PCA cases.
+RMSEVersusPaintOnlyNPCAfig = figure; clf;
+set(gcf,'Position',[100 100 1200 700]);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+subplot(1,2,1); hold on;
+plot(decodeSave.thePaintOnlyUnits,decodeSave.thePaintOnlyPaintRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
+plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyPaintRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+smoothX = (0:length(decodeSave.thePaintOnlyUnits))';
+plot(smoothX,decodeSave.paintOnlyPaintFit(smoothX),'r','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.paintOnlyPaintFitScale,decodeSave.paintOnlyPaintFit(decodeSave.paintOnlyPaintFitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
+smoothX = (0:length(decodeSave.theShadowOnlyUnits))';
+plot(smoothX,decodeSave.shadowOnlyPaintFit(smoothX),'k','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.shadowOnlyPaintFitScale,decodeSave.shadowOnlyPaintFit(decodeSave.shadowOnlyPaintFitScale),'ko','MarkerFaceColor','k','MarkerSize',8);
+plot(smoothX,nullRMSEPaint*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
+xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoded Paint RMSE','FontSize',decodeInfo.labelFontSize);
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+xlim([0,max([decodeSave.thePaintOnlyUnits ; decodeSave.theShadowOnlyUnits])]);
+ylim([0,0.5]);
+axis square
+legend({'Paint Only PCA','Shadow Only PCA'});
+
+subplot(1,2,2); hold on;
+plot(decodeSave.thePaintOnlyUnits,decodeSave.thePaintOnlyShadowRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
+plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyShadowRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+smoothX = (0:length(decodeSave.thePaintOnlyUnits))';
+plot(smoothX,decodeSave.paintOnlyShadowFit(smoothX),'r','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.paintOnlyShadowFitScale,decodeSave.paintOnlyShadowFit(decodeSave.paintOnlyShadowFitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
+smoothX = (0:length(decodeSave.theShadowOnlyUnits))';
+plot(smoothX,decodeSave.shadowOnlyShadowFit(smoothX),'k','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.shadowOnlyShadowFitScale,decodeSave.shadowOnlyShadowFit(decodeSave.shadowOnlyShadowFitScale),'ko','MarkerFaceColor','k','MarkerSize',8)
+plot(smoothX,nullRMSEShadow*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
+xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoded Shadow RMSE','FontSize',decodeInfo.labelFontSize);
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+xlim([0,max([decodeSave.thePaintOnlyUnits ; decodeSave.theShadowOnlyUnits])]);
+ylim([0,0.5]);
+axis square
+legend({'Paint Only PCA','Shadow Only PCA'});
+figName = [decodeInfo.figNameRoot '_extRMSEVersusOneOnlyNPCA'];
+drawnow;
+FigureSave(figName,RMSEVersusPaintOnlyNPCAfig,decodeInfo.figType);
+
+% Temporary, to get rid of old plots with wrong name
+if (exist([decodeInfo.figNameRoot '_extRMSEVersusPaintOnlyNPCA.pdf'],'file'))
+    unix(['rm ' [decodeInfo.figNameRoot '_extRMSEVersusOneOnlyNPCA.pdf']]);
+end
+
+% PLOT: RMSE for paint and shadow, compared with paintOnly and shadowOnly PCA
+RMSEPaintOnlyShadowOnlyScatterFig = figure; clf;
+set(gcf,'Position',decodeInfo.sqPosition);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+hold on;
+h = plot(decodeSave.thePaintOnlyPaintRMSE,decodeSave.theShadowOnlyPaintRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
+h = plot(decodeSave.thePaintOnlyShadowRMSE,decodeSave.theShadowOnlyShadowRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+xlabel('Paint Only PCA RMSE','FontSize',decodeInfo.labelFontSize);
+ylabel('Shadow Only PCA RMSE','FontSize',decodeInfo.labelFontSize);
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+legend({'Paint Trials','Shadow Trials'},'Location','NorthWest');
+xlim([0,0.5]);
+ylim([0,0.5]);
+plot([0 0.5],[0 0.5],'k:','LineWidth',1);
+axis square
+figName = [decodeInfo.figNameRoot '_extRMSEPaintOnlyShadowOnlyScatter'];
+drawnow;
+FigureSave(figName,RMSEPaintOnlyShadowOnlyScatterFig,decodeInfo.figType);
+
+% PLOT: paint/shadow mean responses on PCA 1 and 2.
 clear decodeInfoPCA
 decodeInfoPCA.pcaType = 'ml';
 decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
@@ -113,17 +291,22 @@ decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
 paintShadowOnPCAFig = figure; clf; hold on;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
-theGrays = linspace(.4,1,length(decodeInfo.uniqueIntensities));
+theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
 for dc = 1:length(decodeInfo.uniqueIntensities)
     theGreen = [0 theGrays(dc) 0];
     theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
     
     % Basic points first, so legend comes out right
-    plot(mean(decodeSave.meanPaintPCAResponses(dc,1)),mean(decodeSave.meanPaintPCAResponses(dc,2)),...
+    plot(decodeSave.meanPaintPCAResponses(dc,1),decodeSave.meanPaintPCAResponses(dc,2),...
         'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
-    plot(mean(decodeSave.meanShadowPCAResponses(dc,1)),mean(decodeSave.meanShadowPCAResponses(dc,2)),...
+    plot(decodeSave.meanShadowPCAResponses(dc,1),decodeSave.meanShadowPCAResponses(dc,2),...
         'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
 end
+
+% Connect by lines to match what Marlene does
+plot(decodeSave.meanPaintPCAResponses(:,1),decodeSave.meanPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
+plot(decodeSave.meanShadowPCAResponses(:,1),decodeSave.meanShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
+    
 xlabel('PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
 ylabel('PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
 decodeInfo.titleStr = decodeInfo.titleStr;
@@ -137,4 +320,4 @@ FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
 decodeInfo.RMSEVersusNPCA = decodeSave;
 
 %% Save the data
-save(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA '),'decodeSave','-v7.3');
+save(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA'),'decodeSave','-v7.3');
