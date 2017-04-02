@@ -13,31 +13,41 @@ function [decodeInfoIn] = ParseDecodeInfo(varargin)
 % Defaults are given here.  Options are described in comments
 % with each field/variable below.
 narginchk(0, Inf);
-parser = inputParser;
-parser.addParamValue('dataType','spksrt',@ischar);
-parser.addParamValue('type','aff',@ischar);
-parser.addParamValue('classifyType','no',@ischar);
-parser.addParamValue('pcaType','no',@ischar);
-parser.addParamValue('pcaKeep',10,@isnumeric);
-parser.addParamValue('rfAnalysisType','no',@ischar);
-parser.addParamValue('reallyDoIRFPlots',false,@islogical);
-parser.addParamValue('reallyDoRFPlots',false,@islogical);
-parser.addParamValue('decodeJoint','both',@ischar);
-parser.addParamValue('trialShuffleType','notshf',@ischar);
-parser.addParamValue('paintShadowShuffleType','nopsshf',@ischar);
-parser.addParamValue('decodeIntensityFitType','betacdf',@ischar);
-parser.addParamValue('paintCondition',1,@isnumeric);
-parser.addParamValue('shadowCondition',2,@isnumeric);
-parser.addParamValue('paintShadowFitType','intcpt',@ischar);
-parser.addParamValue('decodeNFolds',10,@isnumeric);
-parser.addParamValue('excludeSYelectrodes','sykp',@ischar);
-parser.addParamValue('minTrials',5,@isnumeric);
-parser.addParamValue('filterMaxRMSE',0.25,@isnumeric);
-parser.parse(varargin{:});
+p = inputParser;
+p.addParamValue('dataType','spksrt',@ischar);
+p.addParamValue('type','aff',@ischar);
+p.addParamValue('classifyType','no',@ischar);
+p.addParamValue('pcaType','no',@ischar);
+p.addParamValue('pcaKeep',10,@isnumeric);
+p.addParamValue('rfAnalysisType','no',@ischar);
+p.addParamValue('reallyDoIRFPlots',false,@islogical);
+p.addParamValue('reallyDoRFPlots',false,@islogical);
+p.addParamValue('decodeJoint','both',@ischar);
+p.addParamValue('trialShuffleType','notshf',@ischar);
+p.addParamValue('paintShadowShuffleType','nopsshf',@ischar);
+p.addParamValue('decodeIntensityFitType','betacdf',@ischar);
+p.addParamValue('paintCondition',1,@isnumeric);
+p.addParamValue('shadowCondition',2,@isnumeric);
+p.addParamValue('paintShadowFitType','intcpt',@ischar);
+p.addParamValue('decodeNFolds',10,@isnumeric);
+p.addParamValue('excludeSYelectrodes','sykp',@ischar);
+p.addParamValue('minTrials',5,@isnumeric);
+p.addParamValue('filterMaxRMSE',0.25,@isnumeric);
+
+% Which summary analyses to do
+p.addParamValue('doSummaryPaintShadowEffect',true,@islogical);
+p.addParamValue('doSummaryRepSim',false,@islogical);
+p.addParamValue('doSummaryRMSEAnalysis',false,@islogical);
+p.addParamValue('doSummaryRMSEVersusNUnits',false,@islogical);
+p.addParamValue('doSummaryRMSEVersusNPCA',false,@islogical);
+p.addParamValue('doSummaryClassificationVersusNUnits',false,@islogical);
+p.addParamValue('doSummaryClassificationVersusNPCA',false,@islogical);
+
+p.parse(varargin{:});
 
 % Type of input
 %   'spksrt'             - After Doug did the manual spike sorting
-decodeInfoIn.dataType = parser.Results.dataType;
+decodeInfoIn.dataType = p.Results.dataType;
 
 % Type of decoder
 %
@@ -52,7 +62,7 @@ decodeInfoIn.dataType = parser.Results.dataType;
 %   'maxlikelyfano'        - Max likelihood based, multiplicative noise model
 %   'mlbayes'              - Bayes based
 %   'mlbayesfano'          - Bayes based, multiplicative noise model
-decodeInfoIn.type = parser.Results.type;
+decodeInfoIn.type = p.Results.type;
 
 % Type of classifier
 %
@@ -63,15 +73,15 @@ decodeInfoIn.type = parser.Results.type;
 %   'svma'                     - LIBSVM's svm classifier, on all trials
 %   'nna'                      - Nearest neighbor classification on all trials
 %   'no'                       - Don't do the stinkin' classification.
-decodeInfoIn.classifyType = parser.Results.classifyType;
+decodeInfoIn.classifyType = p.Results.classifyType;
 
 % Type of pca
 %
 % We can do pca on the responses before analyzing.
 %   'ml'                 - Matlab's pca.
 %   'no'                 - Don't do pca.
-decodeInfoIn.pcaType = parser.Results.pcaType;
-decodeInfoIn.pcaKeep = parser.Results.pcaKeep;
+decodeInfoIn.pcaType = p.Results.pcaType;
+decodeInfoIn.pcaKeep = p.Results.pcaKeep;
 
 % Use paint, shadow, or both for building decoder?
 %
@@ -80,7 +90,7 @@ decodeInfoIn.pcaKeep = parser.Results.pcaKeep;
 %   'both'                    - Build decoder using paint and shadow trials
 %   'paint'                   - Build decoder using paint trials only
 %   'shadow'                  - Build decoder using shadow trials only
-decodeInfoIn.decodeJoint = parser.Results.decodeJoint;
+decodeInfoIn.decodeJoint = p.Results.decodeJoint;
 
 % Shuffle trials?
 %  
@@ -89,7 +99,7 @@ decodeInfoIn.decodeJoint = parser.Results.decodeJoint;
 %   'intshf'          - Shuffle within test intensity
 %   'alltshf'         - Shuffle all trials
 %   'notshfpca'       - Don't shuffle, do do pca.
-decodeInfoIn.trialShuffleType = parser.Results.trialShuffleType;
+decodeInfoIn.trialShuffleType = p.Results.trialShuffleType;
 
 % Paint/shadow shuffle
 %  
@@ -97,12 +107,12 @@ decodeInfoIn.trialShuffleType = parser.Results.trialShuffleType;
 % trial shuffling.
 %   'nopsshf'         - Don't shuffle
 %   'psshf'           - Shuffle within test intensity
-decodeInfoIn.paintShadowShuffleType = parser.Results.paintShadowShuffleType;
+decodeInfoIn.paintShadowShuffleType = p.Results.paintShadowShuffleType;
 
 % How to fit the decoded intensity function for each context
 %   'smoothingspline'
 %   'betcdf'
-decodeInfoIn.decodedIntensityFitType = parser.Results.decodeIntensityFitType;
+decodeInfoIn.decodedIntensityFitType = p.Results.decodeIntensityFitType;
 decodeInfoIn.decodedIntensityFitSmoothingParam = 0.995;
 
 % Conditions 
@@ -113,8 +123,8 @@ decodeInfoIn.decodedIntensityFitSmoothingParam = 0.995;
 %   2                        - Original shadow images
 %   3                        - New paint images
 %   4                        - New shadow images
-decodeInfoIn.paintCondition = parser.Results.paintCondition;
-decodeInfoIn.shadowCondition = parser.Results.shadowCondition;
+decodeInfoIn.paintCondition = p.Results.paintCondition;
+decodeInfoIn.shadowCondition = p.Results.shadowCondition;
 
 % What data to read
 decodeInfoIn.DATASTYLE = 'new';
@@ -125,7 +135,7 @@ decodeInfoIn.DATASTYLE = 'new';
 % paint and shadow.  Currently we are using intercept because
 % the affine does not appear to be well-identified.
 %    'intcpt'            - Fit inferred match plot with a line of slope 1 and free intercept.
-decodeInfoIn.paintShadowFitType = parser.Results.paintShadowFitType;
+decodeInfoIn.paintShadowFitType = p.Results.paintShadowFitType;
 decodeInfoIn.nFinelySpacedIntensities = 1000;
 decodeInfoIn.inferIntensityLevelsDiscrete = [25 35 45 55 65 75]/100;
 
@@ -149,14 +159,14 @@ decodeInfoIn.MVM_COMPARECLASS = false;
 %   'sykp'                    - Keep all electrodes
 %   'syexp'                   - Exclude SY peripheral electrodes
 %   'syexf'                   - Exclude SY foveal electrodes
-decodeInfoIn.excludeSYelectrodes = parser.Results.excludeSYelectrodes;
+decodeInfoIn.excludeSYelectrodes = p.Results.excludeSYelectrodes;
 
 % Debugging plots?
 decodeInfoIn.debugPlots = true;
 
 % Minimum number of trials needed to go forward with a session.
-decodeInfoIn.minTrials = parser.Results.minTrials;
-decodeInfoIn.filterMaxRMSE = parser.Results.filterMaxRMSE;
+decodeInfoIn.minTrials = p.Results.minTrials;
+decodeInfoIn.filterMaxRMSE = p.Results.filterMaxRMSE;
 
 % Which stimulus intensities to leave out of the analysis.
 %
@@ -185,3 +195,11 @@ decodeInfoIn.degreesPerPixel = rad2deg(2*atan((1/decodeInfoIn.monitorPixelsPerIn
 % keeps some code the references the field from crashing when it passes the
 % value on to another structure.
 decodeInfoIn.doIndElectrodeRFPlots = false;
+
+decodeInfoIn.doSummaryPaintShadowEffect = p.Results.doSummaryPaintShadowEffect;
+decodeInfoIn.doSummaryRepSim = p.Results.doSummaryRepSim;
+decodeInfoIn.doSummaryRMSEAnalysis = p.Results.doSummaryRMSEAnalysis;
+decodeInfoIn.doSummaryRMSEVersusNUnits = p.Results.doSummaryRMSEVersusNUnits;
+decodeInfoIn.doSummaryRMSEVersusNPCA = p.Results.doSummaryRMSEVersusNPCA;
+decodeInfoIn.doSummaryClassificationVersusNUnits = p.Results.doSummaryClassificationVersusNUnits;
+decodeInfoIn.doSummaryClassificationVersusNPCA = p.Results.doSummaryClassificationVersusNPCA;

@@ -76,46 +76,71 @@ for runIndex = 1:length(theExtractedDirs)
     
     % Get the output of the various analyses that get run over the
     % preprocessed data.
-    paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
-    repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
-    RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
-    RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
-    %RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
-    %ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
-    %ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
+    if (decodeInfoIn.doSummaryPaintShadowEffect)
+        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
+    end
+    if (decodeInfoIn.doSummaryRepSim)
+        repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
+    end
+    if (decodeInfoIn.doSummaryRMSEAnalysis)
+        RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
+    end
+    if (decodeInfoIn.doSummaryRMSEVersusNUnits)
+        RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
+    end
+    if (decodeInfoIn.doSummaryRMSEVersusNPCA)
+        RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
+    end
+    if (decodeInfoIn.doSummaryClassificationVersusNUnits)    
+        ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
+    end
+    if (decodeInfoIn.doSummaryClassificationVersusNPCA)
+        ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
+    end
 end
 
-% Check that everyone is the same length
-if (length(basicInfo) ~= length(paintShadowEffect))
-    error('Data length mismatch');
-end
-if (length(basicInfo) ~= length(repSim))
-    error('Data length mismatch');
-end
-if (length(basicInfo) ~= length(RMSEAnalysis))
-    error('Data length mismatch');
-end
-if (length(basicInfo) ~= length(RMSEVersusNUnits))
-    error('Data length mismatch');
-end
-% if (length(basicInfo) ~= length(RMSEVersusNPCA))
-%     error('Data length mismatch');
-% end
-% if (length(basicInfo) ~= length(ClassificationVersusNUnits))
-%     error('Data length mismatch');
-% end
-% if (length(basicInfo) ~= length(ClassificationVersusNPCA))
-%     error('Data length mismatch');
-% end
-
+    
 %% Figure parameters
 figParams = SetFigParams([],'popdecode');
 
 %% Call routines to make nice summary plots
+if (decodeInfoIn.doSummaryPaintShadowEffect)
+    if (length(basicInfo) ~= length(paintShadowEffect))
+        error('Data length mismatch');
+    end
+    PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
+end
+if (decodeInfoIn.doSummaryRepSim)
+    repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
+    RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams);
+end
+if (decodeInfoIn.doSummaryRMSEAnalysis)
+    if (length(basicInfo) ~= length(RMSEAnalysis))
+        error('Data length mismatch');
+    end
+end
+if (decodeInfoIn.doSummaryRMSEVersusNUnits)
+    if (length(basicInfo) ~= length(RMSEVersusNUnits))
+        error('Data length mismatch');
+    end
+end
+if (decodeInfoIn.doSummaryRMSEVersusNPCA)
+    if (length(basicInfo) ~= length(RMSEVersusNPCA))
+        error('Data length mismatch');
+    end
+    RMSEVersusNPCASummaryPlots(basicInfo,RMSEVersusNPCA,summaryDir,figParams);
+end
+if (decodeInfoIn.doSummaryClassificationVersusNUnits)
+    if (length(basicInfo) ~= length(ClassificationVersusNUnits))
+        error('Data length mismatch');
+    end
+end
+if (decodeInfoIn.doSummaryClassificationVersusNPCA)
+    if (length(basicInfo) ~= length(ClassificationVersusNPCA))
+        error('Data length mismatch');
+    end
+end
 
-% Paint/Shadow Effect
-PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
-RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams);
 
 
 
