@@ -6,3 +6,8 @@ function [responsesPCA] = PCATransform(decodeInfo,responses,pcaBasis,meanRespons
 % coordinate system.
 
 responsesPCA = (pcaBasis\(responses-meanResponse(ones(size(responses,1),1),:))')' + meanResponsePCA(ones(size(responses,1),1),:);
+
+responsesPCACheck = (pcaBasis\responses')';
+if (max(abs(responsesPCACheck(:)-responsesPCA(:))) > 1e-9)
+    error('We do not understand PCA');
+end

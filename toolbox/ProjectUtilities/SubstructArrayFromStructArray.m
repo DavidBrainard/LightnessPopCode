@@ -3,12 +3,17 @@ function [theSubstructArray,index] = SubstructArrayFromStructArray(theStructArra
 %
 % Take a struct array as input, and get the index that returns the
 % entries after filtering out any values as specified in the filter info.
-% Then return the indicated substruct as a struct array.  Also return the
+% Then return the indicated substruct as an array, concatenated together.  Also return the
 % filtering index.
 %
 % See GetFilteringIndex for information on how the filtering is done.
 %
 % See also FilterAndGetFieldFromStrucArray
+%
+% This handles cases where each entry of the field is a scalar or a vector,
+% and tries to be smart about what to do with row and column vectors.  In
+% the latter two cases, these come back as the rows or as the columns of
+% the returned matrix, while in the scalar case you get vector back.
 %
 % Examples:
 % 1) Get the decodeBoth structure field as a struct array, taking all of them with no filtering
@@ -30,11 +35,20 @@ end
 % Get the index
 index = GetFilteringIndex(theStructArray,filterFieldNames,filterFieldVals,booleanStrings);
 
+% Get size of the field so we can figure out how to pack it for return
+eval(['[m,n] = size(theStructArray(1).' theSubstruct ');'])
+
 % Pull out the entries we want.
-for ii = 1:length(index)
-    theArrayEvalStr = ['theSubstructArray(ii) = theStructArray(index(ii)).' theSubstruct ';'];
+for ii = 1:length(index) 
+    if (m == 1 & n == 1)
+        theArrayEvalStr = ['theSubstructArray(ii) = theStructArray(index(ii)).' theSubstruct ';'];
+    elseif (n == 1)
+        theArrayEvalStr = ['theSubstructArray(:,ii) = theStructArray(index(ii)).' theSubstruct ';'];
+    elseif (m == 1)
+        theArrayEvalStr = ['theSubstructArray(ii,:) = theStructArray(index(ii)).' theSubstruct ';'];
+    end
     eval(theArrayEvalStr);
 end
-    
+
 end
 

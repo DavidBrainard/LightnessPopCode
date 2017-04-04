@@ -62,6 +62,8 @@ decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
 [~,~,~,pcaBasis,meanResponse,meanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
 paintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,pcaBasis,meanResponse,meanResponsePCA);
 shadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,pcaBasis,meanResponse,meanResponsePCA);
+meanPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,pcaBasis,meanResponse,meanResponsePCA);
+meanShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,pcaBasis,meanResponse,meanResponsePCA);
 
 %% Get RMSE based on guessing mean intensity
 %
@@ -104,7 +106,6 @@ decodeSave.fitScale = decodeSave.fit.b;
 decodeSave.fitAsymp = decodeSave.fit.c;
 
 %% Do PCA on paint only, and decode both paint and shadow in the PCA basis
-% and the orthogonal basis.
 [~,~,~,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,[]);
 paintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
 paintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
@@ -262,7 +263,7 @@ if (exist([decodeInfo.figNameRoot '_extRMSEVersusPaintOnlyNPCA.pdf'],'file'))
     unix(['rm ' [decodeInfo.figNameRoot '_extRMSEVersusOneOnlyNPCA.pdf']]);
 end
 
-% PLOT: RMSE for paint and shadow, compared with paintOnly and shadowOnly PCA
+%% PLOT: RMSE for paint and shadow, compared with paintOnly and shadowOnly PCA
 RMSEPaintOnlyShadowOnlyScatterFig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
@@ -281,12 +282,16 @@ figName = [decodeInfo.figNameRoot '_extRMSEPaintOnlyShadowOnlyScatter'];
 drawnow;
 FigureSave(figName,RMSEPaintOnlyShadowOnlyScatterFig,decodeInfo.figType);
 
-% PLOT: paint/shadow mean responses on PCA 1 and 2.
+%% PLOT: paint/shadow mean responses on PCA 1 and 2.
+%
+% PCA from both paint and shadow mean responses
 clear decodeInfoPCA
 decodeInfoPCA.pcaType = 'ml';
 decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
-[decodeSave.meanPaintPCAResponses, decodeSave.meanShadowPCAResponses] = ...
-    PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
+% [decodeSave.meanPaintPCAResponses, decodeSave.meanShadowPCAResponses] = ...
+%    PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
+decodeSave.meanPaintPCAResponses = meanPaintPCAResponses;
+decodeSave.meanShadowPCAResponses = meanShadowPCAResponses;
 
 paintShadowOnPCAFig = figure; clf; hold on;
 set(gcf,'Position',decodeInfo.sqPosition);
@@ -313,8 +318,50 @@ decodeInfo.titleStr = decodeInfo.titleStr;
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
 drawnow;
-figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowOnMeanPCA'];
+figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2'];
 FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
+
+% Temp, get rid of old files
+% Temporary, to get rid of old plots with wrong name
+if (exist([decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowOnMeanPCA.pdf'],'file'))
+    unix(['rm ' [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowOnMeanPCA.pdf']]);
+end
+
+%% PLOT: Version of above but use PCA from mean paint responses
+% clear decodeInfoPCA
+% decodeInfoPCA.pcaType = 'ml';
+% decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
+% [decodeSave.meanPaintPCAResponses, decodeSave.meanShadowPCAResponses] = ...
+%     PaintShadowPCA(decodeInfoPCA,meanPaintOnlyPaintResponses,meanPaintOnlyShadowResponses);
+% 
+% paintShadowOnPCAFig1 = figure; clf; hold on;
+% set(gcf,'Position',decodeInfo.sqPosition);
+% set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+% theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
+% for dc = 1:length(decodeInfo.uniqueIntensities)
+%     theGreen = [0 theGrays(dc) 0];
+%     theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
+%     
+%     % Basic points first, so legend comes out right
+%     plot(decodeSave.meanPaintPCAResponses(dc,1),decodeSave.meanPaintPCAResponses(dc,2),...
+%         'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
+%     plot(decodeSave.meanShadowPCAResponses(dc,1),decodeSave.meanShadowPCAResponses(dc,2),...
+%         'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
+% end
+% 
+% % Connect by lines to match what Marlene does
+% plot(decodeSave.meanPaintPCAResponses(:,1),decodeSave.meanPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
+% plot(decodeSave.meanShadowPCAResponses(:,1),decodeSave.meanShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
+%     
+% xlabel('PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
+% ylabel('PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
+% decodeInfo.titleStr = decodeInfo.titleStr;
+% title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+% h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
+% drawnow;
+% figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCAPaint1_2'];
+% FigureSave(figName,paintShadowOnPCAFig1,decodeInfo.figType);
+
 
 %% Store the data for return
 decodeInfo.RMSEVersusNPCA = decodeSave;
