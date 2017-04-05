@@ -44,7 +44,6 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 dataForPCA = [paintResponses ; shadowResponses];
 clear decodeInfoPCA
 decodeInfoPCA.pcaType = 'ml';
-decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
 meanDataForPCA = mean(dataForPCA,1);
 [paintPCAResponses,shadowPCAResponses] = PaintShadowPCA(decodeInfoPCA,paintResponses,shadowResponses);
 

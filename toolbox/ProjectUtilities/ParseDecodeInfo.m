@@ -18,7 +18,6 @@ p.addParamValue('dataType','spksrt',@ischar);
 p.addParamValue('type','aff',@ischar);
 p.addParamValue('classifyType','no',@ischar);
 p.addParamValue('pcaType','no',@ischar);
-p.addParamValue('pcaKeep',10,@isnumeric);
 p.addParamValue('rfAnalysisType','no',@ischar);
 p.addParamValue('reallyDoIRFPlots',false,@islogical);
 p.addParamValue('reallyDoRFPlots',false,@islogical);
@@ -81,7 +80,6 @@ decodeInfoIn.classifyType = p.Results.classifyType;
 %   'ml'                 - Matlab's pca.
 %   'no'                 - Don't do pca.
 decodeInfoIn.pcaType = p.Results.pcaType;
-decodeInfoIn.pcaKeep = p.Results.pcaKeep;
 
 % Use paint, shadow, or both for building decoder?
 %

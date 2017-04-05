@@ -377,7 +377,7 @@ for nn1 = 1:length(useSizes)
     [paintIntensities,paintResponses,shadowIntensities,shadowResponses,decodeInfoIn] = PaintShadowShuffle(decodeInfoIn,paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 
     %% PCA if desired.  This also propagates.
-    [paintResponses,shadowResponses,decodeInfoIn] = PaintShadowPCA(decodeInfoIn,paintResponses,shadowResponses);
+    [paintResponses,shadowResponses] = PaintShadowPCA(decodeInfoIn,paintResponses,shadowResponses);
     
     %% Check that there is enough data, only write the output if so.
     OK = true;

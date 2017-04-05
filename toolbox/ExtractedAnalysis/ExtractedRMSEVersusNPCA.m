@@ -9,9 +9,6 @@ function ExtractedRMSEVersusNPCA(doIt,decodeInfo,theData)
 %% Are we doing it?
 %
 % Rename buggy filename if it exists
-if (exist(fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA .mat'),'file'))
-    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA\ .mat') ' ' fullfile(decodeInfo.writeDataDir,'extRMSEVersusNPCA.mat')]);
-end
 switch (doIt)
     case 'always'
     case 'never'
@@ -58,12 +55,13 @@ end
 %% Get PCA info based on both paint and shadow mean responses
 clear decodeInfoPCA
 decodeInfoPCA.pcaType = 'ml';
-decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
-[~,~,~,pcaBasis,meanResponse,meanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
-paintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,pcaBasis,meanResponse,meanResponsePCA);
-shadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,pcaBasis,meanResponse,meanResponsePCA);
-meanPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,pcaBasis,meanResponse,meanResponsePCA);
-meanShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,pcaBasis,meanResponse,meanResponsePCA);
+[~,~,pcaBasis,meanResponse] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
+
+% The form returned by PCATransform has the mean subtracted off.
+paintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,pcaBasis,meanResponse);
+shadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,pcaBasis,meanResponse);
+meanPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,pcaBasis,meanResponse);
+meanShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,pcaBasis,meanResponse);
 
 %% Get RMSE based on guessing mean intensity
 %
@@ -106,9 +104,11 @@ decodeSave.fitScale = decodeSave.fit.b;
 decodeSave.fitAsymp = decodeSave.fit.c;
 
 %% Do PCA on paint only, and decode both paint and shadow in the PCA basis
-[~,~,~,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,[]);
-paintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
-paintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse,paintOnlyMeanResponsePCA);
+[~,~,paintOnlyPCABasis,paintOnlyMeanResponse] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,[]);
+paintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
+paintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
+meanPaintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,pcaBasis,paintOnlyMeanResponse);
+meanPaintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,pcaBasis,paintOnlyMeanResponse);
 
 uniqueNUnitsToStudy = size(paintOnlyPCABasis,2);
 nUnitsToUseList = 1:uniqueNUnitsToStudy;
@@ -151,9 +151,9 @@ decodeSave.paintOnlyShadowFitAsymp = decodeSave.paintOnlyShadowFit.c;
 
 %% Do PCA on shadow only, and decode both paint and shadow in the PCA basis
 % and the orthogonal basis.
-[~,~,~,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA] = PaintShadowPCA(decodeInfoPCA,meanShadowResponses,[]);
-shadowOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA);
-shadowOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse,shadowOnlyMeanResponsePCA);
+[~,~,shadowOnlyPCABasis,shadowOnlyMeanResponse] = PaintShadowPCA(decodeInfoPCA,meanShadowResponses,[]);
+shadowOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
+shadowOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
 
 uniqueNUnitsToStudy = size(shadowOnlyPCABasis,2);
 nUnitsToUseList = 1:uniqueNUnitsToStudy;
@@ -258,11 +258,6 @@ figName = [decodeInfo.figNameRoot '_extRMSEVersusOneOnlyNPCA'];
 drawnow;
 FigureSave(figName,RMSEVersusPaintOnlyNPCAfig,decodeInfo.figType);
 
-% Temporary, to get rid of old plots with wrong name
-if (exist([decodeInfo.figNameRoot '_extRMSEVersusPaintOnlyNPCA.pdf'],'file'))
-    unix(['rm ' [decodeInfo.figNameRoot '_extRMSEVersusOneOnlyNPCA.pdf']]);
-end
-
 %% PLOT: RMSE for paint and shadow, compared with paintOnly and shadowOnly PCA
 RMSEPaintOnlyShadowOnlyScatterFig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);
@@ -287,9 +282,6 @@ FigureSave(figName,RMSEPaintOnlyShadowOnlyScatterFig,decodeInfo.figType);
 % PCA from both paint and shadow mean responses
 clear decodeInfoPCA
 decodeInfoPCA.pcaType = 'ml';
-decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
-% [decodeSave.meanPaintPCAResponses, decodeSave.meanShadowPCAResponses] = ...
-%    PaintShadowPCA(decodeInfoPCA,meanPaintResponses,meanShadowResponses);
 decodeSave.meanPaintPCAResponses = meanPaintPCAResponses;
 decodeSave.meanShadowPCAResponses = meanShadowPCAResponses;
 
@@ -312,8 +304,8 @@ end
 plot(decodeSave.meanPaintPCAResponses(:,1),decodeSave.meanPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
 plot(decodeSave.meanShadowPCAResponses(:,1),decodeSave.meanShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
     
-xlabel('PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
-ylabel('PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
+xlabel('Both PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
+ylabel('Both PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
 decodeInfo.titleStr = decodeInfo.titleStr;
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
@@ -321,47 +313,39 @@ drawnow;
 figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2'];
 FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
 
-% Temp, get rid of old files
-% Temporary, to get rid of old plots with wrong name
-if (exist([decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowOnMeanPCA.pdf'],'file'))
-    unix(['rm ' [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowOnMeanPCA.pdf']]);
+%% PLOT: Version of above but use PCA from mean paint responses
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeSave.meanPaintOnlyPaintPCAResponses = meanPaintOnlyPaintPCAResponses;
+decodeSave.meanPaintOnlyShadowPCAResponses = meanPaintOnlyShadowPCAResponses;
+
+paintShadowOnPCAFig = figure; clf; hold on;
+set(gcf,'Position',decodeInfo.sqPosition);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
+for dc = 1:length(decodeInfo.uniqueIntensities)
+    theGreen = [0 theGrays(dc) 0];
+    theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
+    
+    % Basic points first, so legend comes out right
+    plot(decodeSave.meanPaintOnlyPaintPCAResponses(dc,1),decodeSave.meanPaintOnlyPaintPCAResponses(dc,2),...
+        'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
+    plot(decodeSave.meanPaintOnlyShadowPCAResponses(dc,1),decodeSave.meanPaintOnlyShadowPCAResponses(dc,2),...
+        'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
 end
 
-%% PLOT: Version of above but use PCA from mean paint responses
-% clear decodeInfoPCA
-% decodeInfoPCA.pcaType = 'ml';
-% decodeInfoPCA.pcaKeep = decodeInfo.nUnits;
-% [decodeSave.meanPaintPCAResponses, decodeSave.meanShadowPCAResponses] = ...
-%     PaintShadowPCA(decodeInfoPCA,meanPaintOnlyPaintResponses,meanPaintOnlyShadowResponses);
-% 
-% paintShadowOnPCAFig1 = figure; clf; hold on;
-% set(gcf,'Position',decodeInfo.sqPosition);
-% set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
-% theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
-% for dc = 1:length(decodeInfo.uniqueIntensities)
-%     theGreen = [0 theGrays(dc) 0];
-%     theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
-%     
-%     % Basic points first, so legend comes out right
-%     plot(decodeSave.meanPaintPCAResponses(dc,1),decodeSave.meanPaintPCAResponses(dc,2),...
-%         'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
-%     plot(decodeSave.meanShadowPCAResponses(dc,1),decodeSave.meanShadowPCAResponses(dc,2),...
-%         'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
-% end
-% 
-% % Connect by lines to match what Marlene does
-% plot(decodeSave.meanPaintPCAResponses(:,1),decodeSave.meanPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
-% plot(decodeSave.meanShadowPCAResponses(:,1),decodeSave.meanShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
-%     
-% xlabel('PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
-% ylabel('PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
-% decodeInfo.titleStr = decodeInfo.titleStr;
-% title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
-% h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
-% drawnow;
-% figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCAPaint1_2'];
-% FigureSave(figName,paintShadowOnPCAFig1,decodeInfo.figType);
-
+% Connect by lines to match what Marlene does
+plot(decodeSave.meanPaintOnlyPaintPCAResponses(:,1),decodeSave.meanPaintOnlyPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
+plot(decodeSave.meanPaintOnlyShadowPCAResponses(:,1),decodeSave.meanPaintOnlyShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
+    
+xlabel('Paint Only PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
+ylabel('Paint Only PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
+decodeInfo.titleStr = decodeInfo.titleStr;
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
+drawnow;
+figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2'];
+FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
 
 %% Store the data for return
 decodeInfo.RMSEVersusNPCA = decodeSave;

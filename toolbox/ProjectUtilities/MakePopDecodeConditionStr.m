@@ -8,10 +8,8 @@ function [condStr,sizeLocStr] = MakePopDecodeConditionStr(decodeInfo)
 
 % Condition string
 switch (decodeInfo.pcaType)
-    case 'no'
+    case {'no', 'ml', 'sdn'}
         pcaKeepStr = [];
-    case {'sdn'}
-        pcaKeepStr = num2str(decodeInfo.pcaKeep);
     otherwise
         error('Unknown pca type specified');
 end

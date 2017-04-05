@@ -1,13 +1,10 @@
-function [responsesPCA] = PCATransform(decodeInfo,responses,pcaBasis,meanResponse,meanResponsePCA)
+function [responsesPCA] = PCATransform(decodeInfo,responses,pcaBasis,meanResponse)
 %PCATransform
-%  [responsesPCA] = PCATransform(decodeInfo,responses,pcaBasis,meanResponse,meanResponsePCA)
+%  [responsesPCA] = PCATransform(decodeInfo,responses,pcaBasis,meanResponse)
 %
 % Use output of PaintShadowPCA to transform responses into the PCA
-% coordinate system.
+% coordinate system, with the mean response subtracted off.
 
-responsesPCA = (pcaBasis\(responses-meanResponse(ones(size(responses,1),1),:))')' + meanResponsePCA(ones(size(responses,1),1),:);
+responsesPCA = (pcaBasis\(responses-meanResponse(ones(size(responses,1),1),:))')';
 
-responsesPCACheck = (pcaBasis\responses')';
-if (max(abs(responsesPCACheck(:)-responsesPCA(:))) > 1e-9)
-    error('We do not understand PCA');
 end
