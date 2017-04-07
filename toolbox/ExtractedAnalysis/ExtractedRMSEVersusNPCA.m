@@ -22,7 +22,6 @@ end
 %% Get info about what to do
 %nUnitsToUseList = unique([1 2 round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy))]);
 
-
 %% Set up needed parameters
 clear decodeSave
 decodeSave.verbose = decodeInfo.verbose;
@@ -202,9 +201,9 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 smoothX = (0:decodeInfo.nUnits)';
-plot(smoothX,decodeSave.fit(smoothX),'k','LineWidth',decodeInfo.lineWidth);
+plot(smoothX,decodeSave.fit(smoothX),'r','LineWidth',decodeInfo.lineWidth);
 plot(decodeSave.theUnits,decodeSave.theRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-plot(decodeSave.fitScale,decodeSave.fit(decodeSave.fitScale),'go','MarkerFaceColor','g','MarkerSize',8);
+plot(decodeSave.fitScale,decodeSave.fit(decodeSave.fitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
 plot(smoothX,nullRMSE*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);

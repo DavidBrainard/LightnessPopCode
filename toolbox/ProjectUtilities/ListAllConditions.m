@@ -30,29 +30,29 @@ end
 % % This crashes at the end because there isn't enough
 % % summary data, but is fine for testing the core session
 % % analyses.
-
-% SY data
-theFiles{outIndex} = ['SY150423' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['SY150423RFmap0002_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V4';
-decodeInfoInRun{outIndex}.subjectStr = 'SY';
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
- 
-theFiles{outIndex} = ['JD130904' insertFilenameStr '0001'];
-theRFFiles{outIndex} = ['JD130904RFmap0001_reduceddata'];
-decodeInfoInRun{outIndex} = decodeInfoIn;
-decodeInfoInRun{outIndex}.titleInfoStr = 'V4';
-decodeInfoInRun{outIndex}.subjectStr = 'JD';
-decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
-decodeInfoInRun{outIndex}.rfInfoLocation = [];
-decodeInfoInRun{outIndex}.normIndexLocation = [];
-decodeInfoInRun{outIndex}.sameDayRF = true;
-outIndex = outIndex + 1;
+% 
+% % SY data
+% theFiles{outIndex} = ['SY150423' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['SY150423RFmap0002_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V4';
+% decodeInfoInRun{outIndex}.subjectStr = 'SY';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
+%  
+% theFiles{outIndex} = ['JD130904' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['JD130904RFmap0001_reduceddata'];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V4';
+% decodeInfoInRun{outIndex}.subjectStr = 'JD';
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
 
 return;
 
