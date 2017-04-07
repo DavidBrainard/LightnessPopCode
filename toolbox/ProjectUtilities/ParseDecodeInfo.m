@@ -33,6 +33,15 @@ p.addParamValue('excludeSYelectrodes','sykp',@ischar);
 p.addParamValue('minTrials',5,@isnumeric);
 p.addParamValue('filterMaxRMSE',0.25,@isnumeric);
 
+% Which extracted analyses to do
+p.addParamValue('doExtractedPaintShadowEffect',true,@islogical);
+p.addParamValue('doExtractedRepSim',false,@islogical);
+p.addParamValue('doExtractedRMSEAnalysis',false,@islogical);
+p.addParamValue('doExtractedRMSEVersusNUnits',false,@islogical);
+p.addParamValue('doExtractedRMSEVersusNPCA',false,@islogical);
+p.addParamValue('doExtractedClassificationVersusNUnits',false,@islogical);
+p.addParamValue('doExtractedClassificationVersusNPCA',false,@islogical);
+
 % Which summary analyses to do
 p.addParamValue('doSummaryPaintShadowEffect',true,@islogical);
 p.addParamValue('doSummaryRepSim',false,@islogical);
@@ -193,6 +202,14 @@ decodeInfoIn.degreesPerPixel = rad2deg(2*atan((1/decodeInfoIn.monitorPixelsPerIn
 % keeps some code the references the field from crashing when it passes the
 % value on to another structure.
 decodeInfoIn.doIndElectrodeRFPlots = false;
+
+decodeInfoIn.doExtractedPaintShadowEffect = p.Results.doExtractedPaintShadowEffect;
+decodeInfoIn.doExtractedRepSim = p.Results.doExtractedRepSim;
+decodeInfoIn.doExtractedRMSEAnalysis = p.Results.doExtractedRMSEAnalysis;
+decodeInfoIn.doExtractedRMSEVersusNUnits = p.Results.doExtractedRMSEVersusNUnits;
+decodeInfoIn.doExtractedRMSEVersusNPCA = p.Results.doExtractedRMSEVersusNPCA;
+decodeInfoIn.doExtractedClassificationVersusNUnits = p.Results.doExtractedClassificationVersusNUnits;
+decodeInfoIn.doExtractedClassificationVersusNPCA = p.Results.doExtractedClassificationVersusNPCA;
 
 decodeInfoIn.doSummaryPaintShadowEffect = p.Results.doSummaryPaintShadowEffect;
 decodeInfoIn.doSummaryRepSim = p.Results.doSummaryRepSim;

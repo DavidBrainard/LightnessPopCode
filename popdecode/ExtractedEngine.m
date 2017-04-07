@@ -9,19 +9,6 @@ function decodeInfoOut = ExtractedEngine(readDataDir,decodeInfoIn)
 %% Basic initialization
 close all;
 
-%% Control what we do
-% Options are:
-%   'always' -- always do the analsyis
-%   'never' -- never do the analysis
-%   'ifmissing' -- do the analysis if there isn't currently a corresponding output file.
-doPaintShadowEffect = 'never';
-doRepSim = 'never';
-doRMSEAnalysis = 'never';
-doRMSEVersusNUnits = 'never';
-doRMSEVersusNPCA= 'always';
-doClassificationVersusNUnits = 'never';
-doClassificationVersusNPCA = 'never';
-
 %% Start getting info to pass on back
 decodeInfoOut = decodeInfoIn;
 
@@ -60,6 +47,12 @@ for ii = 1:length(filename)
 end
 decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,'Fig');
 decodeInfoOut.writeDataDir = extractedPlotDir;
+
+%% Filter right here to just look at a particular session
+theTempName = 'SY150423';
+if (~strcmp(filename(1:8),theTempName))
+    return;
+end
 
 %% Read in extracted data
 curDir = pwd; cd(readDataDir);
@@ -124,34 +117,48 @@ if (decodeInfoOut.OK)
     
     % *******
     % Paint shadow effect
-    ExtractedPaintShadowEffect(doPaintShadowEffect,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedPaintShadowEffect)  
+        ExtractedPaintShadowEffect('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Representational similarity
-    ExtractedRepSim(doRepSim,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedRepSim)
+        ExtractedRepSim('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Analyze how paint and shadow RMSE/Prediction compare with each other when
     % decoder is built with both, built with paint only, built with shadow
     % only, is chosen randomly, is built to classify, etc.
-    ExtractedRMSEAnalysis(doRMSEAnalysis,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedRMSEAnalysis)
+        ExtractedRMSEAnalysis('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Analyze decoding as a function of the number of units used to build
     % decoder.
-    ExtractedRMSEVersusNUnits(doRMSEVersusNUnits,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedRMSEVersusNUnits)
+        ExtractedRMSEVersusNUnits('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Study decoding performance as a function of number of PCA dimensions
-    ExtractedRMSEVersusNPCA(doRMSEVersusNPCA,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedRMSEVersusNPCA)
+        ExtractedRMSEVersusNPCA('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Study classification performance as a function of the number of units
-    ExtractedClassificationVersusNUnits(doClassificationVersusNUnits,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedClassificationVersusNUnits) 
+        ExtractedClassificationVersusNUnits('always',decodeInfoOut,theData);
+    end
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
-    ExtractedClassificationVersusNPCA(doClassificationVersusNPCA,decodeInfoOut,theData);
+    if (decodeInfoIn.doExtractedClassificationVersusNPCA) 
+        ExtractedClassificationVersusNPCA('always',decodeInfoOut,theData);
+    end
     
     % Save the output for this directory.  Good for checkpointing
     decodeInfoOut.runTime = toc(tstart);

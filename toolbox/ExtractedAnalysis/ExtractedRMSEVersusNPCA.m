@@ -95,7 +95,7 @@ end
 %% Fit an exponential
 a0 = nullRMSE; b0 = 5; c0 = min(decodeSave.theRMSE);
 ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 0.1 0],'Upper',[a0 200 5]);
 index = find(decodeSave.theUnits <= decodeInfo.nFitMaxUnits);
 decodeSave.fit = fit(decodeSave.theUnits(index),decodeSave.theRMSE(index),ftype,foptions);
 decodeSave.bestRMSE = c0;
@@ -107,8 +107,8 @@ decodeSave.fitAsymp = decodeSave.fit.c;
 [~,~,paintOnlyPCABasis,paintOnlyMeanResponse] = PaintShadowPCA(decodeInfoPCA,meanPaintResponses,[]);
 paintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
 paintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
-meanPaintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,pcaBasis,paintOnlyMeanResponse);
-meanPaintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,pcaBasis,paintOnlyMeanResponse);
+meanPaintOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
+meanPaintOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,paintOnlyPCABasis,paintOnlyMeanResponse);
 
 uniqueNUnitsToStudy = size(paintOnlyPCABasis,2);
 nUnitsToUseList = 1:uniqueNUnitsToStudy;
@@ -131,7 +131,7 @@ end
 % Fit exponentials to paint only decodings
 a0 = nullRMSEPaint; b0 = 5; c0 = min(decodeSave.thePaintOnlyPaintRMSE);
 ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 0.1 0],'Upper',[a0 200 5]);
 index = find(decodeSave.thePaintOnlyUnits <= decodeInfo.nFitMaxUnits);
 decodeSave.paintOnlyPaintFit = fit(decodeSave.thePaintOnlyUnits(index),decodeSave.thePaintOnlyPaintRMSE(index),ftype,foptions);
 decodeSave.paintOnlyPaintBestRMSE = c0;
@@ -141,7 +141,7 @@ decodeSave.paintOnlyPaintFitAsymp = decodeSave.paintOnlyPaintFit.c;
 
 a0 = nullRMSEShadow; b0 = 5; c0 = min(decodeSave.thePaintOnlyShadowRMSE);
 ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 0.1 0],'Upper',[a0 200 5]);
 index = find(decodeSave.thePaintOnlyUnits <= decodeInfo.nFitMaxUnits);
 decodeSave.paintOnlyShadowFit = fit(decodeSave.thePaintOnlyUnits(index),decodeSave.thePaintOnlyShadowRMSE(index),ftype,foptions);
 decodeSave.paintOnlyShadowBestRMSE = c0;
@@ -154,6 +154,8 @@ decodeSave.paintOnlyShadowFitAsymp = decodeSave.paintOnlyShadowFit.c;
 [~,~,shadowOnlyPCABasis,shadowOnlyMeanResponse] = PaintShadowPCA(decodeInfoPCA,meanShadowResponses,[]);
 shadowOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,paintResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
 shadowOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,shadowResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
+meanShadowOnlyPaintPCAResponses = PCATransform(decodeInfoPCA,meanPaintResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
+meanShadowOnlyShadowPCAResponses = PCATransform(decodeInfoPCA,meanShadowResponses,shadowOnlyPCABasis,shadowOnlyMeanResponse);
 
 uniqueNUnitsToStudy = size(shadowOnlyPCABasis,2);
 nUnitsToUseList = 1:uniqueNUnitsToStudy;
@@ -176,7 +178,7 @@ end
 % Fit exponentials to shadow only decodings
 a0 = nullRMSEPaint; b0 = 5; c0 = min(decodeSave.theShadowOnlyPaintRMSE);
 ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 0.1 0],'Upper',[a0 200 5]);
 index = find(decodeSave.theShadowOnlyUnits <= decodeInfo.nFitMaxUnits);
 decodeSave.shadowOnlyPaintFit = fit(decodeSave.theShadowOnlyUnits(index),decodeSave.theShadowOnlyPaintRMSE(index),ftype,foptions);
 decodeSave.shadowOnlyPaintBestRMSE = c0;
@@ -186,7 +188,7 @@ decodeSave.shadowOnlyPaintFitAsymp = decodeSave.shadowOnlyPaintFit.c;
 
 a0 = nullRMSEShadow; b0 = 5; c0 = min(decodeSave.theShadowOnlyShadowRMSE);
 ftype = fittype('(a-c)*exp(-(x)/(b)) + c');
-foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 2 0],'Upper',[a0 200 5]);
+foptions = fitoptions('Method','NonLinearLeastSquares','StartPoint',[a0 b0 c0],'Lower',[a0 0.1 0],'Upper',[a0 200 5]);
 index = find(decodeSave.theShadowOnlyUnits <= decodeInfo.nFitMaxUnits);
 decodeSave.shadowOnlyShadowFit = fit(decodeSave.theShadowOnlyUnits(index),decodeSave.theShadowOnlyShadowRMSE(index),ftype,foptions);
 decodeSave.shadowOnlyShadowBestRMSE = c0;
@@ -221,13 +223,13 @@ set(gcf,'Position',[100 100 1200 700]);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 subplot(1,2,1); hold on;
 plot(decodeSave.thePaintOnlyUnits,decodeSave.thePaintOnlyPaintRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyPaintRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyPaintRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
 smoothX = (0:length(decodeSave.thePaintOnlyUnits))';
 plot(smoothX,decodeSave.paintOnlyPaintFit(smoothX),'r','LineWidth',decodeInfo.lineWidth-1);
 plot(decodeSave.paintOnlyPaintFitScale,decodeSave.paintOnlyPaintFit(decodeSave.paintOnlyPaintFitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
 smoothX = (0:length(decodeSave.theShadowOnlyUnits))';
-plot(smoothX,decodeSave.shadowOnlyPaintFit(smoothX),'k','LineWidth',decodeInfo.lineWidth-1);
-plot(decodeSave.shadowOnlyPaintFitScale,decodeSave.shadowOnlyPaintFit(decodeSave.shadowOnlyPaintFitScale),'ko','MarkerFaceColor','k','MarkerSize',8);
+plot(smoothX,decodeSave.shadowOnlyPaintFit(smoothX),'b','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.shadowOnlyPaintFitScale,decodeSave.shadowOnlyPaintFit(decodeSave.shadowOnlyPaintFitScale),'bo','MarkerFaceColor','b','MarkerSize',8);
 plot(smoothX,nullRMSEPaint*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Paint RMSE','FontSize',decodeInfo.labelFontSize);
@@ -239,13 +241,13 @@ legend({'Paint Only PCA','Shadow Only PCA'});
 
 subplot(1,2,2); hold on;
 plot(decodeSave.thePaintOnlyUnits,decodeSave.thePaintOnlyShadowRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyShadowRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+plot(decodeSave.theShadowOnlyUnits,decodeSave.theShadowOnlyShadowRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
 smoothX = (0:length(decodeSave.thePaintOnlyUnits))';
 plot(smoothX,decodeSave.paintOnlyShadowFit(smoothX),'r','LineWidth',decodeInfo.lineWidth-1);
 plot(decodeSave.paintOnlyShadowFitScale,decodeSave.paintOnlyShadowFit(decodeSave.paintOnlyShadowFitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
 smoothX = (0:length(decodeSave.theShadowOnlyUnits))';
-plot(smoothX,decodeSave.shadowOnlyShadowFit(smoothX),'k','LineWidth',decodeInfo.lineWidth-1);
-plot(decodeSave.shadowOnlyShadowFitScale,decodeSave.shadowOnlyShadowFit(decodeSave.shadowOnlyShadowFitScale),'ko','MarkerFaceColor','k','MarkerSize',8)
+plot(smoothX,decodeSave.shadowOnlyShadowFit(smoothX),'b','LineWidth',decodeInfo.lineWidth-1);
+plot(decodeSave.shadowOnlyShadowFitScale,decodeSave.shadowOnlyShadowFit(decodeSave.shadowOnlyShadowFitScale),'bo','MarkerFaceColor','b','MarkerSize',8)
 plot(smoothX,nullRMSEShadow*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Shadow RMSE','FontSize',decodeInfo.labelFontSize);
@@ -264,7 +266,7 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 h = plot(decodeSave.thePaintOnlyPaintRMSE,decodeSave.theShadowOnlyPaintRMSE,'ro','MarkerFaceColor','r','MarkerSize',4);
-h = plot(decodeSave.thePaintOnlyShadowRMSE,decodeSave.theShadowOnlyShadowRMSE,'ko','MarkerFaceColor','k','MarkerSize',4);
+h = plot(decodeSave.thePaintOnlyShadowRMSE,decodeSave.theShadowOnlyShadowRMSE,'bo','MarkerFaceColor','b','MarkerSize',4);
 xlabel('Paint Only PCA RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Shadow Only PCA RMSE','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
@@ -290,20 +292,22 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
 for dc = 1:length(decodeInfo.uniqueIntensities)
-    theGreen = [0 theGrays(dc) 0];
-    theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
+    theRed = [theGrays(dc) 0 0];
+    theBlue = [0 0 theGrays(dc)];
     
     % Basic points first, so legend comes out right
     plot(decodeSave.meanPaintPCAResponses(dc,1),decodeSave.meanPaintPCAResponses(dc,2),...
-        'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
+        'o','MarkerSize',15,'MarkerFaceColor',theRed,'MarkerEdgeColor',theRed);
     plot(decodeSave.meanShadowPCAResponses(dc,1),decodeSave.meanShadowPCAResponses(dc,2),...
-        'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
+        'o','MarkerSize',15,'MarkerFaceColor',theBlue,'MarkerEdgeColor',theBlue);
+    
+    % Connect by lines to match what Marlene does
+    if (dc > 1)
+        plot([decodeSave.meanPaintPCAResponses(dc-1,1) decodeSave.meanPaintPCAResponses(dc,1)],[decodeSave.meanPaintPCAResponses(dc-1,2) decodeSave.meanPaintPCAResponses(dc,2)],'-','Color',theRed)
+        plot([decodeSave.meanShadowPCAResponses(dc-1,1) decodeSave.meanShadowPCAResponses(dc,1)],[decodeSave.meanShadowPCAResponses(dc-1,2) decodeSave.meanShadowPCAResponses(dc,2)],'-','Color',theBlue)
+    end
 end
 
-% Connect by lines to match what Marlene does
-plot(decodeSave.meanPaintPCAResponses(:,1),decodeSave.meanPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
-plot(decodeSave.meanShadowPCAResponses(:,1),decodeSave.meanShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
-    
 xlabel('Both PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
 ylabel('Both PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
 decodeInfo.titleStr = decodeInfo.titleStr;
@@ -311,6 +315,44 @@ title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
 drawnow;
 figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2'];
+FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
+
+%% PLOT: paint/shadow mean responses on PCA 1 and 3.
+%
+% PCA from both paint and shadow mean responses
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeSave.meanPaintPCAResponses = meanPaintPCAResponses;
+decodeSave.meanShadowPCAResponses = meanShadowPCAResponses;
+
+paintShadowOnPCAFig = figure; clf; hold on;
+set(gcf,'Position',decodeInfo.sqPosition);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
+for dc = 1:length(decodeInfo.uniqueIntensities)
+    theRed = [theGrays(dc) 0 0];
+    theBlue = [0 0 theGrays(dc)];
+    
+    % Basic points first, so legend comes out right
+    plot(decodeSave.meanPaintPCAResponses(dc,1),decodeSave.meanPaintPCAResponses(dc,3),...
+        'o','MarkerSize',15,'MarkerFaceColor',theRed,'MarkerEdgeColor',theRed);
+    plot(decodeSave.meanShadowPCAResponses(dc,1),decodeSave.meanShadowPCAResponses(dc,3),...
+        'o','MarkerSize',15,'MarkerFaceColor',theBlue,'MarkerEdgeColor',theBlue);
+    
+    % Connect by lines to match what Marlene does
+    if (dc > 1)
+        plot([decodeSave.meanPaintPCAResponses(dc-1,1) decodeSave.meanPaintPCAResponses(dc,1)],[decodeSave.meanPaintPCAResponses(dc-1,3) decodeSave.meanPaintPCAResponses(dc,3)],'-','Color',theRed)
+        plot([decodeSave.meanShadowPCAResponses(dc-1,1) decodeSave.meanShadowPCAResponses(dc,1)],[decodeSave.meanShadowPCAResponses(dc-1,3) decodeSave.meanShadowPCAResponses(dc,3)],'-','Color',theBlue)
+    end
+end
+    
+xlabel('Both PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
+ylabel('Both PCA Component 3 Wgt','FontSize',decodeInfo.labelFontSize);
+decodeInfo.titleStr = decodeInfo.titleStr;
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
+drawnow;
+figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_3'];
 FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
 
 %% PLOT: Version of above but use PCA from mean paint responses
@@ -324,19 +366,21 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
 for dc = 1:length(decodeInfo.uniqueIntensities)
-    theGreen = [0 theGrays(dc) 0];
-    theBlack = [theGrays(dc) theGrays(dc) theGrays(dc)];
+    theRed = [theGrays(dc) 0 0];
+    theBlue = [0 0 theGrays(dc)];
     
     % Basic points first, so legend comes out right
     plot(decodeSave.meanPaintOnlyPaintPCAResponses(dc,1),decodeSave.meanPaintOnlyPaintPCAResponses(dc,2),...
-        'o','MarkerSize',15,'MarkerFaceColor',theGreen,'MarkerEdgeColor',theGreen);
+        'o','MarkerSize',15,'MarkerFaceColor',theRed,'MarkerEdgeColor',theRed);
     plot(decodeSave.meanPaintOnlyShadowPCAResponses(dc,1),decodeSave.meanPaintOnlyShadowPCAResponses(dc,2),...
-        'o','MarkerSize',15,'MarkerFaceColor',theBlack,'MarkerEdgeColor',theBlack);
+        'o','MarkerSize',15,'MarkerFaceColor',theBlue,'MarkerEdgeColor',theBlue);
+    
+    % Connect by lines to match what Marlene does
+    if (dc > 1)
+        plot([decodeSave.meanPaintOnlyPaintPCAResponses(dc-1,1) decodeSave.meanPaintOnlyPaintPCAResponses(dc,1)],[decodeSave.meanPaintOnlyPaintPCAResponses(dc-1,2) decodeSave.meanPaintOnlyPaintPCAResponses(dc,2)],'-','Color',theRed)
+        plot([decodeSave.meanPaintOnlyShadowPCAResponses(dc-1,1) decodeSave.meanPaintOnlyShadowPCAResponses(dc,1)],[decodeSave.meanPaintOnlyShadowPCAResponses(dc-1,2) decodeSave.meanPaintOnlyShadowPCAResponses(dc,2)],'-','Color',theBlue)
+    end
 end
-
-% Connect by lines to match what Marlene does
-plot(decodeSave.meanPaintOnlyPaintPCAResponses(:,1),decodeSave.meanPaintOnlyPaintPCAResponses(:,2),'-','Color',[0 0.5 0])
-plot(decodeSave.meanPaintOnlyShadowPCAResponses(:,1),decodeSave.meanPaintOnlyShadowPCAResponses(:,2),'-','Color',[0.5 0.5 0.5]);
     
 xlabel('Paint Only PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint Only PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
@@ -345,6 +389,42 @@ title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
 drawnow;
 figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2'];
+FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
+
+%% PLOT: Version of above but use PCA from mean shadow responses
+clear decodeInfoPCA
+decodeInfoPCA.pcaType = 'ml';
+decodeSave.meanShadowOnlyPaintPCAResponses = meanShadowOnlyPaintPCAResponses;
+decodeSave.meanShadowOnlyShadowPCAResponses = meanShadowOnlyShadowPCAResponses;
+
+paintShadowOnPCAFig = figure; clf; hold on;
+set(gcf,'Position',decodeInfo.sqPosition);
+set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+theGrays = linspace(.4,0.9,length(decodeInfo.uniqueIntensities));
+for dc = 1:length(decodeInfo.uniqueIntensities)
+    theRed = [theGrays(dc) 0 0];
+    theBlue = [0 0 theGrays(dc)];
+    
+    % Basic points first, so legend comes out right
+    plot(decodeSave.meanShadowOnlyPaintPCAResponses(dc,1),decodeSave.meanShadowOnlyPaintPCAResponses(dc,2),...
+        'o','MarkerSize',15,'MarkerFaceColor',theRed,'MarkerEdgeColor',theRed);
+    plot(decodeSave.meanShadowOnlyShadowPCAResponses(dc,1),decodeSave.meanShadowOnlyShadowPCAResponses(dc,2),...
+        'o','MarkerSize',15,'MarkerFaceColor',theBlue,'MarkerEdgeColor',theBlue);
+    
+    % Connect by lines to match what Marlene does
+    if (dc > 1)
+        plot([decodeSave.meanShadowOnlyPaintPCAResponses(dc-1,1) decodeSave.meanShadowOnlyPaintPCAResponses(dc,1)],[decodeSave.meanShadowOnlyPaintPCAResponses(dc-1,2) decodeSave.meanShadowOnlyPaintPCAResponses(dc,2)],'-','Color',theRed)
+        plot([decodeSave.meanShadowOnlyShadowPCAResponses(dc-1,1) decodeSave.meanShadowOnlyShadowPCAResponses(dc,1)],[decodeSave.meanShadowOnlyShadowPCAResponses(dc-1,2) decodeSave.meanShadowOnlyShadowPCAResponses(dc,2)],'-','Color',theBlue)
+    end
+end
+    
+xlabel('Shadow Only PCA Component 1 Wgt','FontSize',decodeInfo.labelFontSize);
+ylabel('Shadow Only PCA Component 2 Wgt','FontSize',decodeInfo.labelFontSize);
+decodeInfo.titleStr = decodeInfo.titleStr;
+title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
+h = legend({ 'Paint' 'Shadow' },'FontSize',decodeInfo.legendFontSize,'Location','SouthWest');
+drawnow;
+figName = [decodeInfo.figNameRoot '_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2'];
 FigureSave(figName,paintShadowOnPCAFig,decodeInfo.figType);
 
 %% Store the data for return
