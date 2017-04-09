@@ -14,7 +14,12 @@ myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
 %% Original paint/shadow
-argList = SetupConditionArgs('basic');
+% argList = SetupConditionArgs('basic');
+% DataPreprocessRunOne(argList{:});
+% close all;
+
+%% Maximum likelihood decoding
+argList = SetupConditionArgs('basic_ml');
 DataPreprocessRunOne(argList{:});
 close all;
 
