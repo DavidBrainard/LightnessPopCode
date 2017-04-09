@@ -28,6 +28,8 @@ DOPCA2 = true;
 % We specify this by overloading the trial suffle type
 switch (decodeInfo.pcaType)
     case {'no'}
+        paintResponsesPCA = paintResponses;
+        shadowResponsesPCA = shadowResponses;
     case {'ml'}
         dataForPCA = [paintResponses ; shadowResponses];
         if (~isempty(dataForPCA) & ~any(isnan(dataForPCA)))

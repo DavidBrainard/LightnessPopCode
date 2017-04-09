@@ -53,8 +53,8 @@ end
 % decodeInfoInRun{outIndex}.normIndexLocation = [];
 % decodeInfoInRun{outIndex}.sameDayRF = true;
 % outIndex = outIndex + 1;
-
-return;
+% 
+% return;
 
 % ST data
 theFiles{outIndex} = ['ST140422' insertFilenameStr '0001'];

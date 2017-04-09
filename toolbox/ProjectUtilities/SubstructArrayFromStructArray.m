@@ -38,14 +38,27 @@ index = GetFilteringIndex(theStructArray,filterFieldNames,filterFieldVals,boolea
 % Get size of the field so we can figure out how to pack it for return
 eval(['[m,n] = size(theStructArray(1).' theSubstruct ');'])
 
+% In the vector case, we have to make sure all of the individual sessions
+% have the same size, and use the min of those sizes so that the matrix
+% comes out OK.  This is a little risky in general, but often what we want.
+if (n ~= 1 || m ~= 1)
+    for ii = 1:length(index)
+        theLengthEvalStr = ['theLengths(ii) = length(theStructArray(index(ii)).' theSubstruct ');'];
+        eval(theLengthEvalStr);
+    end
+    minLength = min(theLengths);
+end
+
 % Pull out the entries we want.
 for ii = 1:length(index) 
     if (m == 1 & n == 1)
         theArrayEvalStr = ['theSubstructArray(ii) = theStructArray(index(ii)).' theSubstruct ';'];
     elseif (n == 1)
-        theArrayEvalStr = ['theSubstructArray(:,ii) = theStructArray(index(ii)).' theSubstruct ';'];
+        theArrayEvalStr = ['theSubstructArray(:,ii) = theStructArray(index(ii)).' theSubstruct '(1:minLength);'];
     elseif (m == 1)
-        theArrayEvalStr = ['theSubstructArray(ii,:) = theStructArray(index(ii)).' theSubstruct ';'];
+        theArrayEvalStr = ['theSubstructArray(ii,:) = theStructArray(index(ii)).' theSubstruct '(1:minLength);'];
+    else
+        error('This routine cannot handle case where individual session data is a matrix rather than scalar or vector');
     end
     eval(theArrayEvalStr);
 end

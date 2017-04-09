@@ -11,6 +11,8 @@ nElectrodes = size(responses,2);
 
 switch decodeInfo.type
     case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano'}
+        % For each contrast, fine the mean response and response variance
+        % for each unit.
         for ii = 1:length(decodeInfo.maxlikely.uniqueContrasts)
             index = find(contrasts == decodeInfo.maxlikely.uniqueContrasts(ii));
             decodeInfo.maxlikely.meanResp(ii,:) = mean(responses(index,:),1);
