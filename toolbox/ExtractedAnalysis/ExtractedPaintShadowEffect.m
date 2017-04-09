@@ -28,7 +28,7 @@ clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.nFinelySpacedIntensities = decodeInfo.nFinelySpacedIntensities;
@@ -85,7 +85,7 @@ decodeInfoTemp.shadowShiftIn = 0.06;
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.nFinelySpacedIntensities = decodeInfo.nFinelySpacedIntensities;
@@ -169,7 +169,7 @@ clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'paint';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.nFinelySpacedIntensities = decodeInfo.nFinelySpacedIntensities;
@@ -251,7 +251,7 @@ clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'shadow';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.nFinelySpacedIntensities = decodeInfo.nFinelySpacedIntensities;
