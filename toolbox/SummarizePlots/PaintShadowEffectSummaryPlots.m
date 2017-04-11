@@ -17,6 +17,9 @@ if (~exist(figureDir,'dir'))
     mkdir(figureDir);
 end
 
+%% Override filterMaxRMSE
+basicInfo(1).filterMaxRMSE = 0.4;
+
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
 % Get the decode both results from the top level structure, and also get
@@ -155,7 +158,7 @@ startX = startX + length(paintShadowEffectArray);
 if (basicInfo(1).paintCondition == 1 && basicInfo(1).shadowCondition == 2)
     figParams.plotSymbol = 'v';
     figParams.plotColor = 'b';
-    fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPsychoSummary','OriginalPaintShadowIntercept');
+    thePsychoFile = fullfile(getpref('LightnessPopCode','outputBaseDir'),'xPsychoSummary','Gain','OriginalPaintShadow');
     thePsychoData = load(thePsychoFile);
     psychoPaintShadowEffect = thePsychoData.theData.allPaintShadow;
     plot(startX:startX+length(psychoPaintShadowEffect)-1,psychoPaintShadowEffect,[figParams.plotColor figParams.plotSymbol],'MarkerSize',figParams.markerSize+1,'MarkerFaceColor',figParams.plotColor);
@@ -166,9 +169,15 @@ end
 
 % Save the figure
 figure(theFigure);
-plot([1 startX],[0 0],'k:','LineWidth',figParams.lineWidth);
+switch (basicInfo(1).paintShadowFitType)
+    case 'gain'
+        plot([1 startX],[1 1],'k:','LineWidth',figParams.lineWidth);
+        ylim([figParams.gainLimLow figParams.gainLimHigh]);
+    case 'intcpt'
+        plot([1 startX],[0 0],'k:','LineWidth',figParams.lineWidth);
+        ylim([figParams.interceptLimLow figParams.interceptLimHigh]);
+end
 xlim([0 startX+1]);
-ylim([figParams.interceptLimLow figParams.interceptLimHigh]);
 set(gca,'YTick',figParams.interceptTicks);
 set(gca,'YTickLabel',figParams.interceptTickLabels);
 set(gca,'XTickLabel',{});

@@ -149,7 +149,7 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case 'intcpt'
+    case {'intcpt' 'gain'}
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');
@@ -232,7 +232,7 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case 'intcpt'
+    case {'intcpt' 'gain'}
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');
@@ -314,7 +314,7 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case 'intcpt'
+    case {'intcpt' 'gain'}
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');

@@ -45,6 +45,8 @@ switch (type)
         
         figParams.interceptLimLow = -0.30;
         figParams.interceptLimHigh = 0.30;
+        figParams.gainLimLow = 0;
+        figParams.gainLimHigh = 3;
         figParams.interceptTicks = [-0.30 -0.20 -0.10 0.0 0.10 0.20 0.30];
         figParams.interceptTickLabels = {'-0.30' '-0.20' '-0.10' '0.0' '0.10' '0.20' '0.30'};
         figParams.rfPlotLimLow = -300;

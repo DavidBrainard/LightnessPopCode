@@ -35,7 +35,7 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
@@ -48,7 +48,7 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
@@ -64,7 +64,7 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'paint';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
@@ -80,7 +80,7 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'shadow';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 [~,~,paintPreds,shadowPreds] = PaintShadowDecode(decodeInfoTemp, ...
@@ -100,7 +100,7 @@ decodeInfoTemp.MVM_ALG = 'SMO';
 decodeInfoTemp.MVM_COMPARECLASS = 0;
 decodeInfoTemp.classifyLOOType = decodeInfo.classifyLOOType;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 decodeInfoTemp.classifyLOOType = 'no';
@@ -121,7 +121,7 @@ clear decodeInfoTemp
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
 decodeInfoTemp.decodeJoint = 'both';
-decodeInfoTemp.type = 'aff';
+decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
 for rr = 1:decodeInfoTemp.nRandomVectorRepeats

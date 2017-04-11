@@ -1,5 +1,5 @@
-function SummarizeRunOne(varargin)
-% SummarizeRunOne(varargin)
+function [paintShadowEffect,repSim,RMSEAnalysis,RMSEVersusNUnits,RMSEVersusNPCA,ClassificationVersusNUnits,ClassificationVersusNPCA] = SummarizeRunOne(varargin)
+% [paintShadowEffect,repSim,RMSEAnalysis,RMSEVersusNUnits,RMSEVersusNPCA,ClassificationVersusNUnits,ClassificationVersusNPCA] = SummarizeRunOne(varargin)
 %
 % Make summary plots based on the data extracted by the main pass through the data.
 %
@@ -78,24 +78,38 @@ for runIndex = 1:length(theExtractedDirs)
     % preprocessed data.
     if (decodeInfoIn.doSummaryPaintShadowEffect)
         paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
+    else
+        paintShadowEffect(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryRepSim)
         repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
+    else
+        repSim(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryRMSEAnalysis)
         RMSEAnalysis(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEAnalysis.mat');
+    else
+        RMSEAnalysis(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryRMSEVersusNUnits)
         RMSEVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNUnits.mat');
+    else
+        RMSEVersusNUnits(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryRMSEVersusNPCA)
         RMSEVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRMSEVersusNPCA.mat');
+    else
+        RMSEVersusNPCA(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryClassificationVersusNUnits)    
         ClassificationVersusNUnits(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNUnits.mat');
+     else
+        ClassificationVersusNUnits(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryClassificationVersusNPCA)
         ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
+     else
+        ClassificationVersusNPCA(runIndex) = NaN;
     end
 end
 
@@ -111,7 +125,6 @@ if (decodeInfoIn.doSummaryPaintShadowEffect)
     PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,figParams);
 end
 if (decodeInfoIn.doSummaryRepSim)
-    repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
     RepSimSummaryPlots(basicInfo,paintShadowEffect,repSim,summaryDir,figParams);
 end
 if (decodeInfoIn.doSummaryRMSEAnalysis)
