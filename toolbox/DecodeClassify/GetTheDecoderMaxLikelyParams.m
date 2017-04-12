@@ -10,7 +10,7 @@ decodeInfo.maxlikely.uniqueContrasts = unique(contrasts);
 nElectrodes = size(responses,2);
 
 switch decodeInfo.type
-    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano'}
+    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano' 'maxlikelymeanvar' 'mlbayesmeanvar'}
         % For each contrast, fine the mean response and response variance
         % for each unit.
         for ii = 1:length(decodeInfo.maxlikely.uniqueContrasts)
@@ -18,9 +18,8 @@ switch decodeInfo.type
             decodeInfo.maxlikely.meanResp(ii,:) = mean(responses(index,:),1);
             decodeInfo.maxlikely.varResp(ii,:) = var(responses(index,:),0,1);
         end
-        for jj = 1:nElectrodes
-            decodeInfo.maxlikely.fanoFactors(jj) = decodeInfo.maxlikely.meanResp(:,jj)\decodeInfo.maxlikely.varResp(:,jj);
-        end
+        decodeInfo.maxlikely.fanoFactor = decodeInfo.maxlikely.meanResp(:)\decodeInfo.maxlikely.varResp(:);
+        decodeInfo.maxlikely.meanVar = mean(decodeInfo.maxlikely.varResp(:));
 
     otherwise
         error('Unknown decoder type specified');

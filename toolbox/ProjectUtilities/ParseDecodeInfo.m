@@ -68,8 +68,10 @@ decodeInfoIn.dataType = p.Results.dataType;
 %   'svmreg'               - SVM regression
 %   'maxlikely'            - Max likelihood based        
 %   'maxlikelyfano'        - Max likelihood based, multiplicative noise model
+%   'maxlikelymeanvar'     - Max likelihood based, mean noise variance across everything.
 %   'mlbayes'              - Bayes based
 %   'mlbayesfano'          - Bayes based, multiplicative noise model
+%   'mlbayesmeanvar'       - Bayes based, mean noise variance across everything.
 decodeInfoIn.type = p.Results.type;
 
 % Type of classifier

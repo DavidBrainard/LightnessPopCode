@@ -29,14 +29,9 @@ switch decodeInfo.type
         % parameters.
         varResp = decodeInfo.maxlikely.varResp;
     case {'maxlikelyfano' 'mlbayesfano'}
-        for ii = 1:length(uniqueContrasts)
-            % There is a single Fano factor for each electrode, determined
-            % by the mean/variance relationship for that electrode.  We get
-            % the variance for each stimulus level/electrode by multiplying
-            % the mean response for each stimulus level/electrode by the
-            % electrode's fano factor.
-            varResp(ii,:) = decodeInfo.maxlikely.fanoFactors .* meanResp(ii,:);
-        end
+        varResp = decodeInfo.maxlikely.fanoFactor * meanResp;
+    case {'maxlikelymeanvar' 'mlbayesmeanvar'}
+        varResp = decodeInfo.maxlikely.meanVar * ones(size(meanResp));;
 end
 
 %% Loop over trials
@@ -57,11 +52,11 @@ for rr = 1:nTrials
     switch decodeInfo.type
         % Once the variance model is set up, the maximum likelihood calculation
         % works the same for either variance model.
-        case {'maxlikely' 'maxlikelyfano'}      
+        case {'maxlikely' 'maxlikelyfano' 'maxlikelymeanvar'}      
             % Find the maximum likelihood contrast
             [~,index] = max(loglikely);
             predict(rr) = uniqueContrasts(index(1));
-        case {'mlbayes' 'mlbayesfano'}
+        case {'mlbayes' 'mlbayesfano' 'mlbayesmeanvar'}
             % To do Bayes, we need to weight each contrast by its posterior
             % probability.
             

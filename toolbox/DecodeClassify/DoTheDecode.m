@@ -15,7 +15,7 @@ end
 switch decodeInfo.type
     case {'aff' 'svmreg'};
         decodeInfo = GetTheDecoderRegressionParams(decodeInfo,intensities,responses);
-    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano'}
+    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano' 'maxlikelymeanvar' 'mlbayesmeanvar'}
         decodeInfo = GetTheDecoderMaxLikelyParams(decodeInfo,intensities,responses);       
     otherwise
         error('Unknown type specified');

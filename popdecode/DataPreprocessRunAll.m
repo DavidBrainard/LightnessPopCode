@@ -19,9 +19,31 @@ DataPreprocessRunOne(argList{:});
 close all;
 
 %% Maximum likelihood decoding
-argList = SetupConditionArgs('basic_ml');
-DataPreprocessRunOne(argList{:});
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','maxlikely');
 close all;
 
+%% Maximum likelihood decoding fano
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','maxlikelyfano');
+close all;
 
+%% Maximum likelihood decoding mean variance
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','maxlikelymeanvar');
+close all;
 
+%% Maximum likelihood decoding Bayes
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','mlbayes');
+close all;
+
+%% Maximum likelihood decoding Bayes fano
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','mlbayesfano');
+close all;
+
+%% Maximum likelihood decoding Bayes fano
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','mlbayesmeanvar');
+close all;
