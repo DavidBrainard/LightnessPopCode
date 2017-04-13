@@ -34,6 +34,13 @@ switch decodeInfo.type
         varResp = decodeInfo.maxlikely.meanVar * ones(size(meanResp));;
 end
 
+% Fix pathological variances.  Hard to know what to stick in here, but this
+% will prevent code from crashing, I think.
+index = find(varResp(:) <= 0);
+index1 = find(varResp(:) > 0);
+meanPosVar = mean(varResp(index1));
+varResp(index) = meanPosVar;
+
 %% Loop over trials
 for rr = 1:nTrials
     % For each contrast, get the log likelihood
@@ -45,6 +52,9 @@ for rr = 1:nTrials
         loglikely(ii) = 0;
         for jj = 1:nElectrodes
             loglikely(ii) = loglikely(ii) + log( 1 / sqrt(2*pi*varResp(ii,jj))) - ((responses(rr,jj)-meanResp(ii,jj))^2) / (2*varResp(ii,jj));
+            if (isnan(loglikely(ii)))
+                fprintf('%d\n',jj);
+            end
         end
     end
     

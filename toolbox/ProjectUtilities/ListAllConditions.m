@@ -14,8 +14,8 @@ switch (decodeInfoIn.DATASTYLE)
 end
 
 %% Uncomment this block to get a quick test for SY data.
-% theFiles{outIndex} = ['SY150522' insertFilenameStr '0001'];
-% theRFFiles{outIndex} = ['SY150522RFmap0001_reduceddata'];
+% theFiles{outIndex} = ['SY150423' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = ['SY150423RFmap0002_reduceddata'];
 % decodeInfoInRun{outIndex} = decodeInfoIn;
 % decodeInfoInRun{outIndex}.titleInfoStr = 'V4';
 % decodeInfoInRun{outIndex}.subjectStr = 'SY';
