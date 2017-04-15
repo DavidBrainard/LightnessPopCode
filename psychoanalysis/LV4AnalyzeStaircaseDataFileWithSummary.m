@@ -311,9 +311,9 @@ for s = 1:nStimTypes
         figure(psychoExampleFig1);
         subplot(nPlotRows,nPlotCols,s); hold on
         set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
-        plot(meanValues{s},nAbove{s}./nTrials{s},'b^','MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor','b');
-        plot(interpStimuli{s},pInterp{s},'b','LineWidth',psychoAnalysisParams.lineWidth);
-        plot([refIntensity(s) refIntensity(s)],[0 0.1],'k','LineWidth',psychoAnalysisParams.lineWidth);
+        plot(meanValues{s},nAbove{s}./nTrials{s},'ko','MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor','k');
+        plot(interpStimuli{s},pInterp{s},'k','LineWidth',psychoAnalysisParams.lineWidth);
+        plot([refIntensity(s) refIntensity(s)],[0 0.1],'r','LineWidth',psychoAnalysisParams.lineWidth);
         %plot([loc25(s) loc75(s)],[0.05 0.05],'r','LineWidth',psychoAnalysisParams.lineWidth);
         plot([pse(s) pse(s)],[0 0.1],'b','LineWidth',psychoAnalysisParams.lineWidth);
         if (s >= 1 && s <= 3)
@@ -335,9 +335,9 @@ for s = 1:nStimTypes
             psychoExampleFig = figure; clf; hold on
             set(gcf,'Position',psychoAnalysisParams.sqPosition);
             set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
-            plot(meanValues{s},nAbove{s}./nTrials{s},'b^','MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor','b');
-            plot(interpStimuli{s},pInterp{s},'b','LineWidth',psychoAnalysisParams.lineWidth);
-            plot([refIntensity(s) refIntensity(s)],[0 0.1],'k','LineWidth',psychoAnalysisParams.lineWidth);
+            plot(meanValues{s},nAbove{s}./nTrials{s},'ko','MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor','k');
+            plot(interpStimuli{s},pInterp{s},'k','LineWidth',psychoAnalysisParams.lineWidth);
+            plot([refIntensity(s) refIntensity(s)],[0 0.1],'r','LineWidth',psychoAnalysisParams.lineWidth);
             %plot([loc25(s) loc75(s)],[0.05 0.05],'r','LineWidth',psychoAnalysisParams.lineWidth);
             plot([pse(s) pse(s)],[0 0.1],'b','LineWidth',psychoAnalysisParams.lineWidth);
             xlabel('Shadow Disk Luminance (re Display Max)','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);

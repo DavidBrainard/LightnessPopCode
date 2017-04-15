@@ -271,7 +271,7 @@ for s = subjectToAnalyze
                 set(gca,'FontName',analysisParams.fontName,'FontSize',analysisParams.axisFontSize,'LineWidth',analysisParams.axisLineWidth);
                 for j = 1:length(conditionStructs{s,c,2})
                     theIndex = find(summaryDataStruct{c1}.whichRun == j);
-                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'b^','MarkerFaceColor','b','MarkerSize',analysisParams.markerSize);
+                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'bo','MarkerFaceColor','b','MarkerSize',analysisParams.markerSize);
                 end
                 plot(summaryDataStruct{c1}.predX,summaryDataStruct{c1}.predData,'b','LineWidth',analysisParams.lineWidth);
                 plot([analysisParams.intensityLimLow analysisParams.intensityLimHigh],[analysisParams.intensityLimLow analysisParams.intensityLimHigh],'k:','LineWidth',analysisParams.lineWidth);
@@ -285,9 +285,9 @@ for s = subjectToAnalyze
                         textDetails = sprintf('Slope %0.2f, Intercept %0.2f',...
                             summaryDataStruct{c1}.theFit(1),summaryDataStruct{c1}.theFit(2));
                     case 'gain'
-                        textDetails = sprintf('Slope %0.2f',summaryDataStruct{c1}.theFit(1));
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
                     case 'intercept'
-                        textDetails = sprintf('Paint/Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
                     otherwise
                         error('Unknown fit type specified');
                 end

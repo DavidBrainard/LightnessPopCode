@@ -14,7 +14,7 @@
 clear; close all;
 
 %% Parameters
-analysisFitType = 'intercept';
+analysisFitType = 'gain';
 COMPUTE = true;
 
 %% Figure directory
@@ -180,8 +180,8 @@ switch (analysisFitType)
         gainFig1 = figure; clf; hold on
         set(gcf,'Position',figParams.position);
         set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(theData.allPaintShadow,'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
-        plot(theData.allControl,'k^','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
+        plot(theData.allPaintShadow,'bo','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+        plot(theData.allControl,'ko','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
         plot(ones(size(theData.allControl)),'k:','LineWidth',figParams.lineWidth);
         plot(mean(theData.allPaintShadow)*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
         plot(mean(theData.allControl)*ones(size(theData.allControl)),'k','LineWidth',figParams.lineWidth);
@@ -189,10 +189,10 @@ switch (analysisFitType)
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
         set(gca,'YTick',[0.8 0.9 1.0 1.1 1.2],'YTickLabel',{'0.8 ' '0.9 ' '1.0 ' '1.1 ' '1.2 '});
         xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
-        ylabel('Paint Shadow Gain Effect','FontSize',figParams.labelFontSize);
-        legend({'Paint/Shadow' 'Paint/Paint'},'Location','NorthWest','FontSize',figParams.legendFontSize);
-        FigureSave(fullfile(outputDir,'OriginalPaintShadowGainssWithControl'),gainFig1,figParams.figType);
-             
+        ylabel('Paint-Shadow Effect','FontSize',figParams.labelFontSize);
+        legend({'Paint-Shadow Effect' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
+        fprintf('Mean paint-shadow effect = %0.2f, control = %0.2f\n',mean(theData.allPaintShadow),mean(theData.allControl));
     otherwise
         error('Unknown analysisFitType specified');
 end
@@ -473,19 +473,24 @@ set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWid
 
 % Pull out the data we want
 theBases = [0.25 0.50 0.75]';
-theIncrs = [0.05 0.10 0.15]';
+theIncrs = 0.10;
 for ii = 1:length(theBases)
     for jj = 1:length(theIncrs)
         base = theBases(ii);
         incr = theIncrs(jj);
-        index = find(abs(stimValuesMean25-(base+incr)) < 1e-8);
         switch (base)
             case 0.25
+                index = find(abs(stimValuesMean25-(base+incr)) < 1e-8);
                 theProbs(ii,jj) = pStimValuesMean25(index);
+                theStderrs(ii,jj) = stdErrPStimValuesMean25(index);
             case 0.50
+                index = find(abs(stimValuesMean50-(base+incr)) < 1e-8);
                 theProbs(ii,jj) = pStimValuesMean50(index);
+                theStderrs(ii,jj) = stdErrPStimValuesMean50(index);
             case 0.75
+                index = find(abs(stimValuesMean75-(base+incr)) < 1e-8);
                 theProbs(ii,jj) = pStimValuesMean75(index);
+                theStderrs(ii,jj) = stdErrPStimValuesMean75(index);
             otherwise
                 error('This klugy code has gotten the better of you.');
         end
@@ -493,12 +498,12 @@ for ii = 1:length(theBases)
 end
 
 % And make the plot
-probColors = ['r' 'g' 'b'];
+probColors = ['k' 'g' 'b'];
 for jj = 1:length(theIncrs)
-    plot(theBases,theProbs(:,jj),probColors(jj),'LineWidth',figParams.lineWidth);
+    errorbar(theBases,theProbs(:,jj),theStderrs(:,jj),theStderrs(:,jj),[probColors(jj) 'o'],'MarkerFaceColor',probColors(jj),'MarkerSize',figParams.markerSize);
 end
 for jj = 1:length(theIncrs)
-    plot(theBases,theProbs(:,jj),[probColors(jj) 'o'],'MarkerFaceColor',probColors(jj),'MarkerSize',figParams.markerSize);
+    plot(theBases,theProbs(:,jj),probColors(jj),'LineWidth',figParams.lineWidth);
 end
 xlim([0 1]);
 set(gca,'XTick',[0 0.25 0.5 0.75 1]);
@@ -508,7 +513,7 @@ set(gca,'YTick',[0.5 0.75 1.00]);
 set(gca,'YTickLabels',{'0.50 ' '0.75 ' '1.00 '});
 xlabel('Test Luminance','FontSize',figParams.labelFontSize);
 ylabel('Fraction Correct','FontSize',figParams.labelFontSize);
-title('Aggregate Paint-Paint Fraction Correct','FontSize',figParams.labelFontSize);
-legend({'Increment 0.05' 'Increment 0.10' 'Increment 0.15'},'Location','SouthWest','FontSize',figParams.legendFontSize);
+%title('Aggregate Paint-Paint Fraction Correct','FontSize',figParams.labelFontSize);
+legend({'Increment 0.10'},'Location','SouthWest','FontSize',figParams.legendFontSize);
 FigureSave(fullfile(outputDir,'OriginalPaintShadowAverageProbCorrect'),allProbFig,figParams.figType);
 
