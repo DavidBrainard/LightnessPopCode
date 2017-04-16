@@ -20,7 +20,7 @@ switch decodeInfo.type
         end
         X = [responses ones(nContrasts,1)];
         predict = svmpredict(rand(nContrasts,1), X, decodeInfo.svmModel, decodeInfo.predictOpts);
-    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano' 'maxlikelymeanvar' 'mlbayesmeanvar'}
+    case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano' 'maxlikelymeanvar' 'mlbayesmeanvar' 'maxlikelypoiss' 'mlbayespoiss'}
         predict = GetTheMaxLikelyPredict(decodeInfo,responses);
     otherwise
         error('Unknown decoder type specified');

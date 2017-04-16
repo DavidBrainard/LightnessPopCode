@@ -33,6 +33,11 @@ argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:},'type','maxlikelymeanvar');
 close all;
 
+%% Maximum likelihood decoding Poisson var
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','maxlikelypoiss');
+close all;
+
 %% Maximum likelihood decoding Bayes
 argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:},'type','mlbayes');
@@ -43,7 +48,12 @@ argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:},'type','mlbayesfano');
 close all;
 
-%% Maximum likelihood decoding Bayes fano
+%% Maximum likelihood decoding Bayes mean variance
 argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:},'type','mlbayesmeanvar');
+close all;
+
+%% Maximum likelihood decoding Bayes Poisson var
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:},'type','mlbayespoiss');
 close all;

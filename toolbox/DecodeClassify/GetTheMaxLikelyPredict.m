@@ -31,7 +31,9 @@ switch decodeInfo.type
     case {'maxlikelyfano' 'mlbayesfano'}
         varResp = decodeInfo.maxlikely.fanoFactor * meanResp;
     case {'maxlikelymeanvar' 'mlbayesmeanvar'}
-        varResp = decodeInfo.maxlikely.meanVar * ones(size(meanResp));;
+        varResp = decodeInfo.maxlikely.meanVar * ones(size(meanResp));
+    case {'maxlikelypoiss' 'mlbayespoiss'}
+        varResp = meanResp;
 end
 
 % Fix pathological variances.  Hard to know what to stick in here, but this
@@ -62,11 +64,11 @@ for rr = 1:nTrials
     switch decodeInfo.type
         % Once the variance model is set up, the maximum likelihood calculation
         % works the same for either variance model.
-        case {'maxlikely' 'maxlikelyfano' 'maxlikelymeanvar'}      
+        case {'maxlikely' 'maxlikelyfano' 'maxlikelymeanvar' 'maxlikelypoiss'}      
             % Find the maximum likelihood contrast
             [~,index] = max(loglikely);
             predict(rr) = uniqueContrasts(index(1));
-        case {'mlbayes' 'mlbayesfano' 'mlbayesmeanvar'}
+        case {'mlbayes' 'mlbayesfano' 'mlbayesmeanvar' 'mlbayespoiss'}
             % To do Bayes, we need to weight each contrast by its posterior
             % probability.
             
