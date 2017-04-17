@@ -45,19 +45,35 @@ varResp(index) = meanPosVar;
 
 %% Loop over trials
 for rr = 1:nTrials
-    % For each contrast, get the log likelihood
-    % This is done by summing over the log likelihood of each
-    % electrode's response.  Given the Gaussian model, the log
-    % likelihood is easily computed from the formula for the
-    % Gaussian PDF.  We assume independent noise on each electrode.
-    for ii = 1:length(uniqueContrasts)
-        loglikely(ii) = 0;
-        for jj = 1:nElectrodes
-            loglikely(ii) = loglikely(ii) + log( 1 / sqrt(2*pi*varResp(ii,jj))) - ((responses(rr,jj)-meanResp(ii,jj))^2) / (2*varResp(ii,jj));
-            if (isnan(loglikely(ii)))
-                fprintf('%d\n',jj);
+    switch (decodeInfo.type)
+        case {'maxlikely' 'maxlikelyfano' 'maxlikelymeanvar' 'mlbayes' 'mlbayesfano' 'mlbayesmeanvar' }
+            % For each contrast, get the log likelihood
+            % This is done by summing over the log likelihood of each
+            % electrode's response.  Given the Gaussian model, the log
+            % likelihood is easily computed from the formula for the
+            % Gaussian PDF.  We assume independent noise on each electrode.
+            for ii = 1:length(uniqueContrasts)
+                loglikely(ii) = 0;
+                for jj = 1:nElectrodes
+                    loglikely(ii) = loglikely(ii) + log( 1 / sqrt(2*pi*varResp(ii,jj))) - ((responses(rr,jj)-meanResp(ii,jj))^2) / (2*varResp(ii,jj));
+                    if (isnan(loglikely(ii)))
+                        fprintf('%d\n',jj);
+                    end
+                end
             end
-        end
+        case {'maxlikelypoiss' 'mlbayespoiss'}
+            % This is the Poisson case.  Ignore the factorial in the
+            % denominator, because this is independent of contrast.
+            for ii = 1:length(uniqueContrasts)
+                loglikely(ii) = 0;
+                for jj = 1:nElectrodes
+                    lambda = meanResponse(ii,jj);   
+                    loglikely(ii) = loglikely(ii) + responses(rr,jj)*log(lambda) - lambda;
+                    if (isnan(loglikely(ii)))
+                        fprintf('%d\n',jj);
+                    end
+                end
+            end
     end
     
     % What we do with the log likihoods depends on the decoder type
