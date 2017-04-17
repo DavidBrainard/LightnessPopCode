@@ -154,6 +154,8 @@ tempBothMLBMV = [paintShadowEffectMLBMV.decodeBoth];
 figure; clf; hold on
 plot([RMSEVersusNPCAAff.bestRMSE],[RMSEVersusNPCAMLMV.bestRMSE],'ko','MarkerSize',6,'MarkerFaceColor','k');
 plot([RMSEVersusNPCAAff.bestRMSE],[RMSEVersusNPCAMLF.bestRMSE],'ro','MarkerSize',6,'MarkerFaceColor','r');
+plot([RMSEVersusNPCAAff.bestRMSE],[RMSEVersusNPCAMLBP.bestRMSE],'go','MarkerSize',6,'MarkerFaceColor','g');
+plot([RMSEVersusNPCAAff.bestRMSE],[RMSEVersusNPCAMLP.bestRMSE],'bo','MarkerSize',6,'MarkerFaceColor','b');
 %plot([tempBothAff.paintRMSE],[tempBothMLBMV.paintRMSE],'ro','MarkerSize',6,'MarkerFaceColor','r');
 %plot([tempBothAff.shadowRMSE],[tempBothMLBMV.shadowRMSE],'bo','MarkerSize',6,'MarkerFaceColor','b');
 plot([0 0.4],[0 0.4],'k:')
@@ -162,4 +164,4 @@ xlim([0 0.4]);
 ylim([0 0.4]);
 xlabel('Linear Decoder RMSE');
 ylabel('Nonlinear Decoder RMSE')
-title('Bayes Use Mean of Variances Decoder');
+title('Non-Linear Decoders');
