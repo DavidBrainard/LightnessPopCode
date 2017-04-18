@@ -39,6 +39,7 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
 d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.theRMSE = sqrt(mean(([paintIntensities(:) ; shadowIntensities(:)]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
 d.paintMean = mean(d.paintPreds(:));
 d.shadowMean = mean(d.shadowPreds(:));
 d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
@@ -125,6 +126,7 @@ for ii = 1:length(shadowShiftInValues)
     d.shadowShiftIn = decodeInfoTemp.shadowShiftIn;
     d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
     d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+    d.theRMSE = sqrt(mean(([paintIntensities(:) ; shadowIntensities(:)]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
     d.paintMean = mean(d.paintPreds(:));
     d.shadowMean = mean(d.shadowPreds(:));
     d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
@@ -141,7 +143,7 @@ end
 % PLOT: Inferred matches with a fit line
 temp = decodeSave.decodeShift;
 tempPaintShadowEffect = [temp.paintShadowEffect];
-tempRMSE = sqrt( ([temp.paintRMSE].^2 + [temp.shadowRMSE].^2)/2 );
+tempRMSE = [temp.theRMSE];
 clear useIndex tempPaintShadowEffect
 inIndex = 1;
 useIndex = [];
@@ -183,6 +185,7 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
 d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.theRMSE = sqrt(mean(([paintIntensities(:) ; shadowIntensities(:)]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
 d.paintMean = mean(d.paintPreds(:));
 d.shadowMean = mean(d.shadowPreds(:));
 d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
@@ -265,6 +268,7 @@ decodeInfoTemp.paintShadowFitType = decodeInfo.paintShadowFitType;
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
 d.shadowRMSE = sqrt(mean((shadowIntensities(:)-d.shadowPreds(:)).^2));
+d.theRMSE = sqrt(mean(([paintIntensities(:) ; shadowIntensities(:)]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
 d.paintMean = mean(d.paintPreds(:));
 d.shadowMean = mean(d.shadowPreds(:));
 d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));

@@ -67,7 +67,7 @@ for rr = 1:nTrials
             for ii = 1:length(uniqueContrasts)
                 loglikely(ii) = 0;
                 for jj = 1:nElectrodes
-                    lambda = meanResponse(ii,jj);   
+                    lambda = meanResp(ii,jj);   
                     loglikely(ii) = loglikely(ii) + responses(rr,jj)*log(lambda) - lambda;
                     if (isnan(loglikely(ii)))
                         fprintf('%d\n',jj);

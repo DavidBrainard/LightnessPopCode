@@ -20,6 +20,79 @@ end
 %% Override filterMaxRMSE
 basicInfo(1).filterMaxRMSE = 0.4;
 
+%% PLOT: Envelope summary
+envelopeThreshold = 1.05;
+sessionIndex = 1;
+for ii = 1:length(paintShadowEffect);
+    temp = paintShadowEffect(ii).decodeShift;
+    inIndex = 1;
+    for kk = 1:length(temp)
+        if ~isempty(temp(kk).paintShadowEffect)
+            useIndex(inIndex) = kk;
+            envelopePaintShadowEffects(inIndex) = temp(kk).paintShadowEffect;
+            envelopeRMSEs(inIndex) = temp(kk).theRMSE;
+            inIndex = inIndex + 1;
+        end
+    end
+    if (~isempty(envelopeRMSEs))
+        bestRMSE(sessionIndex ) = min(envelopeRMSEs);
+        normEnvelopeRMSEs = envelopeRMSEs/bestRMSE(sessionIndex );
+        index = find(normEnvelopeRMSEs < envelopeThreshold);
+        minPaintShadowEffect(sessionIndex) = min(envelopePaintShadowEffects(index));
+        maxPaintShadowEffect(sessionIndex) = max(envelopePaintShadowEffects(index));
+        meanPaintShadowEffect(sessionIndex) = mean(envelopePaintShadowEffects(index));
+        sessionIndex = sessionIndex + 1;
+    end
+end
+meanMeanPaintShadowEffect = mean(meanPaintShadowEffect);
+paintShadowEnvelopeVsRMSEFig = figure; clf; hold on;
+set(gcf,'Position',figParams.position);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+errorbar(bestRMSE,log10(meanPaintShadowEffect),abs(log10(minPaintShadowEffect)-log10(meanPaintShadowEffect)),abs(log10(maxPaintShadowEffect)-log10(meanPaintShadowEffect)),'ko','MarkerSize',8,'MarkerFaceColor','k');
+plot(bestRMSE,meanMeanPaintShadowEffect*ones(size(bestRMSE)),'r:');
+ylim([-0.6 0.6]);
+ylabel('Log10 Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+figFilename = fullfile(figureDir,'summaryPaintShadowEnvelopeVsRMSE','');
+FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
+
+paintShadowEnvelopeSortedFig = figure; clf;
+tempPosition = figParams.position;
+tempPosition(3) = 1000;
+set(gcf,'Position',tempPosition);
+set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+subplot(1,2,1); hold on
+[~,index] = sort(minPaintShadowEffect,'ascend');
+plot(log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+plot(log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
+ylim([-0.6 0.6]);
+xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+ylabel('Log10 Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+title({'Sorted by Lower Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+
+subplot(1,2,2); hold on
+[~,index] = sort(maxPaintShadowEffect,'descend');
+plot(log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+plot(log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
+ylim([-0.6 0.6]);
+xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+ylabel('Log10 Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+title({'Sorted by Upper Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+figFilename = fullfile(figureDir,'summaryPaintShadowEnvelopeSorted','');
+FigureSave(figFilename,paintShadowEnvelopeSortedFig,figParams.figType);
+
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1);
+fractionStraddle = length(index1)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval that straddle 0\n',round(100*fractionStraddle));
+index2 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1);
+fractionBelow = length(index2)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval less than 0\n',round(100*fractionBelow));
+index3 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1);
+fractionAbove = length(index3)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval greater than 0\n',round(100*fractionAbove));
+
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
 % Get the decode both results from the top level structure, and also get
