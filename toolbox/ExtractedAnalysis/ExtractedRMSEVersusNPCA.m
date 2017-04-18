@@ -195,6 +195,44 @@ decodeSave.shadowOnlyShadowNullRMSE = nullRMSEShadow;
 decodeSave.shadowOnlyShadowFitScale = decodeSave.shadowOnlyShadowFit.b;
 decodeSave.shadowOnlyShadowFitAsymp = decodeSave.shadowOnlyShadowFit.c;
 
+%% Build a paint-shadow classifier based on which subspace basis (paintOnlyPCABasis shadowOnlyPCABasis) is closest
+%
+% If this turns out to be useful, may want to explore performance as a
+% function of number of dimensions, and cross-validate the thing.
+subspaceSize = 2;
+paintCorrectTrials = NaN*ones(size(paintResponses,1),1);
+for ii = 1:length(paintResponses)
+    paintResponse = paintResponses(ii,:)';
+    projOntoPaintPCA = paintOnlyPCABasis(:,1:subspaceSize)*(paintOnlyPCABasis(:,1:subspaceSize)\paintResponse);
+    distanceToPaintPCA = norm(paintResponse-projOntoPaintPCA);
+    projOntoShadowPCA = shadowOnlyPCABasis(:,1:subspaceSize)*(shadowOnlyPCABasis(:,1:subspaceSize)\paintResponse);
+    distanceToShadowPCA = norm(paintResponse-projOntoShadowPCA);
+    if (distanceToPaintPCA < distanceToShadowPCA)
+        paintCorrectTrials(ii) = 1;
+    else
+        paintCorrectTrials(ii) = 0;
+    end
+end
+nPaintCorrect = sum(paintCorrectTrials);
+nPaintTrials = length(paintCorrectTrials);
+shadowCorrectTrials = NaN*ones(size(shadowResponses,1),1);
+for ii = 1:length(shadowResponses)
+    shadowResponse = shadowResponses(ii,:)';
+    projOntoPaintPCA = paintOnlyPCABasis(:,1:subspaceSize)*(paintOnlyPCABasis(:,1:subspaceSize)\shadowResponse);
+    distanceToPaintPCA = norm(shadowResponse-projOntoPaintPCA);
+    projOntoShadowPCA = shadowOnlyPCABasis(:,1:subspaceSize)*(shadowOnlyPCABasis(:,1:subspaceSize)\shadowResponse);
+    distanceToShadowPCA = norm(shadowResponse-projOntoShadowPCA);
+    if (distanceToPaintPCA < distanceToShadowPCA)
+        shadowCorrectTrials(ii) = 0;
+    else
+        shadowCorrectTrials(ii) = 1;
+    end
+end
+nShadowCorrect = sum(shadowCorrectTrials);
+nShadowTrials = length(shadowCorrectTrials);
+decodeSave.fractionSubspaceClassifiedCorrect = (nPaintCorrect+nShadowCorrect)/(nPaintTrials+nShadowTrials);
+fprintf('\tSubspace classifier %d%% correct\n',round(100*decodeSave.fractionSubspaceClassifiedCorrect));
+
 %% PLOT: RMSE versus number of PCA components used to decode
 RMSEVersusNPCAfig = figure; clf;
 set(gcf,'Position',decodeInfo.sqPosition);

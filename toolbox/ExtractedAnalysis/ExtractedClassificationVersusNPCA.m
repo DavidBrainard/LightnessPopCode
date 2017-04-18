@@ -6,11 +6,6 @@ function ExtractedClassificationVersusNPCA(doIt,decodeInfo,theData)
 % 3/29/16  dhb  Pulled this out into its own function
 
 %% Are we doing it?
-%
-% Rename buggy filename if it exists
-if (exist(fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA .mat'),'file'))
-    unix(['mv ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA\ .mat') ' ' fullfile(decodeInfo.writeDataDir,'extClassificationVersusNPCA.mat')]);
-end
 switch (doIt)
     case 'always'
     case 'never'
@@ -22,7 +17,7 @@ switch (doIt)
 end
 
 %% Get info about what to do
-nUnitsToUseList = unique(round(logspace(0,log10(decodeInfo.nUnits),decodeInfo.nNUnitsToStudy)));
+nUnitsToUseList = decodeInfo.classifyPCADimsToTry;
 uniqueNUnitsToStudy = length(nUnitsToUseList);
 
 %% Set up input structure for classification
@@ -59,6 +54,7 @@ for uu = 1:uniqueNUnitsToStudy
     shadowClassifyLOONCorrect = length(find(shadowClassifyPredsLOO == decodeInfoTempOut.shadowLabel));
     decodeSave.thePerformance(uu) = (paintClassifyLOONCorrect+shadowClassifyLOONCorrect)/(length(paintClassifyPredsLOO)+length(shadowClassifyPredsLOO));
     decodeSave.theUnits(uu) = nUnitsToUse;
+    fprintf('\tClassification performance for %d PCA components: %d%%\n',decodeSave.theUnits(uu),round(100*decodeSave.thePerformance(uu)));
 end
 
 % Fit an exponential to classification versus number of PCA components

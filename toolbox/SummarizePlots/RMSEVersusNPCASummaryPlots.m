@@ -113,6 +113,13 @@ legend(sprintf('%d PCA Components',pcaDim),'Location','NorthWest');
 figFilename = fullfile(figureDir,'PaintVsShadowPCARMSE','');
 FigureSave(figFilename,PaintVsShadowPCARMSEFig,figParams.figType);
 
+%% PLOT.  Subspace classificaiton performance
+%
+% It's not very impressive.  Either it isn't coded quite
+% right or this method does not work well.
+%
+% figure; clf; hold on;
+% plot([RMSEVersusNPCA.fractionSubspaceClassifiedCorrect],'ko','MarkerFaceColor','k');
 end
 
 
