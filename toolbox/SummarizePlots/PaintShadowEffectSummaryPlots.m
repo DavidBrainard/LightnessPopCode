@@ -20,11 +20,23 @@ end
 %% Override filterMaxRMSE
 basicInfo(1).filterMaxRMSE = 0.4;
 
-%% PLOT: Envelope summary
+%% PLOT: Envelope summary.
+%
+% This makes plots that try to summarize how much we can move the
+% paint-shadow effect around without much of a hit in terms of RMSE.
+% The threshold here is the hit (as a fractional increase) that we can
+% tolerate, we then look at the range of p/s effects within that RMSE
+% range.
 envelopeThreshold = 1.05;
+
+% Go through each session and extract the range.
 sessionIndex = 1;
 for ii = 1:length(paintShadowEffect);
+    % Get the decode shift structure from that session
     temp = paintShadowEffect(ii).decodeShift;
+    
+    % Find all cases where the paint-shadow effect isn't empty and
+    % collect them up along with corresponding RMSEs.
     inIndex = 1;
     for kk = 1:length(temp)
         if ~isempty(temp(kk).paintShadowEffect)
@@ -34,8 +46,11 @@ for ii = 1:length(paintShadowEffect);
             inIndex = inIndex + 1;
         end
     end
+    
+    % If there was at least one paint-shadow effect that wasn't empty,
+    % analyze and accumulate.
     if (~isempty(envelopeRMSEs))
-        bestRMSE(sessionIndex ) = min(envelopeRMSEs);
+        bestRMSE(sessionIndex) = min(envelopeRMSEs);
         normEnvelopeRMSEs = envelopeRMSEs/bestRMSE(sessionIndex );
         index = find(normEnvelopeRMSEs < envelopeThreshold);
         minPaintShadowEffect(sessionIndex) = min(envelopePaintShadowEffects(index));
@@ -44,7 +59,19 @@ for ii = 1:length(paintShadowEffect);
         sessionIndex = sessionIndex + 1;
     end
 end
-meanMeanPaintShadowEffect = mean(meanPaintShadowEffect);
+
+% A little print out.
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1);
+fractionStraddle = length(index1)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval that straddle 0\n',round(100*fractionStraddle));
+index2 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1);
+fractionBelow = length(index2)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval less than 0\n',round(100*fractionBelow));
+index3 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1);
+fractionAbove = length(index3)/length(minPaintShadowEffect);
+fprintf('%d%% of sessions have p/s interval greater than 0\n',round(100*fractionAbove));
+
+% Figure version 1
 paintShadowEnvelopeVsRMSEFig = figure; clf; hold on;
 set(gcf,'Position',figParams.position);
 set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
@@ -56,6 +83,7 @@ xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelF
 figFilename = fullfile(figureDir,'summaryPaintShadowEnvelopeVsRMSE','');
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
 
+% Figure version 2
 paintShadowEnvelopeSortedFig = figure; clf;
 tempPosition = figParams.position;
 tempPosition(3) = 1000;
@@ -82,16 +110,6 @@ ylabel('Log10 Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figP
 title({'Sorted by Upper Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
 figFilename = fullfile(figureDir,'summaryPaintShadowEnvelopeSorted','');
 FigureSave(figFilename,paintShadowEnvelopeSortedFig,figParams.figType);
-
-index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1);
-fractionStraddle = length(index1)/length(minPaintShadowEffect);
-fprintf('%d%% of sessions have p/s interval that straddle 0\n',round(100*fractionStraddle));
-index2 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1);
-fractionBelow = length(index2)/length(minPaintShadowEffect);
-fprintf('%d%% of sessions have p/s interval less than 0\n',round(100*fractionBelow));
-index3 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1);
-fractionAbove = length(index3)/length(minPaintShadowEffect);
-fprintf('%d%% of sessions have p/s interval greater than 0\n',round(100*fractionAbove));
 
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
