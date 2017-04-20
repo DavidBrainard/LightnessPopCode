@@ -92,8 +92,10 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case {'intcpt' 'gain'}
-        text(0,1,(sprintf('Paint-Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+    case 'intcpt'
+        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+    case 'gain'
+        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');
 end
@@ -140,7 +142,14 @@ for ii = 1:length(shadowShiftInValues)
     decodeSave.decodeShift(ii) = d;
 end
 
-% PLOT: Inferred matches with a fit line
+% PLOT: Envelope of p/s effect across the shifted decodings
+
+% Set envelope threshold for coloring.
+% This value should match the value for the same variable that is also
+% coded into routine PaintShadowEffectSummaryPlots. That one determines which
+% points are used to determine the envelope range.
+envelopeThreshold = 1.05;
+
 temp = decodeSave.decodeShift;
 tempPaintShadowEffect = [temp.paintShadowEffect];
 tempRMSE = [temp.theRMSE];
@@ -159,12 +168,19 @@ set(gcf,'Position',decodeInfo.sqPosition);
 set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 if (~isempty(useIndex))
-    h=plot(tempRMSE(useIndex),tempPaintShadowEffect,'bo','MarkerSize',decodeInfo.markerSize-6,'MarkerFaceColor','b');
+    plot(tempRMSE(useIndex),log10(tempPaintShadowEffect),'ko','MarkerSize',decodeInfo.markerSize-6,'MarkerFaceColor','k');
+    minRMSE = min(tempRMSE(useIndex));
+    for kk = 1:length(useIndex)
+        if (tempRMSE(useIndex(kk)) < envelopeThreshold*minRMSE)
+            plot(tempRMSE(useIndex(kk)),log10(tempPaintShadowEffect(kk)),'go','MarkerSize',decodeInfo.markerSize-6,'MarkerFaceColor','g');
+        end
+    end
 end
 xlabel('Decoded RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
-xlim([0 0.4]);
-ylim([0.5 1.5]);
+xlim([0 0.2]);
+ylim([-0.15 0.15]);
+set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
 figName = [decodeInfo.figNameRoot '_extPaintShadowEffectRMSEEnvelope'];
 drawnow;
 FigureSave(figName,rmseenvelopefig,decodeInfo.figType);
@@ -238,8 +254,10 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case {'intcpt' 'gain'}
+    case 'intcpt'
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+    case 'gain'
+        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');
 end
@@ -321,8 +339,10 @@ end
 xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
-    case {'intcpt' 'gain'}
+     case 'intcpt'
         text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+    case 'gain'
+        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     otherwise
         error('Unknown paint/shadow fit type');
 end
