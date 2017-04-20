@@ -285,7 +285,7 @@ for s = subjectToAnalyze
                         textDetails = sprintf('Slope %0.2f, Intercept %0.2f',...
                             summaryDataStruct{c1}.theFit(1),summaryDataStruct{c1}.theFit(2));
                     case 'gain'
-                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',log10(summaryDataStruct{c1}.theFit(1)));
                     case 'intercept'
                         textDetails = sprintf('Paint-Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
                     otherwise
@@ -318,10 +318,10 @@ for s = subjectToAnalyze
                 ylabel('Matched Shadow Disk Luminance','FontSize',analysisParams.labelFontSize);
                 switch (analysisParams.fitType)
                     case 'affine'
-                        textDetails = sprintf('Slope %0.2f, Intercept %0.2f',...
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f, Intercept %0.2f',...
                             summaryDataStruct{c1}.theFit(1),summaryDataStruct{c1}.theFit(2));
                     case 'gain'
-                        textDetails = sprintf('Slope %0.2f',summaryDataStruct{c1}.theFit(1));
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',log10(summaryDataStruct{c1}.theFit(1)));
                     case 'intercept'
                         textDetails = sprintf('Intercept of Fit Unity Slope Line: %0.2f',summaryDataStruct{c1}.theFit(1));
                     otherwise

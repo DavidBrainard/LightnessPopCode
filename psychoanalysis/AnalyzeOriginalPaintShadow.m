@@ -18,7 +18,7 @@ clear; close all;
 % Set compute to false if you just want to fuss with the figures produced
 % by this file and you've already run it once with COMPUTE set true.
 analysisFitType = 'gain';
-COMPUTE = false;
+COMPUTE = true;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
