@@ -94,7 +94,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'no';
             decodeInfoOut.classifyNFolds = 10;
-            decodeInfoOut.classifyPCADimsToTry = [2];
+            decodeInfoOut.classifyPCADimsToTry = [6];
         case 'SLOWER'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 25;
@@ -104,7 +104,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;
-            decodeInfoOut.classifyPCADimsToTry = [2 6];
+            decodeInfoOut.classifyPCADimsToTry = [6];
         case 'REAL'
             decodeInfoOut.verbose = true;
             decodeInfoOut.nNUnitsToStudy = 30;
@@ -114,7 +114,7 @@ if (decodeInfoOut.OK)
             decodeInfoOut.decodeNFolds = 10;
             decodeInfoOut.classifyLOOType = 'kfold';
             decodeInfoOut.classifyNFolds = 10;
-            decodeInfoOut.classifyPCADimsToTry = [2 6];
+            decodeInfoOut.classifyPCADimsToTry = [6];
     end
     tstart = tic;
     

@@ -107,6 +107,9 @@ for runIndex = 1:length(theExtractedDirs)
         ClassificationVersusNUnits(runIndex) = NaN;
     end
     if (decodeInfoIn.doSummaryClassificationVersusNPCA)
+        if (exist(fullfile(theExtractedDir,'extClassificationVersusNPCA .mat'),'file'))
+            unix(['mv ' fullfile(theExtractedDir,'extClassificationVersusNPCA\ .mat') ' ' fullfile(theExtractedDir,'extClassificationVersusNPCA.mat')]);
+        end
         ClassificationVersusNPCA(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extClassificationVersusNPCA.mat');
      else
         ClassificationVersusNPCA(runIndex) = NaN;
@@ -152,6 +155,7 @@ if (decodeInfoIn.doSummaryClassificationVersusNPCA)
     if (length(basicInfo) ~= length(ClassificationVersusNPCA))
         error('Data length mismatch');
     end
+    ClassificationVersusNPCASummaryPlots(basicInfo,paintShadowEffect,ClassificationVersusNPCA,summaryDir,figParams)
 end
 
 

@@ -7,6 +7,9 @@ function PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,fi
 % how we are decoding.  This is because the logic is that a session is
 % either good or bad, independent of what is being analyzed.
 %
+% The envelope threshold used to make the plot is set here, rather than as
+% a parameter.  Probably that's bad practice.
+%
 % 4/19/16  dhb  Wrote it.
 
 %% Additional parameters
