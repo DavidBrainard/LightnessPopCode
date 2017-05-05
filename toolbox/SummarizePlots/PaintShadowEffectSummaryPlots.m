@@ -262,6 +262,18 @@ booleanRMSE = bestRMSE <= basicInfo(1).filterMaxRMSE;
 booleanV1 = booleanSubjectBR | booleanSubjectST;
 booleanV4 = booleanSubjectJD | booleanSubjectSY;
 
+% Write out good filenames into a text file
+allFilenames = {paintShadowEffect.theDataDir};
+filenamesFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffix '.txt'],'');
+fid = fopen(filenamesFilename,'w');
+for ii = 1:length(booleanRMSE)
+    if (booleanRMSE(ii))
+        [a,b] = fileparts(allFilenames{ii});
+        fprintf(fid,'%s\n',b);
+    end
+end
+fclose(fid);
+
 % Say which version we are
 fprintf('\n*****EnvelopeSummary%s*****\n',figureSuffix);
 

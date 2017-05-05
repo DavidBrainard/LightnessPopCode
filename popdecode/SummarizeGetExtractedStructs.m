@@ -13,6 +13,7 @@ cd(curDir);
 % The structure of interest is always stored in variable decodeSave
 % by the extracted analysis
 extractedOut = theData.decodeSave;
+extractedOut.theDataDir = readDataDir;
 
 end
 
