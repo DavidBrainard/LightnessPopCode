@@ -29,9 +29,9 @@ basicInfo(1).filterMaxRMSE = 0.2;
 
 %% PLOT: Envelope summaries in their multiple version glory
 DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
-DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCABoth','PCABoth');
-DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAPaint','PCAPaint');
-DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAShadow','PCAShadow');
+%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCABoth','PCABoth');
+%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAPaint','PCAPaint');
+%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAShadow','PCAShadow');
 
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
@@ -264,7 +264,7 @@ booleanV4 = booleanSubjectJD | booleanSubjectSY;
 
 % Write out good filenames into a text file
 allFilenames = {paintShadowEffect.theDataDir};
-filenamesFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffix '.txt'],'');
+filenamesFilename = fullfile(figureDir,['summaryPaintShadowRMSEGood' figureSuffix '.txt'],'');
 fid = fopen(filenamesFilename,'w');
 for ii = 1:length(booleanRMSE)
     if (booleanRMSE(ii))
