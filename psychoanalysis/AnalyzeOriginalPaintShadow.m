@@ -18,7 +18,7 @@ clear; close all;
 % Set compute to false if you just want to fuss with the figures produced
 % by this file and you've already run it once with COMPUTE set true.
 analysisFitType = 'gain';
-COMPUTE = true;
+COMPUTE = false;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
@@ -197,7 +197,7 @@ switch (analysisFitType)
         ylabel('Paint-Shadow Effect','FontSize',figParams.labelFontSize);
         %legend({'Paint-Shadow Effect' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
-        fprintf('Mean paint-shadow effect = %0.2f, control = %0.2f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
+        fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
     otherwise
         error('Unknown analysisFitType specified');
 end
