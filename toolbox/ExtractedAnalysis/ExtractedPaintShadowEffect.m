@@ -71,6 +71,7 @@ lfactor = 0.5;
 lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
 xlabel('Stimulus Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Luminance','FontSize',decodeInfo.labelFontSize);
+text(0.8,0.00,sprintf('RMSE: %0.2f',d.theRMSE),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
 %title(titleRootStr,'FontSize',decodeInfo.titleFontSize);
 plot([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh],[decodeInfo.intensityLimLow decodeInfo.intensityLimHigh],'k:','LineWidth',decodeInfo.lineWidth);
 axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensityLimLow decodeInfo.intensityLimHigh])
@@ -94,9 +95,13 @@ xlabel('Decoded Paint Luminance','FontSize',decodeInfo.labelFontSize);
 ylabel('Matched Decoded Shadow Luminance','FontSize',decodeInfo.labelFontSize);
 switch (decodeInfo.paintShadowFitType)
     case 'intcpt'
-        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+        text(0,1,(sprintf('Paint/Shadow Effect: %0.3f',d.paintShadowEffect)),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     case 'gain'
-        text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+        if (abs(log10(d.paintShadowEffect)) <= 0.005)
+            text(0,1,(sprintf('Paint/Shadow Effect: %0.3f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+        else
+            text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect))),'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+        end
     otherwise
         error('Unknown paint/shadow fit type');
 end

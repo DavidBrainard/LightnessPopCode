@@ -52,6 +52,9 @@ title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'Fon
 figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
 FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
+%% Print out null RMSE over included sessions
+fprintf('Null model (guess mean) over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
+
 %% PLOT: Paint/shadow effect from decoding on paint
 %
 % Get the decode both results from the top level structure.

@@ -1,6 +1,9 @@
 % PaintShadowStimuliPCA
 %
-% Run PCA on the actual stimuli, for illustrative purposes
+% Run PCA on the actual stimuli, for illustrative purposes.
+%
+% To figure out which stimuli are the right ones, you look at teh config
+% files, parametricConditions2/c31 and c32.
 %
 % 5/26/16  dhb  Wrote it.
 
