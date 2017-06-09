@@ -152,7 +152,7 @@ if (~isempty(useIndex))
         end
     end
 end
-xlabel('Decoded RMSE','FontSize',decodeInfo.labelFontSize);
+xlabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
 xlim([0 0.2]);
 ylim([-0.15 0.15]);
@@ -202,7 +202,7 @@ if (~isempty(useIndex))
         end
     end
 end
-xlabel('Decoded RMSE','FontSize',decodeInfo.labelFontSize);
+xlabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
 xlim([0 0.2]);
 ylim([-0.15 0.15]);
@@ -248,7 +248,7 @@ if (~isempty(useIndex))
         end
     end
 end
-xlabel('Decoded RMSE','FontSize',decodeInfo.labelFontSize);
+xlabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
 xlim([0 0.2]);
 ylim([-0.15 0.15]);
@@ -294,7 +294,7 @@ if (~isempty(useIndex))
         end
     end
 end
-xlabel('Decoded RMSE','FontSize',decodeInfo.labelFontSize);
+xlabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
 xlim([0 0.2]);
 ylim([-0.15 0.15]);

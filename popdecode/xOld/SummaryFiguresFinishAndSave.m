@@ -27,7 +27,7 @@ else
 end
 lfactor = 0.5;
 lpos = get(h,'Position'); set(h,'Position',[lpos(1)-lfactor*lpos(3) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
-title({'Decoded RMSE Versus Range' ; titleStr ; ' '}, ...
+title({'Decoding RMSE Versus Range' ; titleStr ; ' '}, ...
     'FontName',loadedData.decodeInfoIn.fontName,'FontSize',loadedData.decodeInfoIn.titleFontSize);
 figFilename = fullfile(summaryDir,['DecodeRMSEVsRange' '_' loadedData.decodeInfoIn.dataType '_' loadedData.decodeInfoIn.paintShadowFitType v4OnlyString],'');
 FigureSave(figFilename,rmseVersusRangeFig,loadedData.decodeInfoIn.figType);

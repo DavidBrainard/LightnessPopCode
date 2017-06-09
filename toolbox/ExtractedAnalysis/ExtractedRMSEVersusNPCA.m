@@ -244,7 +244,7 @@ plot(decodeSave.theUnits,decodeSave.theRMSE,'ro','MarkerFaceColor','r','MarkerSi
 plot(decodeSave.fitScale,decodeSave.fit(decodeSave.fitScale),'ro','MarkerFaceColor','r','MarkerSize',8);
 plot(smoothX,nullRMSE*ones(size(smoothX)),':','LineWidth',2,'Color',[0.5 0.5 0.5]);
 xlabel('Number of PCA Components','FontSize',decodeInfo.labelFontSize);
-ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 xlim([0,max(decodeSave.theUnits)]);
 ylim([0,0.5]);

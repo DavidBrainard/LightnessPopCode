@@ -109,7 +109,7 @@ h = plot(decodeSave.bestAnalysis.fitScale,...
 
 % Labels, scale, etc
 xlabel('Number of Units Used in Decoding','FontSize',decodeInfo.labelFontSize);
-ylabel('Decoded Luminance RMSE','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 xlim([0,100]);
 ylim([0,0.5]);
@@ -137,7 +137,7 @@ h = plot(decodeSave.bestAnalysis.fitScale,...
 
 % Labels, scale, etc
 xlabel('Number of Units Used in Decoding','FontSize',decodeInfo.labelFontSize);
-ylabel('Decoded Luminance RMSE (Shuffled)','FontSize',decodeInfo.labelFontSize);
+ylabel('Decoding RMSE (Shuffled)','FontSize',decodeInfo.labelFontSize);
 title(decodeInfo.titleStr,'FontSize',decodeInfo.titleFontSize);
 xlim([0,100]);
 ylim([0,0.5]);

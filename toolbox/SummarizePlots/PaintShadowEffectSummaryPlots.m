@@ -358,7 +358,7 @@ xlim([0.05 basicInfo(1).filterMaxRMSE]);
 ylim([-0.15 0.15]);
 set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
 ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-xlabel('Best Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+xlabel('Minimum Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
 figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffix],'');
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
 

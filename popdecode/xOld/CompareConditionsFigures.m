@@ -67,7 +67,7 @@ for plotV4Only = plotV4Onlys
         set(gca,'XTickLabel',{'0.0' '0.1' '0.2' '0.3' '0.4'});
         set(gca,'YTick',[0 0.1 0.2 0.3 0.4]);
         set(gca,'YTickLabel',{'0.0 ' '0.1 ' '0.2 ' '0.3 ' '0.4 '});
-        xlabel('Decoded RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+        xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
         ylabel('Intensity Trial Shuffle RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
         title({['Effect of Within Intensity Trial Shuffle' v4TitleStr]; ' '}, ...
             'FontName',figParams.fontName,'FontSize',figParams.axisFontSize);
@@ -151,7 +151,7 @@ for plotV4Only = plotV4Onlys
     set(gca,'XTickLabel',{'0.0' '0.1' '0.2' '0.3' '0.4'});
     set(gca,'YTick',[0 0.1 0.2 0.3 0.4]);
     set(gca,'YTickLabel',{'0.0 ' '0.1 ' '0.2 ' '0.3 ' '0.4 '});
-    xlabel('Decoded RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+    xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
     ylabel('Best Single Electrode RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
     title({['Effect of Using Single Best Electrode' v4TitleStr]; ' '}, ...
         'FontName',figParams.fontName,'FontSize',figParams.axisFontSize);
@@ -234,7 +234,7 @@ for plotV4Only = plotV4Onlys
     set(gca,'XTickLabel',{'0.0' '0.1' '0.2' '0.3' '0.4'});
     set(gca,'YTick',[0 0.1 0.2 0.3 0.4]);
     set(gca,'YTickLabel',{'0.0 ' '0.1 ' '0.2 ' '0.3 ' '0.4 '});
-    xlabel('Decoded RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+    xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
     ylabel('Best Double Electrode RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
     title({['Effect of Using Two Best Electrodes' v4TitleStr]; ' '}, ...
         'FontName',figParams.fontName,'FontSize',figParams.axisFontSize);
@@ -318,7 +318,7 @@ for plotV4Only = plotV4Onlys
         set(gca,'XTickLabel',{'0.0' '0.1' '0.2' '0.3' '0.4'});
         set(gca,'YTick',[0 0.1 0.2 0.3 0.4]);
         set(gca,'YTickLabel',{'0.0 ' '0.1 ' '0.2 ' '0.3 ' '0.4 '});
-        xlabel('Decoded RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+        xlabel('Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
         ylabel(['PCA ' num2str(pcaNum) ' RMSE'],'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
         title({['Effect of Using PCA ' num2str(pcaNum) v4TitleStr]; ' '}, ...
             'FontName',figParams.fontName,'FontSize',figParams.axisFontSize);
