@@ -11,11 +11,6 @@
 
 % 06/14/17  dhb  Wrote it.
 
-% setpref('LightnessPopCode','physiologyInputBaseDir',physiologyInputBaseDir);
-% setpref('LightnessPopCode','psychoInputBaseDir',psychoInputBaseDir);
-% setpref('LightnessPopCode','stimulusInputBaseDir',stimulusInputBaseDir);
-% setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);
-
 %% Get directory to fill up with the figure parts
 figureDir = getpref('LightnessPopCode','figureOutputDir');
 if (~exist(figureDir,'dir'))
@@ -54,9 +49,13 @@ unix(copyCmd);
 
 % Figure 6: PCA projection example, panels B-D.  We might replace these
 % with panels that Marlene produces
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
-analysisOutputFigDir = fullfile('/Volumes/Users1/Users1Shared/Matlab/Experiments/LightnessV4/zPennOutputOld','xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6B_ExampleDecoding1.pdf')];
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
+analysisOutputFigDir = fullfile('/Volumes/Users1/Users1Shared/Matlab/Experiments/LightnessV4/zPennOutputOld','xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2.pdf') ' ' fullfile(figureDir,'Figure6B_MeanOnPCABoth.pdf')];
+unix(copyCmd);
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6C_MeanOnPCAPaint.pdf')];
+unix(copyCmd);
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6D_MeanOnPCAShadow.pdf')];
 unix(copyCmd);
 
 % Figure 7: Decoding and neural paint/shadow effect
@@ -70,3 +69,12 @@ copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBo
 unix(copyCmd);
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.pdf') ' ' fullfile(figureDir,'Figure7D_ExamplePaintShadowEffect2.pdf')];
 unix(copyCmd);
+
+% Figure 8: Envelope decoding
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.pdf') ' ' fullfile(figureDir,'Figure8A_SingleSessionEnvelope.pdf')];
+unix(copyCmd);
+analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.pdf') ' ' fullfile(figureDir,'Figure8B_PaintShadowEffectSummary.pdf')];
+unix(copyCmd);
+
