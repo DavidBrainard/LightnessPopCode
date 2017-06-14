@@ -37,9 +37,10 @@ setpref('LightnessPopCode','psychoInputBaseDir',psychoInputBaseDir);
 setpref('LightnessPopCode','stimulusInputBaseDir',stimulusInputBaseDir);
 setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);
 
-% Set the preferences
-setpref('LightnessPopCode','outputBaseDir',outputBaseDir);
-setpref('LightnessPopCode','physiologyInputBaseDir',physiologyInputBaseDir);
-setpref('LightnessPopCode','psychoInputBaseDir',psychoInputBaseDir);
-setpref('LightnessPopCode','stimulusInputBaseDir',stimulusInputBaseDir);
-setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);
+%% Set preferences for where paper figures should end up.
+%
+% This is used by script figureforpaper/CopyOverFigures to collect up and
+% organize the figures parts that end up in the paper.
+%
+% This is formatted so it can be passed to the linux shell.
+setpref('LightnessPopCode','figureOutputDir','"/Volumes/Users1/Dropbox (Personal)/xPapers/LightnessV4Paper1/DBFigures"');

@@ -362,7 +362,7 @@ for c = theConditions
         imwrite(sqrt(imShadowData{k}(end:-1:1,:)),sprintf('ShadowSqrt%s.tiff',nameBase),'tiff');
         if (k <= length(probeColors) && round(100*probeColors(k)) == 50)
             imwrite(sqrt(imPaintData{k}(end:-1:1,:)),sprintf('aPaintSqrt_%s_%s.jpg',dirName,nameBase),'jpg');
-            imwrite(sqrt(imShadowData{k}(end:-1:1,:)),sprintf('aShadowSqr_%s_t%s.jpg',dirName,nameBase),'jpg');
+            imwrite(sqrt(imShadowData{k}(end:-1:1,:)),sprintf('aShadowSqrt_%s_%s.jpg',dirName,nameBase),'jpg');
         end
         
         %% Save as mat files too.  For these find the index of the pixels that
