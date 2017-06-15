@@ -5,6 +5,7 @@ function decodeInfoOut = ExtractedEngine(readDataDir,decodeInfoIn)
 % things.
 %
 % 3/8/16  dhb  Wrote from earlier stuff.
+% 6/15/17 dhb  Freeze rng seed before each analysis.
 
 %% Basic initialization
 close all;
@@ -120,12 +121,14 @@ if (decodeInfoOut.OK)
     
     % *******
     % Paint shadow effect
+    rng(1001);
     if (decodeInfoIn.doExtractedPaintShadowEffect)  
         ExtractedPaintShadowEffect('always',decodeInfoOut,theData);
     end
     
     % *******
     % Representational similarity
+    rng(1002);
     if (decodeInfoIn.doExtractedRepSim)
         ExtractedRepSim('always',decodeInfoOut,theData);
     end
@@ -134,6 +137,7 @@ if (decodeInfoOut.OK)
     % Analyze how paint and shadow RMSE/Prediction compare with each other when
     % decoder is built with both, built with paint only, built with shadow
     % only, is chosen randomly, is built to classify, etc.
+    rng(1003);
     if (decodeInfoIn.doExtractedRMSEAnalysis)
         ExtractedRMSEAnalysis('always',decodeInfoOut,theData);
     end
@@ -141,6 +145,7 @@ if (decodeInfoOut.OK)
     % *******
     % Analyze decoding as a function of the number of units used to build
     % decoder.
+    rng(1004);
     if (decodeInfoIn.doExtractedRMSEVersusNUnits)
         ExtractedRMSEVersusNUnits('always',decodeInfoOut,theData);
     end
@@ -153,12 +158,14 @@ if (decodeInfoOut.OK)
     
     % *******
     % Study classification performance as a function of the number of units
+    rng(1005);
     if (decodeInfoIn.doExtractedClassificationVersusNUnits) 
         ExtractedClassificationVersusNUnits('always',decodeInfoOut,theData);
     end
     
     % *******
     % Study classification performance as a function of number of PCA dimensions
+    rng(1006);
     if (decodeInfoIn.doExtractedClassificationVersusNPCA) 
         ExtractedClassificationVersusNPCA('always',decodeInfoOut,theData);
     end

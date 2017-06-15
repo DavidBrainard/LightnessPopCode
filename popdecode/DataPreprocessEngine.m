@@ -1,7 +1,8 @@
 function DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
 % DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
 %
-% Lightness decoder.  Original provided by Doug and Marlene.
+% Takes an initial pass over the data, leaving things in a simple format
+% for further analyses.
 %
 % 10/28/13  dhb  Started to look through.
 % 11/11/13  dhb  Tidy up.
@@ -58,6 +59,23 @@ end
 theData = load(reducedDataFilename);
 fprintf('Working on file %s\n',reducedDataFilename);
 
+%% Did anything change in the most recent version of the data?
+%
+% This wouldn't generally be run, but does allow one to check that
+% a fresh pull of the data from the server matches a previous pull
+% that is tucked away somehwere.
+CHECK_DATA_CHANGED = false;
+if (CHECK_DATA_CHANGED)
+    thePrevData = load(fullfile('/Volumes/Users1/Users1Shared/Matlab/Experiments/LightnessV4/zPittOld/Data',[filename '_ReducedData_Share']));
+    fprintf('\tComparing current and previous data files\n');
+    compareResult = RecursivelyCompareStructs('theData',theData,'theData1',thePrevData,'graphMismatchedData', false);
+    if (~isempty(compareResult))
+        fprintf('\t***** Data differerence for file %s *****\n',[filename '_ReducedData_Share']);
+    else
+        fprintf('\tFile %s has not changed\n',[filename '_ReducedData_Share']);
+    end
+end
+    
 %% Fix stimulus position data for cross-session variation in coding conventions
 %
 % Different conventions for coding the location of

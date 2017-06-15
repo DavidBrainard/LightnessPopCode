@@ -8,9 +8,6 @@ function ExtractedRunOne(varargin)
 %% Clear
 close all;
 
-%% Random number generator seed
-ClockRandSeed;
-
 % Set up decodeInfoIn from args
 [decodeInfoIn] = ParseDecodeInfo(varargin{:});
     

@@ -50,7 +50,6 @@ unix(copyCmd);
 % Figure 6: PCA projection example, panels B-D.  We might replace these
 % with panels that Marlene produces
 analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
-analysisOutputFigDir = fullfile('/Volumes/Users1/Users1Shared/Matlab/Experiments/LightnessV4/zPennOutputOld','xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2.pdf') ' ' fullfile(figureDir,'Figure6B_MeanOnPCABoth.pdf')];
 unix(copyCmd);
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6C_MeanOnPCAPaint.pdf')];

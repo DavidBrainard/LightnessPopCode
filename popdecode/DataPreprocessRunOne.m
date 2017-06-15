@@ -2,7 +2,8 @@ function outputSummaryStructs = DataPreprocessRunOne(varargin)
 % outputSummaryStructs = DataPreprocessRunOne(varargin)
 %
 % Do the basic data preprocessing of all the data files
-% for a condition as described by the options below.
+% for a condition as described by the options created though
+% the call to ParseDecodeInfo.
 %
 % 10/31/13  dhb  Wrote it.
 % 2/24/14   dhb  Add intercept only decode option

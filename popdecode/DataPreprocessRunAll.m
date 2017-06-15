@@ -5,6 +5,7 @@
 %
 % 3/25/14  dhb  Wrote it.
 % 4/15/16  dhb  Now this is just data preprocessing.
+% 6/15/17  dhb  Check that current data matches a previous version (passed).
 
 % Clear
 clear; close all;
