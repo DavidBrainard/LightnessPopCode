@@ -147,6 +147,7 @@ for nn1 = 1:length(useSizes)
     decodeInfoOutTemp.theCenterYPixels = decodeInfoOutTemp.theCenterYPixels;
     [~,sizeLocStr] = MakePopDecodeConditionStr(decodeInfoOutTemp);
     titleSizeLocStr = strrep(sizeLocStr,'_',' ');
+    fprintf('\tDoing session %s\n',sizeLocStr);
     
     %% Get indices for the trials we'll analyze
     %
@@ -160,6 +161,7 @@ for nn1 = 1:length(useSizes)
         theLetterflips == decodeInfoOutTemp.flip & correctIndex & thePaintShadowConditions==decodeInfoIn.paintCondition);
     shadowTrialIndex = find(theData.sizeX==decodeInfoOutTemp.theCheckerboardSizePixels & theData.centerX==decodeInfoOutTemp.theCenterXPixels & theData.centerY==decodeInfoOutTemp.theCenterYPixels & ...
         theLetterflips == decodeInfoOutTemp.flip & correctIndex &thePaintShadowConditions==decodeInfoIn.shadowCondition);
+    fprintf('\tFound %d correct paint trials and %d correct shadow trials\n',length(paintTrialIndex),length(shadowTrialIndex));
     
     %% Turn the stimulus suffices to actual intensities.
     % The intensities end up on a scale from [0-100] which
@@ -216,6 +218,21 @@ for nn1 = 1:length(useSizes)
     if (any(theData.SpikeCountAll(theData.ChListIDX,shadowTrialIndex)' ~= theData.SpikeCount(:,shadowTrialIndex)'))
         error('Do not understand data file format');
     end
+    
+    %% Get rid of any channels with NaNs
+    nChannelsForNanCheck = size(paintResponses,2);
+    if (size(shadowResponses,2) ~= nChannelsForNanCheck)
+        error('Different number of channels for paint and shadow trials.  Ugh!');
+    end
+    keepChannelsIndex = ones(1,nChannelsForNanCheck);
+    for cc = 1:nChannelsForNanCheck
+        if (any(isnan(paintResponses(:,cc))) | any(isnan(shadowResponses(:,cc))))
+            keepChannelsIndex(cc) = 0;
+        end
+    end
+    paintRespnses = paintResponses(:,logical(keepChannelsIndex));
+    shadowResponses = shadowResponses(:,logical(keepChannelsIndex));
+    fprintf('\tKeeping %d of %d channels as result of NaN check\n',sum(keepChannelsIndex),nChannelsForNanCheck);
     
     % Exclude foveal electrodes for SY if desired.
     switch (decodeInfoIn.excludeSYelectrodes)
@@ -344,11 +361,42 @@ for nn1 = 1:length(useSizes)
     end   
     
     %% Convert trials we're not using in intensity decoding (typically blanks and decrements) to NaN so that we don't analyze them.
+    %
+    % This is the old way.  But now we're not removing any other trials
+    % with NaN's, so it is easier just to take these out directly. New way
+    % is below.  Old code is here, commented out.
+    %
+    % if (~isempty(decodeInfoIn.leaveOutIntensities))
+    %     paintLeftOutCount = 0;
+    %     shadowLeftOutCount = 0;
+    %     for clo = 1:length(decodeInfoIn.leaveOutIntensities)
+    %         paintLeftOutCount = paintLeftOutCount + sum(paintIntensities==decodeInfoIn.leaveOutIntensities(clo));
+    %         shadowLeftOutCount = shadowLeftOutCount + sum(shadowIntensities==decodeInfoIn.leaveOutIntensities(clo));
+    %         paintIntensities(paintIntensities==decodeInfoIn.leaveOutIntensities(clo)) = NaN;
+    %         shadowIntensities(shadowIntensities==decodeInfoIn.leaveOutIntensities(clo)) = NaN;
+    %     end
+    %     fprintf('\tConverted %d paint trial blank and specified intensities to NaN, %d for shadow\n',paintLeftOutCount,shadowLeftOutCount);   
+    % else
+    %     fprintf('\tDid not convert any blank or specified intensities to NaN')
+    % end
+    
+    %% Remove trials we're not using in intensity decoding (typically blanks and decrements)
     if (~isempty(decodeInfoIn.leaveOutIntensities))
+        paintLeftOutIndex = zeros(length(paintIntensities),1);
+        shadowLeftOutIndex = zeros(length(shadowIntensities),1);
         for clo = 1:length(decodeInfoIn.leaveOutIntensities)
-            paintIntensities(paintIntensities==decodeInfoIn.leaveOutIntensities(clo)) = NaN;
-            shadowIntensities(shadowIntensities==decodeInfoIn.leaveOutIntensities(clo)) = NaN;
+            paintLeftOutIndex = paintLeftOutIndex + (paintIntensities==decodeInfoIn.leaveOutIntensities(clo));
+            shadowLeftOutIndex = shadowLeftOutIndex + (shadowIntensities==decodeInfoIn.leaveOutIntensities(clo));
         end
+        paintIntensities = paintIntensities(~paintLeftOutIndex);
+        shadowIntensities = shadowIntensities(~shadowLeftOutIndex);
+        paintResponses = paintResponses(~paintLeftOutIndex,:);
+        shadowResponses = shadowResponses(~shadowLeftOutIndex,:);
+        paintLeftOutCount = sum(paintLeftOutIndex);
+        shadowLeftOutCount = sum(shadowLeftOutIndex);
+        fprintf('\tRemoved %d paint trial blank and specified intensity trials, %d for shadow\n',paintLeftOutCount,shadowLeftOutCount);   
+    else
+        fprintf('\tDid not remove any blank or specified intensityt trials\n')
     end
     
     %% Scale intensities to range 0-1 not 0-100.  More convenient conceptually.
@@ -387,10 +435,34 @@ for nn1 = 1:length(useSizes)
             error('Unknown data file type');
     end
     
-    %% Get rid of any trials with NaNs
-    [paintIntensities,paintResponses] = ReduceForNaNs(paintIntensities,paintResponses);
-    [shadowIntensities,shadowResponses] = ReduceForNaNs(shadowIntensities,shadowResponses);
-    
+    %% This was dropping trials based on NaN in the response vector for that trial
+    %
+    % But we've decided that we should drop such channels, rather than such
+    % trials.  So this is commented out.
+    %
+    % paintPreNanDrop = length(paintIntensities);
+    % shadowPreNanDrop = length(shadowIntensities);
+    % nPaintNanResponses = 0;
+    % for nn = 1:length(paintIntensities)
+    %     if (~isnan(paintIntensities(nn)) & any(isnan(paintResponses(nn,:))))
+    %         nPaintNanResponses = nPaintNanResponses + 1;
+    %     end    
+    % end
+    % nShadowNanResponses = 0;
+    % for nn = 1:length(shadowIntensities)
+    %     if (~isnan(shadowIntensities(nn)) & any(isnan(shadowResponses(nn,:))))
+    %         nShadowNanResponses = nShadowNanResponses + 1;
+    %     end    
+    % end
+    % [paintIntensities,paintResponses] = ReduceForNaNs(paintIntensities,paintResponses);
+    % [shadowIntensities,shadowResponses] = ReduceForNaNs(shadowIntensities,shadowResponses);
+    % fprintf('\t%d of included paint trials had at least 1 NaN in the response vector, %d for included shadow trials\n',nPaintNanResponses,nShadowNanResponses);
+    % fprintf('\tExpect to drop %d + %d = %d paint trials, %d + %d = %d shadow trials\n', ...
+    %     paintLeftOutCount,nPaintNanResponses,paintLeftOutCount+nPaintNanResponses, ...
+    %     shadowLeftOutCount,nShadowNanResponses,shadowLeftOutCount+nShadowNanResponses);
+    % fprintf('\tBefore reducing for NaNs, there were %d paint trials; after there were %d, diff = %d\n',paintPreNanDrop,length(paintIntensities),paintPreNanDrop-length(paintIntensities));
+    % fprintf('\tBefore reducing for NaNs, there were %d shadow trials; after there were %d, diff = %d\n',shadowPreNanDrop,length(shadowIntensities),shadowPreNanDrop -length(shadowIntensities));
+ 
     %% Shuffle if desired.  The shuffling propagates through everything.
     [paintIntensities,paintResponses,shadowIntensities,shadowResponses,decodeInfoIn] = PaintShadowShuffle(decodeInfoIn,paintIntensities,paintResponses,shadowIntensities,shadowResponses);
 
@@ -433,6 +505,7 @@ for nn1 = 1:length(useSizes)
         decodeInfoOutTemp.nPaintTrials = length(decodeInfoOutTemp.paintIntensities);
         decodeInfoOutTemp.nShadowTrials = length(decodeInfoOutTemp.shadowIntensities);
         curDir = pwd; cd(outputDir);
+        fprintf('\tAt save, there are %d paint trials and %d shadow trials\n',length(paintIntensities),length(shadowIntensities));
         save paintShadowData paintIntensities paintResponses shadowIntensities shadowResponses
         decodeSave = decodeInfoOutTemp;
         save('basicInfo','decodeSave','-v7.3');

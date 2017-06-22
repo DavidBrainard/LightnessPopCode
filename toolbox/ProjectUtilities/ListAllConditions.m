@@ -26,6 +26,19 @@ end
 % outIndex = outIndex + 1;
 % return
 
+%% Uncomment this block to get a quick test for JD data.
+theFiles{outIndex} = ['JD130912' insertFilenameStr '0001'];
+theRFFiles{outIndex} = [''];
+decodeInfoInRun{outIndex} = decodeInfoIn;
+decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+decodeInfoInRun{outIndex}.subjectStr = 'JD';
+decodeInfoInRun{outIndex}.rfInfoLocation = [];
+decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+decodeInfoInRun{outIndex}.normIndexLocation = [];
+decodeInfoInRun{outIndex}.sameDayRF = true;
+outIndex = outIndex + 1;
+return
+
 %% Uncomment this block to get a quicker test case.
 % % This crashes at the end because there isn't enough
 % % summary data, but is fine for testing the core session

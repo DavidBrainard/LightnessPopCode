@@ -14,7 +14,7 @@ function outputSummaryStructs = DataPreprocessRunOne(varargin)
 close all;
 
 %% Random number generator seed
-ClockRandSeed;
+rng(51);
 
 %% Set up decodeInfoIn from args
 decodeInfoIn = ParseDecodeInfo(varargin{:});
