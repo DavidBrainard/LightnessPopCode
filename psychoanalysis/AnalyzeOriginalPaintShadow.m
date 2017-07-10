@@ -18,7 +18,7 @@ clear; close all;
 % Set compute to false if you just want to fuss with the figures produced
 % by this file and you've already run it once with COMPUTE set true.
 analysisFitType = 'gain';
-COMPUTE = true;
+COMPUTE = false;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
@@ -201,7 +201,7 @@ switch (analysisFitType)
         set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2])
         box off
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
-        exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',6,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
+        exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
 
         fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
         fprintf('Standard error paint-shadow effect = %0.4f, control = %0.4f\n', ...
