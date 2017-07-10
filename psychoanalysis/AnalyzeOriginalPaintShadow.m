@@ -18,7 +18,7 @@ clear; close all;
 % Set compute to false if you just want to fuss with the figures produced
 % by this file and you've already run it once with COMPUTE set true.
 analysisFitType = 'gain';
-COMPUTE = false;
+COMPUTE = true;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
@@ -181,23 +181,31 @@ switch (analysisFitType)
         %
         % Remake whole figure so that legend work right
         gainFig1 = figure; clf; hold on
-        set(gcf,'Position',figParams.position);
-        set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(log10(theData.allPaintShadow),'bo','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
-        plot(log10(theData.allControl),'ko','MarkerFaceColor','k','MarkerSize',figParams.markerSize);
-        plot(zeros(size(theData.allControl)),'k:','LineWidth',figParams.lineWidth);
-        plot(mean(log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
-        plot(mean(log10(theData.allControl))*ones(size(theData.allControl)),'k','LineWidth',figParams.lineWidth);
+        %set(gcf,'Position',figParams.position);
+        %set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+        plot(log10(theData.allPaintShadow),'bo','MarkerFaceColor','b'); %,'MarkerSize',figParams.markerSize);
+        plot(log10(theData.allControl),'ko','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
+        plot(zeros(size(theData.allControl)),'k:'); %,'LineWidth',figParams.lineWidth);
+        plot(mean(log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b'); %,'LineWidth',figParams.lineWidth);
+        plot(mean(log10(theData.allControl))*ones(size(theData.allControl)),'k'); %,'LineWidth',figParams.lineWidth);
         xlim([figParams.xLimLow figParams.xLimHigh]);
         ylim([-0.15 0.15]);
-        set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
+        set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels); %,'FontSize',figParams.axisFontSize-3);
         set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
-        ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);  
-        xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
-        ylabel('Paint-Shadow Effect','FontSize',figParams.labelFontSize);
+        ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);  
+        xlabel('Subject (Replication)'); %,'FontSize',figParams.labelFontSize);
+        ylabel('Paint-Shadow Effect'); %,'FontSize',figParams.labelFontSize);
         %legend({'Paint-Shadow Effect' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        set(gca(gainFig1),'tickdir','out')
+        a=get(gca(gainFig1),'ticklength');
+        set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2])
+        box off
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
+        exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',6,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
+
         fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
+        fprintf('Standard error paint-shadow effect = %0.4f, control = %0.4f\n', ...
+            std(log10(theData.allPaintShadow))/sqrt(length(theData.allPaintShadow)),std(log10(theData.allControl))/sqrt(length(theData.allControl)));
     otherwise
         error('Unknown analysisFitType specified');
 end
@@ -469,12 +477,16 @@ title('Aggregate Paint-Paint Psychometric Functions','FontSize',figParams.labelF
 legend({'Test Lum 0.25' 'Test Lum 0.50' 'Test Lum 0.75'},'Location','NorthWest','FontSize',figParams.legendFontSize);
 FigureSave(fullfile(outputDir,'OriginalPaintShadowAveragePsychometricLog'),allPsychoFig,figParams.figType);
 
-%% Figure of percent correct for various incremental step sizes, as a
-% function of base luminance.  Same aggregate data as for the psychometric
-% plot just above.
+%% Figure of percent correct for various incremental step sizes
+% as a function of base luminance.
+%
+% Same aggregate data as for the psychometric plot just above.
+%
+% Commented out my adjustments of sizes and fonts, so that this plays
+% well with the way Doug would like to make the figures for the paper.
 allProbFig = figure; clf; hold on
-set(gcf,'Position',figParams.position);
-set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+%set(gcf,'Position',figParams.position);
+%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 
 % Pull out the data we want
 theBases = [0.25 0.50 0.75]';
@@ -505,10 +517,10 @@ end
 % And make the plot
 probColors = ['k' 'g' 'b'];
 for jj = 1:length(theIncrs)
-    errorbar(theBases,theProbs(:,jj),theStderrs(:,jj),theStderrs(:,jj),[probColors(jj) 'o'],'MarkerFaceColor',probColors(jj),'MarkerSize',figParams.markerSize);
+    errorbar(theBases,theProbs(:,jj),theStderrs(:,jj),theStderrs(:,jj),[probColors(jj) 'o'],'MarkerFaceColor',probColors(jj)); %,'MarkerSize',figParams.markerSize);
 end
 for jj = 1:length(theIncrs)
-    plot(theBases,theProbs(:,jj),probColors(jj),'LineWidth',figParams.lineWidth);
+    plot(theBases,theProbs(:,jj),probColors(jj)); %,'LineWidth',figParams.lineWidth);
 end
 xlim([0 1]);
 set(gca,'XTick',[0 0.25 0.5 0.75 1]);
@@ -516,9 +528,15 @@ set(gca,'XTickLabels',{'0.00' '0.25' '0.50' '0.75' '1.00'})
 ylim([0.5 1.01]);
 set(gca,'YTick',[0.5 0.75 1.00]);
 set(gca,'YTickLabels',{'0.50 ' '0.75 ' '1.00 '});
-xlabel('Test Luminance','FontSize',figParams.labelFontSize);
-ylabel('Fraction Correct','FontSize',figParams.labelFontSize);
-%title('Aggregate Paint-Paint Fraction Correct','FontSize',figParams.labelFontSize);
-legend({'Increment 0.10'},'Location','SouthWest','FontSize',figParams.legendFontSize);
+xlabel('Test Luminance'); %,'FontSize',figParams.labelFontSize);
+ylabel('Fraction Correct'); %,'FontSize',figParams.labelFontSize);
+legend({'Increment 0.10'}); %,'Location','SouthWest','FontSize',figParams.legendFontSize);
+set(gca(allProbFig),'tickdir','out')
+a=get(gca(allProbFig),'ticklength');
+set(gca(allProbFig),'ticklength',[a(1)*2,a(2)*2])
+box off
+
+% Save it out, including eps version.
 FigureSave(fullfile(outputDir,'OriginalPaintShadowAverageProbCorrect'),allProbFig,figParams.figType);
+exportfig(gcf,fullfile(outputDir,'OriginalPaintShadowAverageProbCorrect.eps'),'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
 

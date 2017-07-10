@@ -267,19 +267,23 @@ for s = subjectToAnalyze
             if (psychoAnalysisParams.generateExampleFigure)
                 % Summary plot of fit
                 dataFig1 = figure; clf; hold on
-                set(gcf,'Position',analysisParams.sqPosition);
-                set(gca,'FontName',analysisParams.fontName,'FontSize',analysisParams.axisFontSize,'LineWidth',analysisParams.axisLineWidth);
+                %set(gcf,'Position',analysisParams.sqPosition);
+                %set(gca,'FontName',analysisParams.fontName,'FontSize',analysisParams.axisFontSize,'LineWidth',analysisParams.axisLineWidth);
                 for j = 1:length(conditionStructs{s,c,2})
                     theIndex = find(summaryDataStruct{c1}.whichRun == j);
-                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'bo','MarkerFaceColor','b','MarkerSize',analysisParams.markerSize);
+                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'bo','MarkerFaceColor','b'); %,'MarkerSize',analysisParams.markerSize);
                 end
-                plot(summaryDataStruct{c1}.predX,summaryDataStruct{c1}.predData,'b','LineWidth',analysisParams.lineWidth);
-                plot([analysisParams.intensityLimLow analysisParams.intensityLimHigh],[analysisParams.intensityLimLow analysisParams.intensityLimHigh],'k:','LineWidth',analysisParams.lineWidth);
+                plot(summaryDataStruct{c1}.predX,summaryDataStruct{c1}.predData,'b'); %,'LineWidth',analysisParams.lineWidth);
+                plot([analysisParams.intensityLimLow analysisParams.intensityLimHigh],[analysisParams.intensityLimLow analysisParams.intensityLimHigh],'k:'); %,'LineWidth',analysisParams.lineWidth);
                 axis([analysisParams.intensityLimLow analysisParams.intensityLimHigh analysisParams.intensityLimLow analysisParams.intensityLimHigh]);
                 set(gca,'XTick',analysisParams.intensityTicks,'XTickLabel',analysisParams.intensityTickLabels);
                 set(gca,'YTick',analysisParams.intensityTicks,'YTickLabel',analysisParams.intensityTickLabels);
-                xlabel('Paint Disk Luminance','FontSize',analysisParams.labelFontSize);
-                ylabel('Matched Shadow Disk Luminance','FontSize',analysisParams.labelFontSize);
+                xlabel('Paint Disk Luminance'); %,'FontSize',analysisParams.labelFontSize);
+                ylabel('Matched Shadow Disk Luminance'); %,'FontSize',analysisParams.labelFontSize);
+                set(gca,'tickdir','out')
+                a=get(gca,'ticklength');
+                set(gca,'ticklength',[a(1)*2,a(2)*2])
+                box off
                 switch (analysisParams.fitType)
                     case 'affine'
                         textDetails = sprintf('Slope %0.2f, Intercept %0.2f',...
@@ -291,13 +295,15 @@ for s = subjectToAnalyze
                     otherwise
                         error('Unknown fit type specified');
                 end
-                text(0,1,textDetails,'FontSize',analysisParams.labelFontSize);
+                text(0,1,textDetails); %,'FontSize',analysisParams.labelFontSize);
                 axis('square');
                 
                 % Save plot
                 figFigDir = fullfile(figDir,conditionStructs{s,c,1},subjectName,'');
                 cd(figFigDir);
                 FigureSave(['Summary_' analysisParams.fitType '_' subjectNames{s} '_' num2str(protocolNumbers{s,c}) '_example'],dataFig1,analysisParams.figType);
+                exportfig(dataFig1,['Summary_' analysisParams.fitType '_' subjectNames{s} '_' num2str(protocolNumbers{s,c}) '_example'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
+
                 cd(curDir);
                 close(dataFig1);
                 

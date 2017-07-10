@@ -21,6 +21,9 @@ end
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
 
 %% Psychophysics
+%
+% Run psychoanalysis/AnalyzeOriginalPaintShadow first.  For full analysis, set 
+% COMPUTE = true near the top.  To just remake the figures, set COMPUTE = false.
 
 % Figure1: Stimulus figure.
 stimulusBaseDir = getpref('LightnessPopCode','stimulusInputBaseDir');
@@ -32,17 +35,17 @@ unix(copyCmd);
 
 % Figure2: Psychophysical data
 analysisOutputFigDir = fullfile(outputBaseDir,'xPsychoBasic','parametricConditions2','c32_pnt_rot0_shad4_blk40_cen40_vs_shd_rot0_shad4_blk40_cen40_t1/aqr/');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'aqr-c32_pnt_rot0_shad4_blk40_cen40_vs_shd_rot0_shad4_blk40_cen40_t1-2_exampleOne.pdf') ' ' fullfile(figureDir,'Figure2A_PsychometricFunctionExample.pdf')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'aqr-c32_pnt_rot0_shad4_blk40_cen40_vs_shd_rot0_shad4_blk40_cen40_t1-2_exampleOne.eps') ' ' fullfile(figureDir,'Figure2A_PsychometricFunctionExample.eps')];
 unix(copyCmd);
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Summary_gain_aqr_32_example.pdf') ' ' fullfile(figureDir,'Figure2B_PaintShadowEffectExample.pdf')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Summary_gain_aqr_32_example.eps') ' ' fullfile(figureDir,'Figure2B_PaintShadowEffectExample.eps')];
 unix(copyCmd);
 analysisOutputFigDir = fullfile(outputBaseDir,'xPsychoSummary','gain');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'OriginalPaintShadowGainsWithControl.pdf') ' ' fullfile(figureDir,'Figure2C_PaintShadowEffectSummary.pdf')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'OriginalPaintShadowGainsWithControl.eps') ' ' fullfile(figureDir,'Figure2C_PaintShadowEffectSummary.eps')];
 unix(copyCmd);
 
 % Figure 5B: Average psychophyical probability correct figure
 analysisOutputFigDir = fullfile(outputBaseDir,'xPsychoSummary','Gain');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'OriginalPaintShadowAverageProbCorrect.pdf') ' ' fullfile(figureDir,'Figure5B_AveragePsychoProbCorrect.pdf')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'OriginalPaintShadowAverageProbCorrect.eps') ' ' fullfile(figureDir,'Figure5B_AveragePsychoProbCorrect.eps')];
 unix(copyCmd);
 
 %% Physiology

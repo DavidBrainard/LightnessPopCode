@@ -191,7 +191,7 @@ set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams
 set(psychoFig,'Position',[100 100 2000 round(560/420*2000)]);
 if (psychoAnalysisParams.generateExampleFigure)
     psychoExampleFig1 = figure;
-    set(psychoExampleFig1,'Position',[100 100 2000 round(560/420*2000)]);
+    %set(psychoExampleFig1,'Position',[100 100 2000 round(560/420*2000)]);
 end
 logFig = figure;
 set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
@@ -317,13 +317,13 @@ for s = 1:nStimTypes
         %plot([loc25(s) loc75(s)],[0.05 0.05],'r','LineWidth',psychoAnalysisParams.lineWidth);
         plot([pse(s) pse(s)],[0 0.1],'b','LineWidth',psychoAnalysisParams.lineWidth);
         if (s >= 1 && s <= 3)
-            xlabel('Shadow Disk Luminance','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            ylabel('Fraction Shadow Disk Judged Lighter','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            title('Reference Disk in Paint','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            xlabel('Shadow Disk Luminance'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            ylabel('Fraction Shadow Disk Judged Lighter') %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            title('Reference Disk in Paint') %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
         else
-            xlabel('Paint Disk Luminance','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            ylabel('Fraction Paint Disk Judged Lighter','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            title('Reference Disk in Shadow','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            xlabel('Paint Disk Luminance'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            ylabel('Fraction Paint Disk Judged Lighter'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            title('Reference Disk in Shadow'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
         end
         xlim([psychoAnalysisParams.intensityLimLow psychoAnalysisParams.intensityLimHigh]);
         ylim([psychoAnalysisParams.fractionLimLow psychoAnalysisParams.fractionLimHigh]);
@@ -334,21 +334,25 @@ for s = 1:nStimTypes
         if  (s == psychoAnalysisParams.exampleFigNum)
             psychoExampleFig = figure; clf; hold on
             set(gcf,'Position',psychoAnalysisParams.sqPosition);
-            set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
-            plot(meanValues{s},nAbove{s}./nTrials{s},'ko','MarkerSize',psychoAnalysisParams.markerSize,'MarkerFaceColor','k');
-            plot(interpStimuli{s},pInterp{s},'k','LineWidth',psychoAnalysisParams.lineWidth);
-            plot([refIntensity(s) refIntensity(s)],[0 0.1],'r','LineWidth',psychoAnalysisParams.lineWidth);
+            %set(gca,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.axisFontSize,'LineWidth',psychoAnalysisParams.axisLineWidth);
+            plot(meanValues{s},nAbove{s}./nTrials{s},'ko','MarkerFaceColor','k'); %,'MarkerSize',psychoAnalysisParams.markerSize,);
+            plot(interpStimuli{s},pInterp{s},'k'); %,'LineWidth',psychoAnalysisParams.lineWidth);
+            plot([refIntensity(s) refIntensity(s)],[0 0.5],'r'); %,'LineWidth',psychoAnalysisParams.lineWidth);
             %plot([loc25(s) loc75(s)],[0.05 0.05],'r','LineWidth',psychoAnalysisParams.lineWidth);
-            plot([pse(s) pse(s)],[0 0.1],'b','LineWidth',psychoAnalysisParams.lineWidth);
-            xlabel('Shadow Disk Luminance (re Display Max)','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            ylabel('Fraction Shadow Disk Judged Lighter','FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            plot([pse(s) pse(s)],[0 0.5],'b'); %,'LineWidth',psychoAnalysisParams.lineWidth);
+            xlabel('Shadow Disk Luminance (re Display Max)'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            ylabel('Fraction Shadow Disk Judged Lighter') %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
             %title(sprintf('stimID = %d, refIntensity = %0.2f',stimID(s),refIntensity(s)),'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.titleFontSize);
             xlim([psychoAnalysisParams.intensityLimLow psychoAnalysisParams.intensityLimHigh]);
             ylim([psychoAnalysisParams.fractionLimLow psychoAnalysisParams.fractionLimHigh]);
             set(gca,'XTick',psychoAnalysisParams.intensityTicks,'XTickLabel',psychoAnalysisParams.intensityTickLabels);
             set(gca,'YTick',psychoAnalysisParams.intensityTicks,'YTickLabel',psychoAnalysisParams.intensityYTickLabels);
-            text(0,1,sprintf('PSE: %0.2f',pse(s)),'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
-            %axis('square');
+            text(0,1,sprintf('PSE: %0.2f',pse(s))); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
+            axis('square');
+            set(gca(psychoExampleFig),'tickdir','out')
+            a=get(gca(psychoExampleFig),'ticklength');
+            set(gca(psychoExampleFig),'ticklength',[a(1)*2,a(2)*2])
+            box off
         end
     end
 
@@ -388,6 +392,8 @@ FigureSave(figFileName,psychoFig,psychoAnalysisParams.figType);
 FigureSave([figFileName '_log'],logFig,psychoAnalysisParams.figType);
 if (exist('psychoExampleFig','var'))
     FigureSave([figFileName '_exampleOne'],psychoExampleFig,psychoAnalysisParams.figType);
+    exportfig(psychoExampleFig,[figFileName '_exampleOne'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
+
     FigureSave([figFileName '_exampleAll'],psychoExampleFig1,psychoAnalysisParams.figType);
 end
 cd(curDir);
