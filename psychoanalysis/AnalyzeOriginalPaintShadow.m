@@ -196,12 +196,12 @@ switch (analysisFitType)
         xlabel('Subject (Replication)'); %,'FontSize',figParams.labelFontSize);
         ylabel('Paint-Shadow Effect'); %,'FontSize',figParams.labelFontSize);
         %legend({'Paint-Shadow Effect' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
-        set(gca(gainFig1),'tickdir','out')
+        set(gca(gainFig1),'tickdir','out');
         a=get(gca(gainFig1),'ticklength');
-        set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2])
+        set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
         box off
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
-        exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk')
+        exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
         fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
         fprintf('Standard error paint-shadow effect = %0.4f, control = %0.4f\n', ...

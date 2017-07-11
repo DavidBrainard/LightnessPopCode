@@ -22,7 +22,7 @@ outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
 
 %% Psychophysics
 %
-% Run psychoanalysis/AnalyzeOriginalPaintShadow first.  For full analysis, set 
+% Cd to psychoanalysis.  Run AnalyzeOriginalPaintShadow.  For full analysis, set 
 % COMPUTE = true near the top.  To just remake the figures, set COMPUTE = false.
 
 % Figure1: Stimulus figure.
@@ -49,6 +49,8 @@ copyCmd = ['cp ' fullfile(analysisOutputFigDir,'OriginalPaintShadowAverageProbCo
 unix(copyCmd);
 
 %% Physiology
+%
+% Cd to popdecode.  Run ProprocessRunAll; ExtractedRunAll; SummarizeRunAll;
 
 % Figure 6: PCA projection example, panels B-D.  We might replace these
 % with panels that Marlene produces
