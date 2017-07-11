@@ -29,9 +29,6 @@ basicInfo(1).filterMaxRMSE = 0.2;
 
 %% PLOT: Envelope summaries in their multiple version glory
 DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
-%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCABoth','PCABoth');
-%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAPaint','PCAPaint');
-%DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShiftPCAShadow','PCAShadow');
 
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
@@ -54,40 +51,6 @@ FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
 %% Print out null RMSE over included sessions
 fprintf('Null model (guess mean) over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
-
-%% PLOT: Paint/shadow effect from decoding on paint
-%
-% Get the decode both results from the top level structure.
-paintShadowEffectDecodePaint = SubstructArrayFromStructArray(paintShadowEffect,'decodePaint');
-if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
-    error('Length mismatch on struct arrays that should be the same');
-end
-
-% Make the figure
-paintShadowEffectDecodePaintFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodePaint,booleanRMSEInclude,figParams);
-
-% Add title and save
-figure(paintShadowEffectDecodePaintFig);
-title({'Paint/Shadow Effect, Decode On Paint'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodePaint','');
-FigureSave(figFilename,paintShadowEffectDecodePaintFig,figParams.figType);
-
-%% PLOT: Paint/shadow effect from decoding on shadow
-%
-% Get the decode both results from the top level structure.
-paintShadowEffectDecodeShadow = SubstructArrayFromStructArray(paintShadowEffect,'decodeShadow');
-if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
-    error('Length mismatch on struct arrays that should be the same');
-end
-
-% Make the figure
-paintShadowEffectDecodeShadowFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeShadow,booleanRMSEInclude,figParams);
-
-% Add title and save
-figure(paintShadowEffectDecodeShadowFig);
-title({'Paint/Shadow Effect, Decode On Shadow'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeShadow','');
-FigureSave(figFilename,paintShadowEffectDecodeShadowFig,figParams.figType);
 
 end
 
@@ -265,7 +228,7 @@ booleanRMSE = bestRMSE <= basicInfo(1).filterMaxRMSE;
 booleanV1 = booleanSubjectBR | booleanSubjectST;
 booleanV4 = booleanSubjectJD | booleanSubjectSY;
 
-% Write out good filenames into a text file
+% Write out good sessions into a text file
 allFilenames = {paintShadowEffect.theDataDir};
 filenamesFilename = fullfile(figureDir,['summaryPaintShadowRMSEGood' figureSuffix '.txt'],'');
 fid = fopen(filenamesFilename,'w');
@@ -277,8 +240,40 @@ for ii = 1:length(booleanRMSE)
 end
 fclose(fid);
 
+% Write information about all sessions into a file
+allFilenames = {paintShadowEffect.theDataDir};
+filenamesFilename = fullfile(figureDir,['summaryPaintShadowAllSessions' figureSuffix '.txt'],'');
+fid = fopen(filenamesFilename,'w');
+fprintf(fid,'Session\t\tSessionOK\tIncluded\t\tSubject\tArea\tNumber Electrodes\tNumber Trials\tNumberPaintTrials\NumberShadowTrials\n');
+numberTrials = [];
+numberElectrodes = [];
+for ii = 1:length(booleanRMSE)
+    [a,b] = fileparts(allFilenames{ii});
+    if (booleanSessionOK(ii))
+        sessionOKStr = 'Yes';
+    else
+        sessionOKStr = 'No';
+    end
+    if (booleanRMSE(ii))
+        includedStr = 'Yes';
+        numberTrials = [numberTrials basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials];
+        numberElectrodes = [numberElectrodes size(basicInfo(ii).paintResponses,2)];
+    else
+        includedStr = 'No';
+    end   
+    fprintf(fid,'%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%n\n',b,sessionOKStr,includedStr,basicInfo(ii).subjectStr,basicInfo(ii).titleInfoStr, ...
+        size(basicInfo(ii).paintResponses,2),basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials,basicInfo(ii).nPaintTrials,basicInfo(ii).nShadowTrials);
+end
+fclose(fid);
+
+% Information about
+
 % Say which version we are
 fprintf('\n*****EnvelopeSummary%s*****\n',figureSuffix);
+
+% Info about good sessions
+fprintf('Mean number of trials per included session: %0.1f, +/- %0.1f std\n',mean(numberTrials),std(numberTrials));
+fprintf('Mean number of electrodes per included session: %0.1f, +/- %0.1f std\n',mean(numberElectrodes),std(numberElectrodes));
 
 % A little print out of where intervals fall
 %
@@ -340,27 +335,32 @@ fprintf('Mean V4 p/s effect range %0.3f\n',psRange);
 
 % Figure version 1
 paintShadowEnvelopeVsRMSEFig = figure; clf; hold on;
-set(gcf,'Position',figParams.position);
-set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+%set(gcf,'Position',figParams.position);
+%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV1index = booleanV1 & booleanRMSE & booleanSessionOK;
 plotV4index = booleanV4 & booleanRMSE & booleanSessionOK;
 errorbar(bestRMSE(plotV1index),log10(bestPaintShadowEffect(plotV1index)),...
     abs(log10(minPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     abs(log10(maxPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
-    'ko','MarkerSize',4,'MarkerFaceColor','k');
+    'ko','MarkerFaceColor','k'); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV4index),log10(bestPaintShadowEffect(plotV4index)),...
     abs(log10(minPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     abs(log10(maxPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
-    'ro','MarkerSize',4,'MarkerFaceColor','r');
-plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:','LineWidth',1);
-plot([0 basicInfo(1).filterMaxRMSE],[-0.06 -0.06],'b:','LineWidth',1);
+    'ro','MarkerFaceColor','r'); %,'MarkerSize',4);
+plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
+plot([0 basicInfo(1).filterMaxRMSE],[-0.064 -0.064],'b'); %,'LineWidth',1);
 xlim([0.05 basicInfo(1).filterMaxRMSE]);
 ylim([-0.15 0.15]);
 set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
-ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-xlabel('Minimum Decoding RMSE','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+xlabel('Minimum Lightness Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
+box off
 figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffix],'');
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
+exportfig(paintShadowEnvelopeVsRMSEFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
 % Figure version 2
 paintShadowEnvelopeSortedFig = figure; clf;

@@ -52,8 +52,10 @@ unix(copyCmd);
 %
 % Cd to popdecode.  Run ProprocessRunAll; ExtractedRunAll; SummarizeRunAll;
 
-% Figure 6: PCA projection example, panels B-D.  We might replace these
-% with panels that Marlene produces
+% Figure 6: PCA projection example, panels B-D.  These are figures similar
+% to ones Marlene made, but hers are cross-validated and we used those in the 
+% paper.
+%
 % analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
 % copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2.pdf') ' ' fullfile(figureDir,'Figure6B_MeanOnPCABoth.pdf')];
 % unix(copyCmd);

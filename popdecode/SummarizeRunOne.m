@@ -9,7 +9,7 @@ function [paintShadowEffect,repSim,RMSEAnalysis,RMSEVersusNUnits,RMSEVersusNPCA,
 close all;
 
 %% Random number generator seed
-ClockRandSeed;
+rng('shuffle');
 
 % Set up decodeInfoIn from args
 [decodeInfoIn] = ParseDecodeInfo(varargin{:});

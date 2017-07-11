@@ -15,6 +15,10 @@ myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
 %% Original paint/shadow
+%
+% This can do lots of analyses that we did not end up using,
+% calls to those routines set to false here to save time and
+% clutter.
 argList = SetupConditionArgs('basic');
 argList = {argList{:}, ...
     'doSummaryPaintShadowEffect',true, ...
