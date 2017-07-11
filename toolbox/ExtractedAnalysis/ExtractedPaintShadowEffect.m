@@ -17,6 +17,15 @@ switch (doIt)
 end
 
 %% Shuffle just once in this whole function, if desired
+%
+%
+% With the 'none' options as set here, this does nothing, just returns
+% the passed intensities and responses.
+%
+% I no longer remember why we would want to do this at this point in the
+% code, nor why the option would be hard coded here rather than passed down
+% to here.  But am leaving this block in case we remember why we wanted it,
+% at some future date.
 clear decodeInfoTemp
 decodeInfoTemp.trialShuffleType = 'none';
 decodeInfoTemp.paintShadowShuffleType = 'none';
@@ -65,10 +74,10 @@ h=errorbar(d.paintGroupedIntensities, d.paintMeans, d.paintSEMs, 'ro');
 h=errorbar(d.shadowGroupedIntensities, d.shadowMeans, d.shadowSEMs, 'bo');
 %set(h,'MarkerFaceColor','b','MarkerSize',decodeInfo.markerSize-6);
 h=plot(d.paintGroupedIntensities, d.paintMeans, 'ro','MarkerFaceColor','r'); % ,'MarkerSize',decodeInfo.markerSize);
-h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'bo','MarkerFaceColor','b') %,'MarkerSize',decodeInfo.markerSize);
-h = legend({'Paint','Shadow'},'FontSize'); %,decodeInfo.legendFontSize,'Location','NorthWest');
-lfactor = 0.5;
-lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
+h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'bo','MarkerFaceColor','b'); %,'MarkerSize',decodeInfo.markerSize);
+h = legend({'Paint','Shadow'},'Location','NorthWest'); %,'FontSize',decodeInfo.legendFontSize);
+%lfactor = 0.5;
+%lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
 xlabel('Stimulus Luminance'); %,'FontSize',decodeInfo.labelFontSize);
 ylabel('Decoded Luminance'); %,'FontSize',decodeInfo.labelFontSize);
 text(0.8,0.00,sprintf('RMSE: %0.2f',d.theRMSE)); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
@@ -78,9 +87,9 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-a=get(gca(gainFig1),'ticklength');
-set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
-set(gca(gainFig1),'tickdir','out');
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
 box off
 drawnow;
 figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothDecoding'];
@@ -115,9 +124,9 @@ axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensit
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
 axis square
-a=get(gca(gainFig1),'ticklength');
-set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
-set(gca(gainFig1),'tickdir','out');
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
 box off
 drawnow;
 figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothInferredMatches'];
@@ -135,7 +144,6 @@ decodeSave.decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIn
 % coded into routine PaintShadowEffectSummaryPlots. That one determines which
 % points are used to determine the envelope range.
 envelopeThreshold = 1.05;
-
 temp = decodeSave.decodeShift;
 tempPaintShadowEffect = [temp.paintShadowEffect];
 tempRMSE = [temp.theRMSE];
@@ -167,9 +175,9 @@ ylabel('Paint-Shadow Effect'); %,'FontSize',decodeInfo.labelFontSize);
 xlim([0 0.2]);
 ylim([-0.15 0.15]);
 set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
-a=get(gca(gainFig1),'ticklength');
-set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
-set(gca(gainFig1),'tickdir','out');
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
 axis('square');
 box off
 figName = [decodeInfo.figNameRoot '_extPaintShadowEffectRMSEEnvelope'];

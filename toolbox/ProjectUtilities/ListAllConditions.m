@@ -27,7 +27,7 @@ end
 % return
 
 %% Uncomment this block to get a quick test for JD data.
-% theFiles{outIndex} = ['JD130912' insertFilenameStr '0001'];
+% theFiles{outIndex} = ['JD130827' insertFilenameStr '0001'];
 % theRFFiles{outIndex} = [''];
 % decodeInfoInRun{outIndex} = decodeInfoIn;
 % decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
