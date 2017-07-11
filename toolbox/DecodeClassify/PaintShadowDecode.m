@@ -89,7 +89,10 @@ switch (decodeInfo.decodeLOOType)
         paintPredsLOO = paintPreds;
         shadowPredsLOO = shadowPreds;
         
-    case {'ot','kfold'}      
+    case {'ot','kfold'}   
+        % Stop printout of warning that there aren't an even number of trials per group.
+        S = warning('OFF', 'stats:cvpartition:KFoldMissingGrp');
+        
         % Leave out one trial at a time
         switch (decodeInfo.decodeJoint)
             case {'paint'}
@@ -97,8 +100,7 @@ switch (decodeInfo.decodeLOOType)
                 % just return the decoded shadow predictions for the shadow data
                 % (since it was not used to build the decoder.)
                 if (strcmp(decodeInfo.decodeLOOType,'ot'))
-                    CVO = cvpartition(paintIntensities,'leaveout');
-                    
+                    CVO = cvpartition(paintIntensities,'leaveout');        
                 elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
                     CVO = cvpartition(paintIntensities,'kfold',decodeInfo.decodeNFolds);
                 else
@@ -123,7 +125,6 @@ switch (decodeInfo.decodeLOOType)
                 % (since it was not used to build the decoder.)
                 if (strcmp(decodeInfo.decodeLOOType,'ot'))
                     CVO = cvpartition(shadowIntensities,'leaveout');
-                    
                 elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
                     CVO = cvpartition(shadowIntensities,'kfold',decodeInfo.decodeNFolds);
                 else
@@ -147,9 +148,9 @@ switch (decodeInfo.decodeLOOType)
                 % worry about selecting equal paint and shadow in the cross
                 % val, just figure that it is OK because we have a fair
                 % number of trials.
+                
                 if (strcmp(decodeInfo.decodeLOOType,'ot'))
-                    CVO = cvpartition(theIntensities,'leaveout');
-                    
+                    CVO = cvpartition(theIntensities,'leaveout');  
                 elseif (strcmp(decodeInfo.decodeLOOType,'kfold'))
                     CVO = cvpartition(theIntensities,'kfold',decodeInfo.decodeNFolds);
                 else
@@ -172,7 +173,10 @@ switch (decodeInfo.decodeLOOType)
             otherwise
                 error('LOO onetrial not implemented for specified joint decode type');
         end
-                
+        
+        % Restore warning state there aren't an even number of trials per group.
+        warning(S); 
+        
     case 'oi'
         % Leave out one intensity at a time for LOO calcs.
         switch (decodeInfo.decodeJoint)
