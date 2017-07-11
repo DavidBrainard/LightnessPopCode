@@ -244,7 +244,7 @@ fclose(fid);
 allFilenames = {paintShadowEffect.theDataDir};
 filenamesFilename = fullfile(figureDir,['summaryPaintShadowAllSessions' figureSuffix '.txt'],'');
 fid = fopen(filenamesFilename,'w');
-fprintf(fid,'Session\t\tSessionOK\tIncluded\t\tSubject\tArea\tNumber Electrodes\tNumber Trials\tNumberPaintTrials\NumberShadowTrials\n');
+fprintf(fid,'Session\tSessionOK\tIncluded\tSubject\tArea\tNumber Electrodes\tNumber Trials\tNumberPaintTrials\tNumberShadowTrials\n');
 numberTrials = [];
 numberElectrodes = [];
 for ii = 1:length(booleanRMSE)
@@ -254,14 +254,14 @@ for ii = 1:length(booleanRMSE)
     else
         sessionOKStr = 'No';
     end
-    if (booleanRMSE(ii))
+    if (booleanRMSE(ii) & booleanSessionOK(ii))
         includedStr = 'Yes';
         numberTrials = [numberTrials basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials];
         numberElectrodes = [numberElectrodes size(basicInfo(ii).paintResponses,2)];
     else
         includedStr = 'No';
     end   
-    fprintf(fid,'%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%n\n',b,sessionOKStr,includedStr,basicInfo(ii).subjectStr,basicInfo(ii).titleInfoStr, ...
+    fprintf(fid,'%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\n',b,sessionOKStr,includedStr,basicInfo(ii).subjectStr,basicInfo(ii).titleInfoStr, ...
         size(basicInfo(ii).paintResponses,2),basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials,basicInfo(ii).nPaintTrials,basicInfo(ii).nShadowTrials);
 end
 fclose(fid);
@@ -272,6 +272,11 @@ fclose(fid);
 fprintf('\n*****EnvelopeSummary%s*****\n',figureSuffix);
 
 % Info about good sessions
+fprintf('There were %d sessions analyzed out of a total of %d sessions\n',length(find(booleanRMSE & booleanSessionOK)),length(booleanRMSE));
+fprintf('\t%d V1 sessions (%d BR, %d ST)\n', ...
+    length(find(booleanV1 & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectBR & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectST & booleanRMSE & booleanSessionOK)));
+fprintf('\t%d V1 sessions (%d JD, %d SY)\n', ...
+    length(find(booleanV4 & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectJD & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectSY & booleanRMSE & booleanSessionOK)));
 fprintf('Mean number of trials per included session: %0.1f, +/- %0.1f std\n',mean(numberTrials),std(numberTrials));
 fprintf('Mean number of electrodes per included session: %0.1f, +/- %0.1f std\n',mean(numberElectrodes),std(numberElectrodes));
 
@@ -353,7 +358,7 @@ xlim([0.05 basicInfo(1).filterMaxRMSE]);
 ylim([-0.15 0.15]);
 set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
 ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-xlabel('Minimum Lightness Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+xlabel('Minimum Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
 a=get(gca,'ticklength');
 set(gca,'ticklength',[a(1)*2,a(2)*2]);
 set(gca,'tickdir','out');

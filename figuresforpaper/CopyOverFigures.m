@@ -81,6 +81,6 @@ analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure8A_SingleSessionEnvelope.eps')];
 unix(copyCmd);
 analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.pdf') ' ' fullfile(figureDir,'Figure8B_PaintShadowEffectSummary.pdf')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.eps') ' ' fullfile(figureDir,'Figure8B_PaintShadowEffectSummary.eps')];
 unix(copyCmd);
 
