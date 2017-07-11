@@ -185,57 +185,6 @@ drawnow;
 FigureSave(figName,rmseenvelopefig,decodeInfo.figType);
 exportfig(rmseenvelopefig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-%% Build shifted decoders on both with shadow intensity shifts, PCA both
-%
-% Set number of PCA components by hand here.  Not really the best coding
-% practice.
-nDecodeShiftPCAComponents = 10;
-decodeSave.decodeShiftPCABoth = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'both',nDecodeShiftPCAComponents);
-
-% PLOT: Envelope of p/s effect across the shifted decodings
-
-% Set envelope threshold for coloring.
-% This value should match the value for the same variable that is also
-% coded into routine PaintShadowEffectSummaryPlots. That one determines which
-% points are used to determine the envelope range.
-envelopeThreshold = 1.05;
-
-temp = decodeSave.decodeShiftPCABoth;
-tempPaintShadowEffect = [temp.paintShadowEffect];
-tempRMSE = [temp.theRMSE];
-clear useIndex tempPaintShadowEffect
-inIndex = 1;
-useIndex = [];
-for kk = 1:length(temp)
-    if ~isempty(temp(kk).paintShadowEffect)
-        useIndex(inIndex) = kk; 
-        tempPaintShadowEffect(inIndex) = temp(kk).paintShadowEffect;
-        inIndex = inIndex + 1;
-    end
-end
-rmseenvelopefigpcaboth = figure; clf;
-set(gcf,'Position',decodeInfo.sqPosition);
-set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
-hold on;
-if (~isempty(useIndex))
-    plot(tempRMSE(useIndex),log10(tempPaintShadowEffect),'ko','MarkerSize',decodeInfo.markerSize-6,'MarkerFaceColor','k');
-    minRMSE = min(tempRMSE(useIndex));
-    for kk = 1:length(useIndex)
-        if (tempRMSE(useIndex(kk)) < envelopeThreshold*minRMSE)
-            plot(tempRMSE(useIndex(kk)),log10(tempPaintShadowEffect(kk)),'go','MarkerSize',decodeInfo.markerSize-6,'MarkerFaceColor','g');
-        end
-    end
-end
-xlabel('Decoding RMSE','FontSize',decodeInfo.labelFontSize);
-ylabel('Paint-Shadow Effect','FontSize',decodeInfo.labelFontSize);
-xlim([0 0.2]);
-ylim([-0.15 0.15]);
-set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
-figName = [decodeInfo.figNameRoot '_extPaintShadowEffectRMSEEnvelopePCABoth'];
-drawnow;
-FigureSave(figName,rmseenvelopefigpcaboth,decodeInfo.figType);
-
-
 %% Store the data for return
 decodeInfo.paintShadowEffect = decodeSave;
 

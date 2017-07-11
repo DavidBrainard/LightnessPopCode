@@ -50,10 +50,10 @@ decodeInfoOut.figNameRoot = fullfile(extractedPlotDir,'Fig');
 decodeInfoOut.writeDataDir = extractedPlotDir;
 
 %% Filter right here to just look at a particular session
-% theTempName = 'SY150423';
-% if (~strcmp(filename(1:8),theTempName))
-%     return;
-% end
+theTempName = 'JD130831';
+if (~strcmp(filename(1:8),theTempName))
+    return;
+end
 
 %% Read in extracted data
 curDir = pwd; cd(readDataDir);

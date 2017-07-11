@@ -5,6 +5,7 @@ function decodeInfo = GetTheDecoderRegressionParams(decodeInfo,contrasts,respons
 %
 % 10/31/13  dhb  Happy holloween.
 % 11/9/15   dhb  Supress rank deficient warning, but print out message of our own.
+%           dhb  Don't print out warning.
 
 nContrasts = length(contrasts);
 
@@ -12,7 +13,7 @@ switch decodeInfo.type
     case {'aff' 'betacdf', 'betadoublecdf', 'smoothing'}
         X = [responses ones(nContrasts,1)];
         if (rank(responses) < size(responses,2))
-            fprintf('\tResponse matrix is not of full rank (rank = %d, column size = %d)\n',rank(responses),size(responses,2))
+            %fprintf('\tResponse matrix is not of full rank (rank = %d, column size = %d)\n',rank(responses),size(responses,2))
         end
         S = warning('off','MATLAB:rankDeficientMatrix');
         decodeInfo.b = X\contrasts;

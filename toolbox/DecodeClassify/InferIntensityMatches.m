@@ -11,7 +11,7 @@ function [paintMatchesSmooth,shadowMatchesSmooth,paintMatchesDiscrete,shadowMatc
 %
 % 3/25/14  dhb  Factored this out.
 
-% Do forward fit.  We could pass this but it seems cleaner to modularize here.
+% Do forward fit.  We could pass this but it seems cleaner to thinkmodularize here.
 smoothIntensities = linspace(stimulusMin,stimulusMax,decodeInfoIn.nFinelySpacedIntensities);
 paintSmooth = PredictDecodedIntensities(decodeInfoIn,paintFitObject,smoothIntensities);
 shadowSmooth = PredictDecodedIntensities(decodeInfoIn,shadowFitObject,smoothIntensities);
