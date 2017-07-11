@@ -16,6 +16,7 @@ function DataPreprocessEngine(filename,rfFilename,decodeInfoIn)
 % 4/20/14   dhb  Started to add RF mapping analyses, based on code provided by Doug.
 % 12/19/15  dhb  Fix up SY foveal/peripheral exclusion convention.
 % 4/14/16   dhb  Change filled in letter from 'd' to 'g', I think that is what it should be.
+% 7/11/17   dhb  Fix typo in checking for NaN section.
 
 %% Basic initialization
 close all;
@@ -230,7 +231,7 @@ for nn1 = 1:length(useSizes)
             keepChannelsIndex(cc) = 0;
         end
     end
-    paintRespnses = paintResponses(:,logical(keepChannelsIndex));
+    paintResponses = paintResponses(:,logical(keepChannelsIndex));
     shadowResponses = shadowResponses(:,logical(keepChannelsIndex));
     fprintf('\tKeeping %d of %d channels as result of NaN check\n',sum(keepChannelsIndex),nChannelsForNanCheck);
     
