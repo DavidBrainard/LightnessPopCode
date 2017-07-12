@@ -397,7 +397,7 @@ for nn1 = 1:length(useSizes)
         shadowLeftOutCount = sum(shadowLeftOutIndex);
         fprintf('\tRemoved %d paint trial blank and specified intensity trials, %d for shadow\n',paintLeftOutCount,shadowLeftOutCount);   
     else
-        fprintf('\tDid not remove any blank or specified intensityt trials\n')
+        fprintf('\tDid not remove any blank or specified intensity trials\n')
     end
     
     %% Scale intensities to range 0-1 not 0-100.  More convenient conceptually.

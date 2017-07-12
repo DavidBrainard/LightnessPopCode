@@ -31,7 +31,8 @@ p.addParamValue('paintShadowFitType','intcpt',@ischar);
 p.addParamValue('decodeNFolds',10,@isnumeric);
 p.addParamValue('excludeSYelectrodes','sykp',@ischar);
 p.addParamValue('minTrials',5,@isnumeric);
-p.addParamValue('filterMaxRMSE',0.25,@isnumeric);
+p.addParamValue('filterMaxRMSE',0.20,@isnumeric);
+p.addParamValue('envelopeThreshold',1.05,@isnumeric);
 
 % Which extracted analyses to do
 p.addParamValue('doExtractedPaintShadowEffect',true,@islogical);
@@ -176,6 +177,7 @@ decodeInfoIn.debugPlots = true;
 % Minimum number of trials needed to go forward with a session.
 decodeInfoIn.minTrials = p.Results.minTrials;
 decodeInfoIn.filterMaxRMSE = p.Results.filterMaxRMSE;
+decodeInfoIn.envelopeThreshold = p.Results.envelopeThreshold;
 
 % Which stimulus intensities to leave out of the analysis.
 %

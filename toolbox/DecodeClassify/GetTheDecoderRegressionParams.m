@@ -13,7 +13,7 @@ switch decodeInfo.type
     case {'aff' 'betacdf', 'betadoublecdf', 'smoothing'}
         X = [responses ones(nContrasts,1)];
         if (rank(responses) < size(responses,2))
-            %fprintf('\tResponse matrix is not of full rank (rank = %d, column size = %d)\n',rank(responses),size(responses,2))
+            % fprintf('\tResponse matrix is not of full rank (rank = %d, column size = %d)\n',rank(responses),size(responses,2))
         end
         S = warning('off','MATLAB:rankDeficientMatrix');
         decodeInfo.b = X\contrasts;

@@ -143,7 +143,9 @@ decodeSave.decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIn
 % This value should match the value for the same variable that is also
 % coded into routine PaintShadowEffectSummaryPlots. That one determines which
 % points are used to determine the envelope range.
-envelopeThreshold = 1.05;
+if (decodeInfo.envelopeThreshold ~= 1.05)
+    error('Check that you really want envelopeThreshold set to something other than its paper value of 1.05');
+end
 temp = decodeSave.decodeShift;
 tempPaintShadowEffect = [temp.paintShadowEffect];
 tempRMSE = [temp.theRMSE];
@@ -165,7 +167,7 @@ if (~isempty(useIndex))
     plot(tempRMSE(useIndex),log10(tempPaintShadowEffect),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
     minRMSE = min(tempRMSE(useIndex));
     for kk = 1:length(useIndex)
-        if (tempRMSE(useIndex(kk)) < envelopeThreshold*minRMSE)
+        if (tempRMSE(useIndex(kk)) < decodeInfo.envelopeThreshold*minRMSE)
             plot(tempRMSE(useIndex(kk)),log10(tempPaintShadowEffect(kk)),'go','MarkerFaceColor','g'); %,'MarkerSize',decodeInfo.markerSize-6);
         end
     end

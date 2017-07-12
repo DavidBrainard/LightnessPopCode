@@ -24,8 +24,10 @@ if (~exist(figureDir,'dir'))
     mkdir(figureDir);
 end
 
-%% Override filterMaxRMSE
-basicInfo(1).filterMaxRMSE = 0.2;
+%% Check filterMaxRMSE
+if (basicInfo(1).filterMaxRMSE ~= 0.2)
+	error('Check that you really want filterMaxRMSE set to something other than its paper value of 0.2');
+end
 
 %% PLOT: Envelope summaries in their multiple version glory
 DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
@@ -176,7 +178,10 @@ function DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,shiftN
 % This value should match the value for the same variable that is also
 % coded into routine ExtractedPaintShadowEffect. That one determines which
 % points in the single session envelope plot get colored green.
-envelopeThreshold = 1.05;
+envelopeThreshold = basicInfo.envelopeThreshold;
+if (envelopeThreshold ~= 1.05)
+    error('Check that you really want envelopeThreshold set to something other than its paper value of 1.05');
+end
 
 % Go through each session and extract the range.
 for ii = 1:length(paintShadowEffect);
@@ -246,7 +251,10 @@ filenamesFilename = fullfile(figureDir,['summaryPaintShadowAllSessions' figureSu
 fid = fopen(filenamesFilename,'w');
 fprintf(fid,'Session\tSessionOK\tIncluded\tSubject\tArea\tNumber Electrodes\tNumber Trials\tNumberPaintTrials\tNumberShadowTrials\n');
 numberTrials = [];
-numberElectrodes = [];
+numberElectrodesBR = [];
+numberElectrodesST = [];
+numberElectrodesJD = [];
+numberElectrodesSY = [];
 for ii = 1:length(booleanRMSE)
     [a,b] = fileparts(allFilenames{ii});
     if (booleanSessionOK(ii))
@@ -257,7 +265,17 @@ for ii = 1:length(booleanRMSE)
     if (booleanRMSE(ii) & booleanSessionOK(ii))
         includedStr = 'Yes';
         numberTrials = [numberTrials basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials];
-        numberElectrodes = [numberElectrodes size(basicInfo(ii).paintResponses,2)];
+        if (booleanSubjectBR(ii))  
+            numberElectrodesBR = [numberElectrodesBR size(basicInfo(ii).paintResponses,2)];
+        elseif(booleanSubjectST(ii))
+            numberElectrodesST = [numberElectrodesST size(basicInfo(ii).paintResponses,2)];
+        elseif(booleanSubjectJD(ii))
+            numberElectrodesJD = [numberElectrodesJD size(basicInfo(ii).paintResponses,2)];
+        elseif(booleanSubjectSY(ii))
+            numberElectrodesSY = [numberElectrodesSY size(basicInfo(ii).paintResponses,2)];
+        else
+            error('Unknown monkey');
+        end
     else
         includedStr = 'No';
     end   
@@ -266,7 +284,7 @@ for ii = 1:length(booleanRMSE)
 end
 fclose(fid);
 
-% Information about
+%% Information printout
 
 % Say which version we are
 fprintf('\n*****EnvelopeSummary%s*****\n',figureSuffix);
@@ -278,7 +296,11 @@ fprintf('\t%d V1 sessions (%d BR, %d ST)\n', ...
 fprintf('\t%d V1 sessions (%d JD, %d SY)\n', ...
     length(find(booleanV4 & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectJD & booleanRMSE & booleanSessionOK)),length(find(booleanSubjectSY & booleanRMSE & booleanSessionOK)));
 fprintf('Mean number of trials per included session: %0.1f, +/- %0.1f std\n',mean(numberTrials),std(numberTrials));
-fprintf('Mean number of electrodes per included session: %0.1f, +/- %0.1f std\n',mean(numberElectrodes),std(numberElectrodes));
+fprintf('Mean number of electrodes per included session:\n');
+fprintf('\tBR: %0.1f, +/- %0.1f std\n',mean(numberElectrodesBR),std(numberElectrodesBR));
+fprintf('\tST: %0.1f, +/- %0.1f std\n',mean(numberElectrodesST),std(numberElectrodesST));
+fprintf('\tJD: %0.1f, +/- %0.1f std\n',mean(numberElectrodesJD),std(numberElectrodesJD));
+fprintf('\tSY: %0.1f, +/- %0.1f std\n',mean(numberElectrodesSY),std(numberElectrodesSY));
 
 % A little print out of where intervals fall
 %
@@ -347,11 +369,11 @@ plotV4index = booleanV4 & booleanRMSE & booleanSessionOK;
 errorbar(bestRMSE(plotV1index),log10(bestPaintShadowEffect(plotV1index)),...
     abs(log10(minPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     abs(log10(maxPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
-    'ko','MarkerFaceColor','k'); %,'MarkerSize',4);
+    'o','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV4index),log10(bestPaintShadowEffect(plotV4index)),...
     abs(log10(minPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     abs(log10(maxPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
-    'ro','MarkerFaceColor','r'); %,'MarkerSize',4);
+    'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[-0.064 -0.064],'b'); %,'LineWidth',1);
 xlim([0.05 basicInfo(1).filterMaxRMSE]);
@@ -363,6 +385,7 @@ a=get(gca,'ticklength');
 set(gca,'ticklength',[a(1)*2,a(2)*2]);
 set(gca,'tickdir','out');
 box off
+legend({'V1', 'V4'},'Location','NorthWest');
 figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffix],'');
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
 exportfig(paintShadowEnvelopeVsRMSEFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
