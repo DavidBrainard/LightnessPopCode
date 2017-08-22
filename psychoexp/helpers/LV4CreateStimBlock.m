@@ -32,7 +32,7 @@ function stimBlock = LV4CreateStimBlock(stimInfo, stimBlockType)
 % different l/r orderings of the same two stimuli are pruned from the returned
 % block list.
 
-error(nargchk(2, 2, nargin));
+narginchk(2, 2);
 
 numStims = length(stimInfo);
 
