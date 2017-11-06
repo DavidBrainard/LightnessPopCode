@@ -64,23 +64,23 @@ unix(copyCmd);
 % copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6D_MeanOnPCAShadow.pdf')];
 % unix(copyCmd);
 
-% Figure 7: Decoding and neural paint/shadow effect
+% Figure 8: Decoding and neural paint/shadow effect
 analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','JD130904lightness0001_300px_15cx_-25cy_i');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure7A_ExampleDecoding1.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8A_ExampleDecoding1.eps')];
 unix(copyCmd);
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure7B_ExamplePaintShadowEffect1.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8B_ExamplePaintShadowEffect1.eps')];
 unix(copyCmd);
 analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure7C_ExampleDecoding2.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8C_ExampleDecoding2.eps')];
 unix(copyCmd);
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure7D_ExamplePaintShadowEffect2.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8D_ExamplePaintShadowEffect2.eps')];
 unix(copyCmd);
 
-% Figure 8: Envelope decoding
+% Figure 9: Envelope decoding
 analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure8A_SingleSessionEnvelope.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure9A_SingleSessionEnvelope.eps')];
 unix(copyCmd);
 analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.eps') ' ' fullfile(figureDir,'Figure8B_PaintShadowEffectSummary.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.eps') ' ' fullfile(figureDir,'Figure9B_PaintShadowEffectSummary.eps')];
 unix(copyCmd);
 
