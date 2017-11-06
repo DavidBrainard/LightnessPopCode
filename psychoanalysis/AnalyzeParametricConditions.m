@@ -22,6 +22,7 @@ function summaryDataStruct = AnalyzeParametricConditions(pcCode,subjectToAnalyze
 %                   Intercept only fit option.
 % 5/12/14       dhb Pass analysisFitType.
 %               dhb Consolidate different parametric conditions analysis
+% 11/06/17      dhb Change sign of p/s effect in figure, log10 -> -log10.  Only for gain method.
 
 %% Clear all
 close all;
@@ -289,7 +290,7 @@ for s = subjectToAnalyze
                         textDetails = sprintf('Slope %0.2f, Intercept %0.2f',...
                             summaryDataStruct{c1}.theFit(1),summaryDataStruct{c1}.theFit(2));
                     case 'gain'
-                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',log10(summaryDataStruct{c1}.theFit(1)));
+                        textDetails = sprintf('Paint-Shadow Effect: %0.2f',-log10(summaryDataStruct{c1}.theFit(1)));
                     case 'intercept'
                         textDetails = sprintf('Paint-Shadow Effect: %0.2f',summaryDataStruct{c1}.theFit(1));
                     otherwise

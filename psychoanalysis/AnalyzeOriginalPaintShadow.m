@@ -9,6 +9,7 @@
 % what is done here.
 %
 % 2/22/14  dhb  Wrote it.
+% 11/6/17  dhb  Change sign of paint-shadow effect: log10 -> -log10.
 
 %% Clear
 clear; close all;
@@ -18,7 +19,7 @@ clear; close all;
 % Set compute to false if you just want to fuss with the figures produced
 % by this file and you've already run it once with COMPUTE set true.
 analysisFitType = 'gain';
-COMPUTE = false;
+COMPUTE = true;
 
 %% Figure directory
 outputBaseDir = getpref('LightnessPopCode','outputBaseDir');
@@ -165,16 +166,16 @@ switch (analysisFitType)
         gainFig = figure; clf; hold on
         set(gcf,'Position',figParams.position);
         set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(log10(theData.allPaintShadow),'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
+        plot(-log10(theData.allPaintShadow),'b^','MarkerFaceColor','b','MarkerSize',figParams.markerSize);
         plot(zeros(size(theData.allControl)),'k:','LineWidth',figParams.lineWidth);
-        plot(mean(log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
+        plot(mean(-log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b','LineWidth',figParams.lineWidth);
         axis([figParams.xLimLow figParams.xLimHigh -0.3 0.3]);
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels,'FontSize',figParams.axisFontSize-3);
         set(gca,'YTick',[-.3 -.2 -.1 0 .1 .2 .3],'YTickLabel',{'-0.3 ' '-0.2 ' '-0.1  ' '0.0 ' '0.1 ' '0.2 ' '0.3 '});
         xlabel('Subject (Replication)','FontSize',figParams.labelFontSize);
         ylabel('Paint/Shadow Gain Effect','FontSize',figParams.labelFontSize);
         % legend({sprintf('Paint/Shadow, Mean %0.2f',mean(theData.allPaintShadow))},'Location','NorthWest','FontSize',figParams.legendFontSize);
-        text(0.25,0.27,sprintf('Mean: %0.2f',mean(log10(theData.allPaintShadow))),'FontSize',figParams.legendFontSize);
+        text(0.25,0.27,sprintf('Mean: %0.2f',mean(-log10(theData.allPaintShadow))),'FontSize',figParams.legendFontSize);
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGains'),gainFig,figParams.figType);
         
         % Version with control conditions.
@@ -183,11 +184,11 @@ switch (analysisFitType)
         gainFig1 = figure; clf; hold on
         %set(gcf,'Position',figParams.position);
         %set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(log10(theData.allPaintShadow),'bo','MarkerFaceColor','b'); %,'MarkerSize',figParams.markerSize);
-        plot(log10(theData.allControl),'ko','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
+        plot(-log10(theData.allPaintShadow),'bo','MarkerFaceColor','b'); %,'MarkerSize',figParams.markerSize);
+        plot(-log10(theData.allControl),'ko','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
         plot(zeros(size(theData.allControl)),'k:'); %,'LineWidth',figParams.lineWidth);
-        plot(mean(log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b'); %,'LineWidth',figParams.lineWidth);
-        plot(mean(log10(theData.allControl))*ones(size(theData.allControl)),'k'); %,'LineWidth',figParams.lineWidth);
+        plot(mean(-log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b'); %,'LineWidth',figParams.lineWidth);
+        plot(mean(-log10(theData.allControl))*ones(size(theData.allControl)),'k'); %,'LineWidth',figParams.lineWidth);
         xlim([figParams.xLimLow figParams.xLimHigh]);
         ylim([-0.15 0.15]);
         set(gca,'XTick',figParams.xTicks,'XTickLabel',figParams.xTickLabels); %,'FontSize',figParams.axisFontSize-3);
@@ -203,9 +204,9 @@ switch (analysisFitType)
         FigureSave(fullfile(outputDir,'OriginalPaintShadowGainsWithControl'),gainFig1,figParams.figType);
         exportfig(gainFig1,fullfile(outputDir,'OriginalPaintShadowGainsWithControl.eps'),'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-        fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(log10(theData.allPaintShadow)),mean(log10(theData.allControl)));
+        fprintf('Mean paint-shadow effect = %0.3f, control = %0.3f\n',mean(-log10(theData.allPaintShadow)),mean(-log10(theData.allControl)));
         fprintf('Standard error paint-shadow effect = %0.4f, control = %0.4f\n', ...
-            std(log10(theData.allPaintShadow))/sqrt(length(theData.allPaintShadow)),std(log10(theData.allControl))/sqrt(length(theData.allControl)));
+            std(-log10(theData.allPaintShadow))/sqrt(length(theData.allPaintShadow)),std(-log10(theData.allControl))/sqrt(length(theData.allControl)));
     otherwise
         error('Unknown analysisFitType specified');
 end
