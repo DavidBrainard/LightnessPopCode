@@ -4,6 +4,7 @@ function ExtractedPaintShadowEffect(doIt,decodeInfo,theData)
 % Do the basic paint/shadow decoding and get paint shadow effect.
 %
 % 3/29/16  dhb  Pulled this out as a function
+% 11/06/17 dhb  Change sign of p/s effect.
 
 %% Are we doing it?
 switch (doIt)
@@ -111,10 +112,10 @@ switch (decodeInfo.paintShadowFitType)
     case 'intcpt'
         text(0,1,(sprintf('Paint/Shadow Effect: %0.3f',d.paintShadowEffect))); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
     case 'gain'
-        if (abs(log10(d.paintShadowEffect)) <= 0.005)
-            text(0,1,(sprintf('Paint/Shadow Effect: %0.3f',log10(d.paintShadowEffect)))); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+        if (abs(-log10(d.paintShadowEffect)) <= 0.005)
+            text(0,1,(sprintf('Paint/Shadow Effect: %0.3f',-log10(d.paintShadowEffect)))); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
         else
-            text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',log10(d.paintShadowEffect)))); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
+            text(0,1,(sprintf('Paint/Shadow Effect: %0.2f',-log10(d.paintShadowEffect)))); %,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize);
         end
     otherwise
         error('Unknown paint/shadow fit type');
@@ -164,11 +165,11 @@ rmseenvelopefig = figure; clf;
 %set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 if (~isempty(useIndex))
-    plot(tempRMSE(useIndex),log10(tempPaintShadowEffect),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
+    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
     minRMSE = min(tempRMSE(useIndex));
     for kk = 1:length(useIndex)
         if (tempRMSE(useIndex(kk)) < decodeInfo.envelopeThreshold*minRMSE)
-            plot(tempRMSE(useIndex(kk)),log10(tempPaintShadowEffect(kk)),'go','MarkerFaceColor','g'); %,'MarkerSize',decodeInfo.markerSize-6);
+            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'go','MarkerFaceColor','g'); %,'MarkerSize',decodeInfo.markerSize-6);
         end
     end
 end

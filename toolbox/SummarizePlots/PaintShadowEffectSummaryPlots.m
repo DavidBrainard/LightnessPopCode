@@ -8,13 +8,14 @@ function PaintShadowEffectSummaryPlots(basicInfo,paintShadowEffect,summaryDir,fi
 % either good or bad, independent of what is being analyzed.
 %
 % The envelope threshold and RMSE thresholds used to make the plot are set here, rather than as
-% a parameter.  And the mean psychophysical paint-shadow effect [log10(gain) = -0.06]
+% a parameter.  And the mean psychophysical paint-shadow effect [-log10(gain) = 0.06]
 % is also coded by hand.  Probably that's bad coding practice, but sometimes we
 % just need to get the job done.
 %
 % We decided by eye that an RMSE threshold of 0.2 seems about right.
 %
 % 4/19/16  dhb  Wrote it.
+% 11/06/17 dhb  Change sign of p/s effect.
 
 %% Additional parameters
 figParams.bumpSizeForMean = 6;
@@ -349,7 +350,8 @@ index1 = find(bestPaintShadowEffect < 1 & booleanRMSE & booleanV4);
 fractionBestUnder = length(index1)/length(find(booleanRMSE & booleanV4));
 fprintf('%d%% of %d V4 sessions have best p/s effect less than 0\n',round(100*fractionBestUnder),length(find(booleanRMSE & booleanV4)));
 
-% And range
+% And range.  Didn't change sign in computation of range, since it doesn't
+% matter.
 index1 = find(booleanRMSE);
 psRange = mean(log10(maxPaintShadowEffect(index1)) - log10(minPaintShadowEffect(index1)));
 fprintf('\nMean p/s effect range %0.3f\n',psRange);
@@ -360,22 +362,24 @@ index1 = find(booleanRMSE & booleanV4);
 psRange = mean(log10(maxPaintShadowEffect(index1)) - log10(minPaintShadowEffect(index1)));
 fprintf('Mean V4 p/s effect range %0.3f\n',psRange);
 
-% Figure version 1
+% Figure version 1.  Didn't change signs in error bars,
+% since the abs() takes care of that.  Did change sign
+% of psychophysical effect by hand.
 paintShadowEnvelopeVsRMSEFig = figure; clf; hold on;
 %set(gcf,'Position',figParams.position);
 %set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV1index = booleanV1 & booleanRMSE & booleanSessionOK;
 plotV4index = booleanV4 & booleanRMSE & booleanSessionOK;
-errorbar(bestRMSE(plotV1index),log10(bestPaintShadowEffect(plotV1index)),...
+errorbar(bestRMSE(plotV1index),-log10(bestPaintShadowEffect(plotV1index)),...
     abs(log10(minPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     abs(log10(maxPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     'o','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
-errorbar(bestRMSE(plotV4index),log10(bestPaintShadowEffect(plotV4index)),...
+errorbar(bestRMSE(plotV4index),-log10(bestPaintShadowEffect(plotV4index)),...
     abs(log10(minPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     abs(log10(maxPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
-plot([0 basicInfo(1).filterMaxRMSE],[-0.064 -0.064],'b'); %,'LineWidth',1);
+plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'b'); %,'LineWidth',1);
 xlim([0.05 basicInfo(1).filterMaxRMSE]);
 ylim([-0.15 0.15]);
 set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
@@ -398,8 +402,8 @@ set(gcf,'Position',tempPosition);
 set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 subplot(1,2,1); hold on
 [~,index] = sort(minPaintShadowEffect,'ascend');
-plot(log10(minPaintShadowEffect(index)),'r','LineWidth',2);
-plot(log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
 plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
 ylim([-0.6 0.6]);
 xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
@@ -408,8 +412,8 @@ title({'Sorted by Lower Limit' ; ''},'FontName',figParams.fontName,'FontSize',fi
 
 subplot(1,2,2); hold on
 [~,index] = sort(maxPaintShadowEffect,'descend');
-plot(log10(minPaintShadowEffect(index)),'r','LineWidth',2);
-plot(log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
 plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
 ylim([-0.6 0.6]);
 xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);

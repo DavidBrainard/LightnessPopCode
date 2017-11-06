@@ -17,6 +17,7 @@ function ClassificationVersusNPCASummaryPlots(basicInfo,paintShadowEffect,Classi
 % parameter.
 %
 % 4/2/17  dhb  Wrote it.
+% 11/6/17 dhb  Change sign of p/s effect in last plot.  Rename x-axis label.
 
 %% Additional parameters
 figParams.bumpSizeForMean = 6;
@@ -92,9 +93,9 @@ end
     
 %% PLOT: Classification versus RMSE
 PaintShadowEffectVsClassificationFig = figure; clf; hold on
-plot(classificationPlot,log10(paintShadowEffectPlot),'ro','MarkerFaceColor','r');
+plot(classificationPlot,-log10(paintShadowEffectPlot),'ro','MarkerFaceColor','r');
 xlabel('Classification Performance');
-ylabel('Log10 Paint-Shadow Effect');
+ylabel('Paint-Shadow Effect');
 %xlim([0 0.3]);
 %ylim([-0.5 0.5]);
 %title({'N PCA Components Scale Parameter' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
