@@ -36,7 +36,7 @@ paintShadowDecodeMeanDifferenceDiscrete = mean(paintDecodeDiscrete-shadowDecodeD
 
 % Find the paint/shadow effect
 switch (decodeInfo.paintShadowFitType)
-    case 'gain',
+    case 'gain'
         % Summarize intensity matches with a line through the discrete level matches.
         paintShadowEffect = (paintMatchesDiscrete')\(shadowMatchesDiscrete');
         shadowMatchesDiscretePred = paintShadowEffect*paintMatchesDiscrete;
