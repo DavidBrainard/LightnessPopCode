@@ -1,5 +1,5 @@
-function LightnessPopCode
-% LightnessPopCode
+function LightnessPopCodeLocalHook
+% LightnessPopCodeLocalHook
 %
 % Configure things for working on the LightnessPopCode project.
 %
