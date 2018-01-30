@@ -279,8 +279,8 @@ for s = subjectToAnalyze
                 axis([analysisParams.intensityLimLow analysisParams.intensityLimHigh analysisParams.intensityLimLow analysisParams.intensityLimHigh]);
                 set(gca,'XTick',analysisParams.intensityTicks,'XTickLabel',analysisParams.intensityTickLabels);
                 set(gca,'YTick',analysisParams.intensityTicks,'YTickLabel',analysisParams.intensityTickLabels);
-                xlabel('Paint Disk Luminance'); %,'FontSize',analysisParams.labelFontSize);
-                ylabel('Matched Shadow Disk Luminance'); %,'FontSize',analysisParams.labelFontSize);
+                xlabel('Paint Disk Luminance at PSE'); %,'FontSize',analysisParams.labelFontSize);
+                ylabel('Shadow Disk Luminance at PSE'); %,'FontSize',analysisParams.labelFontSize);
                 set(gca,'tickdir','out')
                 a=get(gca,'ticklength');
                 set(gca,'ticklength',[a(1)*2,a(2)*2])
@@ -321,8 +321,8 @@ for s = subjectToAnalyze
                 axis([analysisParams.intensityLimLow analysisParams.intensityLimHigh analysisParams.intensityLimLow analysisParams.intensityLimHigh]);
                 set(gca,'XTick',analysisParams.intensityTicks,'XTickLabel',analysisParams.intensityTickLabels);
                 set(gca,'YTick',analysisParams.intensityTicks,'YTickLabel',analysisParams.intensityTickLabels);
-                xlabel('Paint Disk Luminance','FontSize',analysisParams.labelFontSize);
-                ylabel('Matched Shadow Disk Luminance','FontSize',analysisParams.labelFontSize);
+                xlabel('Paint Disk Luminance at PSE','FontSize',analysisParams.labelFontSize);
+                ylabel('Shadow Disk Luminance at PSE','FontSize',analysisParams.labelFontSize);
                 switch (analysisParams.fitType)
                     case 'affine'
                         textDetails = sprintf('Paint-Shadow Effect: %0.2f, Intercept %0.2f',...
