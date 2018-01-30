@@ -339,8 +339,8 @@ for s = 1:nStimTypes
             plot(interpStimuli{s},pInterp{s},'k'); %,'LineWidth',psychoAnalysisParams.lineWidth);
             %plot([refIntensity(s) refIntensity(s)],[0 0.5],'r'); %,'LineWidth',psychoAnalysisParams.lineWidth);
             %plot([loc25(s) loc75(s)],[0.05 0.05],'r','LineWidth',psychoAnalysisParams.lineWidth);
-            plot([0 pse(s)],[0.5 0.5],'k'); %,'LineWidth',psychoAnalysisParams.lineWidth);
-            plot([pse(s) pse(s)],[0 0.5],'k'); %,'LineWidth',psychoAnalysisParams.lineWidth);
+            plot([0 pse(s)],[0.5 0.5],'k:'); %,'LineWidth',psychoAnalysisParams.lineWidth);
+            plot([pse(s) pse(s)],[0 0.5],'k:'); %,'LineWidth',psychoAnalysisParams.lineWidth);
             xlabel('Shadow Disk Luminance (re Display Max)'); %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
             ylabel('Fraction Shadow Disk Judged Lighter') %,'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.labelFontSize);
             %title(sprintf('stimID = %d, refIntensity = %0.2f',stimID(s),refIntensity(s)),'FontName',psychoAnalysisParams.fontName,'FontSize',psychoAnalysisParams.titleFontSize);

@@ -196,7 +196,7 @@ switch (analysisFitType)
         ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);  
         xlabel('Subject (Replication)'); %,'FontSize',figParams.labelFontSize);
         ylabel('Paint-Shadow Effect'); %,'FontSize',figParams.labelFontSize);
-        legend({'Paint-Shadow Condition' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        legend({'Paint-Shadow Condition' 'Paint-Paint Control'},'Location','NorthWest');
         set(gca(gainFig1),'tickdir','out');
         a=get(gca(gainFig1),'ticklength');
         set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
