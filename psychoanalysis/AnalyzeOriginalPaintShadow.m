@@ -184,10 +184,10 @@ switch (analysisFitType)
         gainFig1 = figure; clf; hold on
         %set(gcf,'Position',figParams.position);
         %set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-        plot(-log10(theData.allPaintShadow),'bo','MarkerFaceColor','b'); %,'MarkerSize',figParams.markerSize);
-        plot(-log10(theData.allControl),'ko','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
+        plot(-log10(theData.allPaintShadow),'ko','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
+        plot(-log10(theData.allControl),'ks','MarkerFaceColor','k'); %,'MarkerSize',figParams.markerSize);
         plot(zeros(size(theData.allControl)),'k:'); %,'LineWidth',figParams.lineWidth);
-        plot(mean(-log10(theData.allPaintShadow))*ones(size(theData.allControl)),'b'); %,'LineWidth',figParams.lineWidth);
+        plot(mean(-log10(theData.allPaintShadow))*ones(size(theData.allControl)),'k'); %,'LineWidth',figParams.lineWidth);
         plot(mean(-log10(theData.allControl))*ones(size(theData.allControl)),'k'); %,'LineWidth',figParams.lineWidth);
         xlim([figParams.xLimLow figParams.xLimHigh]);
         ylim([-0.15 0.15]);
@@ -196,7 +196,7 @@ switch (analysisFitType)
         ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);  
         xlabel('Subject (Replication)'); %,'FontSize',figParams.labelFontSize);
         ylabel('Paint-Shadow Effect'); %,'FontSize',figParams.labelFontSize);
-        %legend({'Paint-Shadow Effect' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
+        legend({'Paint-Shadow Condition' 'Paint-Paint Control'},'Location','NorthWest','FontSize',figParams.legendFontSize);
         set(gca(gainFig1),'tickdir','out');
         a=get(gca(gainFig1),'ticklength');
         set(gca(gainFig1),'ticklength',[a(1)*2,a(2)*2]);
