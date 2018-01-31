@@ -53,7 +53,7 @@ figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
 FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
 %% Print out null RMSE over included sessions
-fprintf('Null model (guess mean) over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
+fprintf('Null model (guess mean) RMSE over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
 
 end
 
@@ -305,41 +305,89 @@ fprintf('\tSY: %0.1f, +/- %0.1f std\n',mean(numberElectrodesSY),std(numberElectr
 
 % A little print out of where intervals fall
 %
-% We haven't yet taken the log10, so we compare to 1 but printout relative
+% We haven't yet taken the -log10, so we compare to 1 but printout relative
 % to zero. Effects greater than 1 before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionStraddle = length(index1)/length(find(booleanRMSE));
 fprintf('\n%d%% of %d sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionBelow = length(index2)/length(find(booleanRMSE));
-fprintf('%d%% of %d sessions have p/s interval less than 0\n',round(100*fractionBelow),length(find(booleanRMSE)));
+fprintf('%d%% of %d sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE);
 fractionAbove = length(index3)/length(find(booleanRMSE));
-fprintf('%d%% of %d sessions have p/s interval greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE)));
+fprintf('%d%% of %d sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE)));
 
-% A little print out of where intervals fall. Effects greater than 1
+% A little print out of where intervals fall, V1. Effects greater than 1
 % before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1);
 fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV1));
 fprintf('\n%d%% of %d V1 sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV1)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1);
 fractionBelow = length(index2)/length(find(booleanRMSE & booleanV1));
-fprintf('%d%% of %d V1 sessions have p/s interval less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV1)));
+fprintf('%d%% of %d V1 sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV1)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV1);
 fractionAbove = length(index3)/length(find(booleanRMSE & booleanV1));
-fprintf('%d%% of %d V1 sessions have p/s interval greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV1)));
+fprintf('%d%% of %d V1 sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV1)));
 
-% A little print out of where intervals fall.  Effects greater than 1
+% A little print out of where intervals fall, V4.  Effects greater than 1
 % before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4);
 fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV4));
 fprintf('\n%d%% of %d V4 sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV4)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4);
 fractionBelow = length(index2)/length(find(booleanRMSE & booleanV4));
-fprintf('%d%% of %d V4 sessions have p/s interval less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV4)));
+fprintf('%d%% of %d V4 sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV4)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV4);
 fractionAbove = length(index3)/length(find(booleanRMSE & booleanV4));
-fprintf('%d%% of %d V4 sessions have p/s interval greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV4)));
+fprintf('%d%% of %d V4 sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV4)));
+
+% A little print out of where intervals fall, JD. Effects greater than 1
+% before taking the -log10 are less than 0.
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4 & booleanSubjectJD);
+fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV4 & booleanSubjectJD));
+fprintf('\n%d%% of %d JD (V4) sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV4 & booleanSubjectJD)));
+index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4 & booleanSubjectJD);
+fractionBelow = length(index2)/length(find(booleanRMSE & booleanV4 & booleanSubjectJD));
+fprintf('%d%% of %d JD (V4) sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV4 & booleanSubjectJD)));
+index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV4 & booleanSubjectJD);
+fractionAbove = length(index3)/length(find(booleanRMSE & booleanV4 & booleanSubjectJD));
+fprintf('%d%% of %d JD (V4) sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV4 & booleanSubjectJD)));
+
+% A little print out of where intervals fall, SY. Effects greater than 1
+% before taking the -log10 are less than 0.
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4 & booleanSubjectSY);
+fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV4 & booleanSubjectSY));
+fprintf('\n%d%% of %d SY (V4) sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV4 & booleanSubjectSY)));
+index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4 & booleanSubjectSY);
+fractionBelow = length(index2)/length(find(booleanRMSE & booleanV4 & booleanSubjectSY));
+fprintf('%d%% of %d SY (V4) sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV4 & booleanSubjectSY)));
+index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV4 & booleanSubjectSY);
+fractionAbove = length(index3)/length(find(booleanRMSE & booleanV4 & booleanSubjectSY));
+fprintf('%d%% of %d SY (V4) sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV4 & booleanSubjectSY)));
+
+% A little print out of where intervals fall, BR. Effects greater than 1
+% before taking the -log10 are less than 0.
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1 & booleanSubjectBR);
+fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV1 & booleanSubjectBR));
+fprintf('\n%d%% of %d BR (V1) sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV1 & booleanSubjectBR)));
+index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1 & booleanSubjectBR);
+fractionBelow = length(index2)/length(find(booleanRMSE & booleanV1 & booleanSubjectBR));
+fprintf('%d%% of %d BR (V1) sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV1 & booleanSubjectBR)));
+index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV1 & booleanSubjectBR);
+fractionAbove = length(index3)/length(find(booleanRMSE & booleanV1 & booleanSubjectBR));
+fprintf('%d%% of %d BR (V1) sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV1 & booleanSubjectBR)));
+
+% A little print out of where intervals fall, ST. Effects greater than 1
+% before taking the -log10 are less than 0.
+index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1 & booleanSubjectST);
+fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV1 & booleanSubjectST));
+fprintf('\n%d%% of %d ST (V1) sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV1 & booleanSubjectST)));
+index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1 & booleanSubjectST);
+fractionBelow = length(index2)/length(find(booleanRMSE & booleanV1 & booleanSubjectST));
+fprintf('%d%% of %d ST (V1) sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV1 & booleanSubjectST)));
+index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV1 & booleanSubjectST);
+fractionAbove = length(index3)/length(find(booleanRMSE & booleanV1 & booleanSubjectST));
+fprintf('%d%% of %d ST (V1) sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV1 & booleanSubjectST)));
 
 % And printout where the best RMSE p/s effects are.  Best effect greater
 % than 1 before taking the -log10 is a p/s less than 0 after taking
