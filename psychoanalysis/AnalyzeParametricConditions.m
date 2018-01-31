@@ -272,9 +272,9 @@ for s = subjectToAnalyze
                 %set(gca,'FontName',analysisParams.fontName,'FontSize',analysisParams.axisFontSize,'LineWidth',analysisParams.axisLineWidth);
                 for j = 1:length(conditionStructs{s,c,2})
                     theIndex = find(summaryDataStruct{c1}.whichRun == j);
-                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'bo','MarkerFaceColor','b'); %,'MarkerSize',analysisParams.markerSize);
+                    plot(summaryDataStruct{c1}.refData(theIndex),summaryDataStruct{c1}.testData(theIndex),'ko','MarkerFaceColor','k'); %,'MarkerSize',analysisParams.markerSize);
                 end
-                plot(summaryDataStruct{c1}.predX,summaryDataStruct{c1}.predData,'b'); %,'LineWidth',analysisParams.lineWidth);
+                plot(summaryDataStruct{c1}.predX,summaryDataStruct{c1}.predData,'k'); %,'LineWidth',analysisParams.lineWidth);
                 plot([analysisParams.intensityLimLow analysisParams.intensityLimHigh],[analysisParams.intensityLimLow analysisParams.intensityLimHigh],'k:'); %,'LineWidth',analysisParams.lineWidth);
                 axis([analysisParams.intensityLimLow analysisParams.intensityLimHigh analysisParams.intensityLimLow analysisParams.intensityLimHigh]);
                 set(gca,'XTick',analysisParams.intensityTicks,'XTickLabel',analysisParams.intensityTickLabels);
