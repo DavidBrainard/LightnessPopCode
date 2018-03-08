@@ -74,13 +74,9 @@ for runIndex = 1:length(theExtractedDirs)
     % preprocessed data.  Grab that.
     basicInfo(runIndex) = SummarizeGetExtractedStructs(thePreprocessedDir,'basicInfo.mat');
     
-    % Get the output of the various analyses that get run over the
-    % preprocessed data.
-    if (decodeInfoIn.doSummaryPaintShadowEffect)
-        paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
-    else
-        paintShadowEffect(runIndex) = NaN;
-    end
+    % And basic paint/shadow effect info, which we also get no matter what.
+    paintShadowEffect(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extPaintShadowEffect.mat');
+    
     if (decodeInfoIn.doSummaryRepSim)
         repSim(runIndex) = SummarizeGetExtractedStructs(theExtractedDir,'extRepSim.mat');
     else
@@ -139,6 +135,22 @@ if (decodeInfoIn.doSummaryRMSEVersusNUnits)
     if (length(basicInfo) ~= length(RMSEVersusNUnits))
         error('Data length mismatch');
     end
+    
+    % Print out info about RMSEs for best one and best two electrodes
+    for ii = 1:length(RMSEVersusNUnits)
+        clear tmpRMSE;
+        for jj = 1:length(paintShadowEffect(ii).decodeShift)
+            tmpRMSE(jj) = paintShadowEffect(ii).decodeShift(jj).theRMSE;
+        end
+        theRMSE(ii) = min(tmpRMSE);
+        bestOneRMSE(ii) = RMSEVersusNUnits(ii).basicAnalysis.bestOneRMSE;
+        bestTwoRMSE(ii) = RMSEVersusNUnits(ii).basicAnalysis.bestTwoRMSE;
+    end
+    indexOK = find(theRMSE <= basicInfo(1).filterMaxRMSE);
+    indexBestOneOK = find(bestOneRMSE <= basicInfo(1).filterMaxRMSE & theRMSE <= basicInfo(1).filterMaxRMSE);
+    indexBestTwoOK = find(bestTwoRMSE <= basicInfo(1).filterMaxRMSE & theRMSE <= basicInfo(1).filterMaxRMSE);
+    fprintf('Number of good sessions overall: %d; number of those with best 1 good: %d, best 2 good: %d\n', ...
+        length(indexOK),length(indexBestOneOK),length(indexBestTwoOK));
 end
 if (decodeInfoIn.doSummaryRMSEVersusNPCA)
     if (length(basicInfo) ~= length(RMSEVersusNPCA))

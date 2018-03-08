@@ -31,7 +31,7 @@ if (basicInfo(1).filterMaxRMSE ~= 0.2)
 end
 
 %% PLOT: Envelope summaries in their multiple version glory
-DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
+booleanShiftedRMSEInclude = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
 
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
@@ -54,6 +54,43 @@ FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
 %% Print out null RMSE over included sessions
 fprintf('Null model (guess mean) RMSE over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
+
+%% We'd like to understand something about how best (non-shifted) decoder weights are distributed across electrodes
+if (strcmp(basicInfo(1).type,'aff'))
+    for ii = 1:length(paintShadowEffect)
+        set25 = false;
+        set50 = false;
+        set75 = false;
+        sortedAbsElectrodeWeights = sort(abs(paintShadowEffect(ii).decodeBoth.electrodeWeights(:)),'descend');
+        area = sum(sortedAbsElectrodeWeights(:));
+        for jj = 1:length(sortedAbsElectrodeWeights)
+            runningArea = sum(sortedAbsElectrodeWeights(1:jj));
+            if (~set25 & runningArea > 0.25*area)
+                nElectrodesForArea25(ii) = jj;
+                fractionElectrodesForAreaFraction25(ii) = jj/length(sortedAbsElectrodeWeights);
+                set25 = true;
+            end
+            if (~set50 & runningArea > 0.5*area)
+                nElectrodesForArea50(ii) = jj;
+                fractionElectrodesForAreaFraction50(ii) = jj/length(sortedAbsElectrodeWeights);
+                set50 = true;
+            end
+            if (~set75 & runningArea > 0.75*area)
+                nElectrodesForArea75(ii) = jj;
+                fractionElectrodesForAreaFraction75(ii) = jj/length(sortedAbsElectrodeWeights);
+                set75 = true;
+            end
+        end
+    end
+end
+
+% Report fraction
+fprintf('Mean fraction of electrodes for 0.25 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
+    mean(fractionElectrodesForAreaFraction25(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction25(booleanShiftedRMSEInclude)));
+fprintf('Mean fraction of electrodes for 0.50 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
+    mean(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)));
+fprintf('Mean fraction of electrodes for 0.75 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
+    mean(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)));
 
 end
 
@@ -168,7 +205,7 @@ ylabel('Paint/Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.
 end
 
 %% Function to do the envelope summary plot
-function DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,shiftName,figureSuffix)
+function booleanRMSE = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,shiftName,figureSuffix)
 
 % This makes plots that try to summarize how much we can move the
 % paint-shadow effect around without much of a hit in terms of RMSE.
