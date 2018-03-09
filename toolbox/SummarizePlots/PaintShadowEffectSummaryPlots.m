@@ -82,7 +82,6 @@ if (strcmp(basicInfo(1).type,'aff'))
             end
         end
     end
-end
 
 % Report fraction
 fprintf('Mean fraction of electrodes for 0.25 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
@@ -91,6 +90,9 @@ fprintf('Mean fraction of electrodes for 0.50 of absolute total no-shift decodin
     mean(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)));
 fprintf('Mean fraction of electrodes for 0.75 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
     mean(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)));
+
+end
+
 
 end
 
