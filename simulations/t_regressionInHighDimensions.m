@@ -161,6 +161,9 @@ end
 fprintf('\n');
 
 %% Try using Matlab's regularized regression
+%
+% This function has many many options that can affect how it
+% tries to regularize.  Just going with the defaults.
 regFitResults = fitrlinear(neuronResponses,theTrialLuminances,'FitBias',false);
 regWeights4 = regFitResults.Beta;
 
