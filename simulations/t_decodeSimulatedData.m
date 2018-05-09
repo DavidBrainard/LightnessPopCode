@@ -54,6 +54,7 @@ shadowResponses = [neuron1ShadowResponses neuron2ShadowResponses neuronOtherShad
 % Types
 %   'aff'
 %   'fitrlinear'
+%   'fitrcvlasso'
 %   'maxlikely'
 decodeInfo.type = 'fitrlinear';
 decodeInfo.decodeJoint = 'both';

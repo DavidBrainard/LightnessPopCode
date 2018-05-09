@@ -19,7 +19,11 @@ cd(myDir);
 % DataPreprocessRunOne(argList{:});
 % close all;
 
-argList = SetupConditionArgs('fitrlinear');
+% argList = SetupConditionArgs('fitrlinear');
+% DataPreprocessRunOne(argList{:});
+% close all;
+
+argList = SetupConditionArgs('fitrcvlasso');
 DataPreprocessRunOne(argList{:});
 close all;
 

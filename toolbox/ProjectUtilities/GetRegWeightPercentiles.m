@@ -35,7 +35,7 @@ function regPercents = GetRegWeightPercentiles(regWeights,percentCrits)
     regPercents = GetRegWeightPercentiles(regWeights,percentCrits)
 %}
 
-regSorted = sort(abs(regWeights));
+regSorted = sort(abs(regWeights),'descend');
 regSum = sum(regSorted);
 regPercents = NaN*zeros(length(percentCrits),1);
 runningSum = 0;

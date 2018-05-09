@@ -23,10 +23,39 @@ switch decodeInfo.type
         X = [responses ones(nContrasts,1)];
         regFitResults = fitrlinear(X,contrasts,'FitBias',false);
         decodeInfo.b = regFitResults.Beta;
+    case 'fitrcvlasso'
+        X = [responses ones(nContrasts,1)];
+        lambda = logspace(-5,1,25);
+        regFitResultsCV = fitrlinear(X',contrasts, ...
+            'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
+            'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
+            'FitBias',false);
+        mseCV = kfoldLoss(regFitResultsCV);
+        regFitResults = fitrlinear(X',contrasts, ...
+            'ObservationsIn','columns','Lambda',lambda, ...
+            'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
+            'FitBias',false);
+        numNZCoef = sum(regFitResults.Beta~=0);
+        [~,rindex] = min(mseCV);
+        decodeInfo.b = regFitResults.Beta(:,rindex);
+
+        tempFig = figure; hold on;
+        [h,hL1,hL2] = plotyy(log10(lambda),log10(mseCV),log10(lambda),log10(numNZCoef));
+        hL1.Marker = 'o';
+        hL2.Marker = 'o';
+        plot(log10(lambda(rindex)),log10(mseCV(rindex)),'kx');
+        plot(log10(lambda(rindex)),log10(numNZCoef(rindex)),'kx');
+        ylabel(h(1),'log_{10} Cross-Validated MSE')
+        ylabel(h(2),'log_{10} Number Nonzero Reg Coeffs')
+        xlabel('log_{10} Lasso Lambda')
+        title(sprintf('Number NZ coeefs: %d\n',numNZCoef(rindex)));
+        pause
+        close(tempFig);
+        
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];
         
-        decodeInfo.svmOpts = ['-s ' num2str(decodeInfo.svmSvmType) ' -t ' num2str(decodeInfo.svmKernalType)]; 
+        decodeInfo.svmOpts = ['-s ' num2str(decodeInfo.svmSvmType) ' -t ' num2str(decodeInfo.svmKernalType)];
         if (decodeInfo.svmQuiet)
             decodeInfo.svmOpts =  [decodeInfo.svmOpts ' -q'];
         end

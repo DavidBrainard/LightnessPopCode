@@ -19,7 +19,7 @@ nTrialsPerLuminance = 25;
 nNeurons = 100;
 neuron1Gain = 1;
 neuron2Gain = 1;
-responseNoiseSd = 0.01;
+responseNoiseSd = 0.05;
 
 %% Set up luminances across trials
 theLuminances = linspace(0,1,nLuminances);
@@ -67,30 +67,8 @@ regWeights1 = neuronResponses\theTrialLuminances;
 predTrialLuminances = neuronResponses * regWeights1;
 
 % Compute our statistic
-regSorted1 = sort(abs(regWeights1));
-regSum1 = sum(regSorted1);
-reg1Percents = zeros(length(percentCrits),1);
-runningSum = 0;
-whichCrit = 1;
-for ii = 1:nNeurons
-    runningSum = runningSum + regSorted1(ii);
-    if (runningSum > regSum1*percentCrits(whichCrit)/100)
-        reg1Percents(whichCrit) = round(100*ii/nNeurons);
-        whichCrit = whichCrit+1;
-    end
-    if (whichCrit > length(reg1Percents))
-        break;
-    end
-end
-fprintf('backslash percentiles (25, 50, 75): ');
-for ii = 1:length(percentCrits)
-    fprintf('%d%% ',reg1Percents(ii));
-end
-fprintf('\n');
-
-% Compute our statistic
 reg1Percents = GetRegWeightPercentiles(regWeights1,percentCrits);
-fprintf('regress (percentCrits) (25, 50, 75): ');
+fprintf('backslash (percentCrits) (25, 50, 75): ');
 for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg1Percents(ii));
 end
@@ -118,10 +96,7 @@ for ii = 1:length(percentCrits)
 end
 fprintf('\n');
 
-%% Try using Matlab's regularized regression
-%
-% This function has many many options that can affect how it
-% tries to regularize.  Just going with the defaults.
+%% Try using Matlab's regularized regression, default params
 regFitResults = fitrlinear(neuronResponses,theTrialLuminances,'FitBias',false);
 regWeights4 = regFitResults.Beta;
 
@@ -139,4 +114,99 @@ figure; clf;
 hist([regWeights1 regWeights1 regWeights3 regWeights4],nHistBins);
 title('Regression Weight Histogram');
 legend({'backslash','regress','robustfit','fitrlinear'},'Location','NorthEast');
+
+%% Try using Matlab's regularized regression, cross-validated lasso
+lambda = logspace(-8,-1,25);
+regFitResultsCV = fitrlinear(neuronResponses',theTrialLuminances, ...
+    'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
+    'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
+    'FitBias',false);
+mseCV = kfoldLoss(regFitResultsCV);
+[~,rindex] = min(mseCV);
+regFitResults = fitrlinear(neuronResponses',theTrialLuminances, ...
+    'ObservationsIn','columns','Lambda',lambda, ...
+    'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
+    'FitBias',false);
+numNZCoef = sum(regFitResults.Beta~=0);
+coeffL1Norm = sum(abs(regFitResults.Beta));
+coeffL2Norm = sum(regFitResults.Beta.^2);
+mse = loss(regFitResults,neuronResponses,theTrialLuminances);
+regWeights5 = regFitResults.Beta(:,rindex);
+
+figure; set(gcf,'Position',[1000 360 880 460])
+subplot(1,2,1); hold on;
+[h,hL1,hL2] = plotyy(log10(lambda),log10(mseCV),log10(lambda),log10(numNZCoef));
+hL1.Marker = 'o';
+hL2.Marker = 'o';
+ylabel(h(1),'log_{10} MSE')
+ylabel(h(2),'log_{10} nonzero-coefficient number')
+xlabel('log_{10} Lambda')
+title(sprintf('MSE: %0.2g, number non zero coefficients: %d',mse(rindex),numNZCoef(rindex)));
+subplot(1,2,2); hold on;
+[h,hL1,hL2] = plotyy(log10(lambda),log10(coeffL1Norm),log10(lambda),log10(coeffL2Norm));
+hL1.Marker = 'o';
+hL2.Marker = 'o';
+ylabel(h(1),'log_{10} L1 Norm')
+ylabel(h(2),'log_{10} L2 Norm')
+xlabel('log_{10} Lambda')
+title(sprintf('Lasso L1 and L2 norms'));
+
+% Compute our statistic
+reg5Percents = GetRegWeightPercentiles(regWeights5,percentCrits);
+fprintf('CV lasso percentiles (25, 50, 75): ')
+for ii = 1:length(percentCrits)
+    fprintf('%d%% ',reg5Percents(ii));
+end
+fprintf('\n');
+
+%% Try using Matlab's regularized regression, cross-validated ridge
+lambda = logspace(-8,-1,25);
+regFitResultsCV = fitrlinear(neuronResponses',theTrialLuminances, ...
+    'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
+    'Learner','leastsquares','Solver','lbfgs','Regularization','ridge', ...
+    'FitBias',false);
+mseCV = kfoldLoss(regFitResultsCV);
+[~,rindex] = min(mseCV);
+regFitResults = fitrlinear(neuronResponses',theTrialLuminances, ...
+    'ObservationsIn','columns','Lambda',lambda, ...
+    'Learner','leastsquares','Solver','lbfgs','Regularization','ridge', ...
+    'FitBias',false);
+numNZCoef = sum(regFitResults.Beta~=0);
+coeffL1Norm = sum(abs(regFitResults.Beta));
+coeffL2Norm = sum(regFitResults.Beta.^2);
+mse = loss(regFitResults,neuronResponses,theTrialLuminances);
+regWeights6 = regFitResults.Beta(:,rindex);
+
+figure; set(gcf,'Position',[1000 360 880 460])
+subplot(1,2,1); hold on;
+[h,hL1,hL2] = plotyy(log10(lambda),log10(mseCV),log10(lambda),log10(numNZCoef));
+hL1.Marker = 'o';
+hL2.Marker = 'o';
+ylabel(h(1),'log_{10} MSE')
+ylabel(h(2),'log_{10} nonzero-coefficient number')
+xlabel('log_{10} Lambda')
+title(sprintf('MSE: %0.2g, number non zero coefficients: %d',mse(rindex),numNZCoef(rindex)));
+subplot(1,2,2); hold on;
+[h,hL1,hL2] = plotyy(log10(lambda),log10(coeffL1Norm),log10(lambda),log10(coeffL2Norm));
+hL1.Marker = 'o';
+hL2.Marker = 'o';
+ylabel(h(1),'log_{10} L1 Norm')
+ylabel(h(2),'log_{10} L2 Norm')
+xlabel('log_{10} Lambda')
+title(sprintf('Ridge L1 and L2 norms'));
+
+% Compute our statistic
+reg5Percents = GetRegWeightPercentiles(regWeights5,percentCrits);
+fprintf('CV ridge percentiles (25, 50, 75): ')
+for ii = 1:length(percentCrits)
+    fprintf('%d%% ',reg5Percents(ii));
+end
+fprintf('\n');
+
+%% Make a histogram of the regression weights.
+nHistBins = 20;
+figure; clf;
+hist([regWeights1 regWeights1 regWeights3 regWeights4 regWeights5 regWeights6],nHistBins);
+title('Regression Weight Histogram');
+legend({'backslash','regress','robustfit','fitrlinear','cv lasso', 'cv ridge'},'Location','NorthEast');
 

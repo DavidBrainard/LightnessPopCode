@@ -61,9 +61,10 @@ d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
 [d.paintShadowEffect,d.paintSmooth,d.shadowSmooth,d.paintMatchesSmooth,d.shadowMatchesSmooth, ...
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
-if (strcmp(dTmp.type,'aff'))
-    d.electrodeWeights = dTmp.electrodeWeights;
-    d.affineTerms = dTmp.affineTerms;
+switch (dTmp.type)
+    case {'aff', 'fitrlinear', 'fitrcvlasso'}
+        d.electrodeWeights = dTmp.electrodeWeights;
+        d.affineTerms = dTmp.affineTerms;
 end
 decodeSave.decodeBoth = d;
 

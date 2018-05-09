@@ -27,7 +27,7 @@ end
 
 %% Check filterMaxRMSE
 if (basicInfo(1).filterMaxRMSE ~= 0.2)
-	error('Check that you really want filterMaxRMSE set to something other than its paper value of 0.2');
+    error('Check that you really want filterMaxRMSE set to something other than its paper value of 0.2');
 end
 
 %% PLOT: Envelope summaries in their multiple version glory
@@ -56,32 +56,15 @@ FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 fprintf('Null model (guess mean) RMSE over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
 
 %% We'd like to understand something about how best (non-shifted) decoder weights are distributed across electrodes
-if (strcmp(basicInfo(1).type,'aff'))
-    for ii = 1:length(paintShadowEffect)
-        set25 = false;
-        set50 = false;
-        set75 = false;
-        sortedAbsElectrodeWeights = sort(abs(paintShadowEffect(ii).decodeBoth.electrodeWeights(:)),'descend');
-        area = sum(sortedAbsElectrodeWeights(:));
-        for jj = 1:length(sortedAbsElectrodeWeights)
-            runningArea = sum(sortedAbsElectrodeWeights(1:jj));
-            if (~set25 & runningArea > 0.25*area)
-                nElectrodesForArea25(ii) = jj;
-                fractionElectrodesForAreaFraction25(ii) = jj/length(sortedAbsElectrodeWeights);
-                set25 = true;
-            end
-            if (~set50 & runningArea > 0.5*area)
-                nElectrodesForArea50(ii) = jj;
-                fractionElectrodesForAreaFraction50(ii) = jj/length(sortedAbsElectrodeWeights);
-                set50 = true;
-            end
-            if (~set75 & runningArea > 0.75*area)
-                nElectrodesForArea75(ii) = jj;
-                fractionElectrodesForAreaFraction75(ii) = jj/length(sortedAbsElectrodeWeights);
-                set75 = true;
-            end
+switch(basicInfo(1).type)
+    case {'aff', 'fitrlinear', 'fitrcvlasso'}
+        for ii = 1:length(paintShadowEffect)
+            regPercents = GetRegWeightPercentiles(paintShadowEffect(ii).decodeBoth.electrodeWeights(:),[25 50 75]);
+            fractionElectrodesForAreaFraction25(ii) = regPercents(1);
+            fractionElectrodesForAreaFraction50(ii) = regPercents(2);
+            fractionElectrodesForAreaFraction75(ii) = regPercents(3);
         end
-    end
+end
 
 % Report fraction
 fprintf('Mean fraction of electrodes for 0.25 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
@@ -90,9 +73,6 @@ fprintf('Mean fraction of electrodes for 0.50 of absolute total no-shift decodin
     mean(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction50(booleanShiftedRMSEInclude)));
 fprintf('Mean fraction of electrodes for 0.75 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
     mean(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)));
-
-end
-
 
 end
 
@@ -305,7 +285,7 @@ for ii = 1:length(booleanRMSE)
     if (booleanRMSE(ii) & booleanSessionOK(ii))
         includedStr = 'Yes';
         numberTrials = [numberTrials basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials];
-        if (booleanSubjectBR(ii))  
+        if (booleanSubjectBR(ii))
             numberElectrodesBR = [numberElectrodesBR size(basicInfo(ii).paintResponses,2)];
         elseif(booleanSubjectST(ii))
             numberElectrodesST = [numberElectrodesST size(basicInfo(ii).paintResponses,2)];
@@ -318,7 +298,7 @@ for ii = 1:length(booleanRMSE)
         end
     else
         includedStr = 'No';
-    end   
+    end
     fprintf(fid,'%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\n',b,sessionOKStr,includedStr,basicInfo(ii).subjectStr,basicInfo(ii).titleInfoStr, ...
         size(basicInfo(ii).paintResponses,2),basicInfo(ii).nPaintTrials+basicInfo(ii).nShadowTrials,basicInfo(ii).nPaintTrials,basicInfo(ii).nShadowTrials);
 end
