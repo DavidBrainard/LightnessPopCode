@@ -59,7 +59,7 @@ switch (decodeInfo.decodeJoint)
         switch (decodeInfo.type)
             case {'aff', 'fitrlinear', 'fitrcvlasso'}
                 decodeInfo.electrodeWeights = decodeInfo.b(1:end-1);
-                decodeInfo.affineTerms = decodeInfo.b(end)*ones(size(decodeInfo.electrodeWeights));
+                decodeInfo.affineTerms = decodeInfo.b(end)*ones(size(decodeInfo.electrodeWeights));                    
 
                 % For the case of both, we want to separately get the paint
                 % and shadow regression parameters, so that we can look at

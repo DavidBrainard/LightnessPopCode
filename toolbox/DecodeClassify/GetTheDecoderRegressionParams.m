@@ -38,7 +38,9 @@ switch decodeInfo.type
         numNZCoef = sum(regFitResults.Beta~=0);
         [~,rindex] = min(mseCV);
         decodeInfo.b = regFitResults.Beta(:,rindex);
+        decodeInfo.numNZCoef = numNZCoef(rindex);
 
+        %{
         tempFig = figure; hold on;
         [h,hL1,hL2] = plotyy(log10(lambda),log10(mseCV),log10(lambda),log10(numNZCoef));
         hL1.Marker = 'o';
@@ -51,6 +53,7 @@ switch decodeInfo.type
         title(sprintf('Number NZ coeefs: %d\n',numNZCoef(rindex)));
         pause
         close(tempFig);
+        %}
         
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];
