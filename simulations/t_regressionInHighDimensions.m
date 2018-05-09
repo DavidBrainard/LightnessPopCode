@@ -210,3 +210,11 @@ hist([regWeights1 regWeights1 regWeights3 regWeights4 regWeights5 regWeights6],n
 title('Regression Weight Histogram');
 legend({'backslash','regress','robustfit','fitrlinear','cv lasso', 'cv ridge'},'Location','NorthEast');
 
+%% Plot sorted regression weights
+figure; clf; hold on
+plot(sort(regWeights1),'ko','MarkerSize',8,'MarkerFaceColor','k');
+plot(sort(regWeights5),'ro','MarkerSize',8,'MarkerFaceColor','r');
+plot(sort(regWeights6),'bo','MarkerSize',8,'MarkerFaceColor','b');
+legend({'regress', 'cv lasso', 'cv rigdge'});
+
+
