@@ -89,21 +89,7 @@ end
 fprintf('\n');
 
 % Compute our statistic
-regSorted1 = sort(abs(regWeights1));
-regSum1 = sum(regSorted1);
-reg1Percents = zeros(length(percentCrits),1);
-runningSum = 0;
-whichCrit = 1;
-for ii = 1:nNeurons
-    runningSum = runningSum + regSorted1(ii);
-    if (runningSum > regSum1*percentCrits(whichCrit)/100)
-        reg1Percents(whichCrit) = round(100*ii/nNeurons);
-        whichCrit = whichCrit+1;
-    end
-    if (whichCrit > length(reg1Percents))
-        break;
-    end
-end
+reg1Percents = GetRegWeightPercentiles(regWeights1,percentCrits);
 fprintf('regress (percentCrits) (25, 50, 75): ');
 for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg1Percents(ii));
@@ -114,21 +100,7 @@ fprintf('\n');
 regWeights2 = regress(theTrialLuminances,neuronResponses);
 
 % Compute our statistic
-regSorted2 = sort(abs(regWeights2));
-regSum2 = sum(regSorted2);
-reg2Percents = zeros(length(percentCrits),1);
-runningSum = 0;
-whichCrit = 1;
-for ii = 1:nNeurons
-    runningSum = runningSum + regSorted2(ii);
-    if (runningSum > regSum2*percentCrits(whichCrit)/100)
-        reg2Percents(whichCrit) = round(100*ii/nNeurons);
-        whichCrit = whichCrit+1;
-    end
-    if (whichCrit > length(reg2Percents))
-        break;
-    end
-end
+reg2Percents = GetRegWeightPercentiles(regWeights2,percentCrits);
 fprintf('regress percentiles (25, 50, 75): ');
 for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg2Percents(ii));
@@ -139,21 +111,7 @@ fprintf('\n');
 regWeights3 = robustfit(neuronResponses,theTrialLuminances,[],[],'off');
 
 % Compute our statistic
-regSorted3 = sort(abs(regWeights3));
-regSum3 = sum(regSorted3);
-reg3Percents = zeros(length(percentCrits),1);
-runningSum = 0;
-whichCrit = 1;
-for ii = 1:nNeurons
-    runningSum = runningSum + regSorted3(ii);
-    if (runningSum > regSum3*percentCrits(whichCrit)/100)
-        reg3Percents(whichCrit) = round(100*ii/nNeurons);
-        whichCrit = whichCrit+1;
-    end
-    if (whichCrit > length(reg3Percents))
-        break;
-    end
-end
+reg3Percents = GetRegWeightPercentiles(regWeights3,percentCrits);
 fprintf('robust percentiles (25, 50, 75): ');
 for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg3Percents(ii));
@@ -168,21 +126,7 @@ regFitResults = fitrlinear(neuronResponses,theTrialLuminances,'FitBias',false);
 regWeights4 = regFitResults.Beta;
 
 % Compute our statistic
-regSorted4 = sort(abs(regWeights4));
-regSum4 = sum(regSorted4);
-reg4Percents = zeros(length(percentCrits),1);
-runningSum = 0;
-whichCrit = 1;
-for ii = 1:nNeurons
-    runningSum = runningSum + regSorted4(ii);
-    if (runningSum > regSum4*percentCrits(whichCrit)/100)
-        reg4Percents(whichCrit) = round(100*ii/nNeurons);
-        whichCrit = whichCrit+1;
-    end
-    if (whichCrit > length(reg4Percents))
-        break;
-    end
-end
+reg4Percents = GetRegWeightPercentiles(regWeights4,percentCrits);
 fprintf('fitrlinear percentiles (25, 50, 75): ')
 for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg4Percents(ii));
@@ -195,3 +139,4 @@ figure; clf;
 hist([regWeights1 regWeights1 regWeights3 regWeights4],nHistBins);
 title('Regression Weight Histogram');
 legend({'backslash','regress','robustfit','fitrlinear'},'Location','NorthEast');
+

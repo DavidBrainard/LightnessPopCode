@@ -80,7 +80,6 @@ h=errorbar(d.shadowGroupedIntensities, d.shadowMeans, d.shadowSEMs, 'bo');
 %set(h,'MarkerFaceColor','b','MarkerSize',decodeInfo.markerSize-6);
 h=plot(d.paintGroupedIntensities, d.paintMeans, 'ro','MarkerFaceColor','r'); % ,'MarkerSize',decodeInfo.markerSize);
 h=plot(d.shadowGroupedIntensities, d.shadowMeans, 'bo','MarkerFaceColor','b'); %,'MarkerSize',decodeInfo.markerSize);
-h = legend({'Paint','Shadow'},'Location','NorthWest'); %,'FontSize',decodeInfo.legendFontSize);
 %lfactor = 0.5;
 %lpos = get(h,'Position'); set(h,'Position',[lpos(1) lpos(2)-lfactor*lpos(4) (1+lfactor)*lpos(3) (1+lfactor)*lpos(4)]);
 xlabel('Stimulus Luminance'); %,'FontSize',decodeInfo.labelFontSize);
@@ -91,6 +90,7 @@ plot([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh],[decodeInfo.intens
 axis([decodeInfo.intensityLimLow decodeInfo.intensityLimHigh decodeInfo.intensityLimLow decodeInfo.intensityLimHigh]);
 set(gca,'XTick',decodeInfo.intensityTicks,'XTickLabel',decodeInfo.intensityTickLabels);
 set(gca,'YTick',decodeInfo.intensityTicks,'YTickLabel',decodeInfo.intensityYTickLabels);
+h = legend({'Paint','Shadow'},'Location','NorthWest'); %,'FontSize',decodeInfo.legendFontSize);
 axis square
 a=get(gca,'ticklength');
 set(gca,'ticklength',[a(1)*2,a(2)*2]);

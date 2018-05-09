@@ -6,11 +6,12 @@ function decodeInfo = GetTheDecoderRegressionParams(decodeInfo,contrasts,respons
 % 10/31/13  dhb  Happy holloween.
 % 11/9/15   dhb  Supress rank deficient warning, but print out message of our own.
 %           dhb  Don't print out warning.
+% 05/09/18  dhb  Add regularized regression via fitrlinear.
 
 nContrasts = length(contrasts);
 
 switch decodeInfo.type
-    case {'aff' 'betacdf', 'betadoublecdf', 'smoothing'}
+    case {'aff'}
         X = [responses ones(nContrasts,1)];
         if (rank(responses) < size(responses,2))
             % fprintf('\tResponse matrix is not of full rank (rank = %d, column size = %d)\n',rank(responses),size(responses,2))
@@ -18,6 +19,10 @@ switch decodeInfo.type
         S = warning('off','MATLAB:rankDeficientMatrix');
         decodeInfo.b = X\contrasts;
         warning(S.state,S.identifier);
+    case 'fitrlinear'
+        X = [responses ones(nContrasts,1)];
+        regFitResults = fitrlinear(X,contrasts,'FitBias',false);
+        decodeInfo.b = regFitResults.Beta;
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];
         
