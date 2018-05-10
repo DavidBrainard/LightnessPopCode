@@ -65,6 +65,9 @@ switch (dTmp.type)
     case {'aff', 'fitrlinear', 'fitrcvlasso'}
         d.electrodeWeights = dTmp.electrodeWeights;
         d.affineTerms = dTmp.affineTerms;
+        if (isfield(dTmp,'numNZCoefs'))
+            d.numNZCoefs = dTmp.numNZCoefs;
+        end
 end
 decodeSave.decodeBoth = d;
 
