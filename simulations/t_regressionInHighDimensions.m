@@ -4,7 +4,7 @@
 %    Try to develop some intuitions about how regression coefficients
 %    behave in high dimensions.
 %
-%    Follows broad ideas introduced by an anonymous reviewer, although 
+%    Follows broad ideas introduced by an anonymous reviewer, although
 %    the reviewer provided code in R and modeled a different case.  The
 %    code here is more like what we do in the paper.
 %
@@ -19,7 +19,9 @@ nTrialsPerLuminance = 25;
 nNeurons = 100;
 neuron1Gain = 1;
 neuron2Gain = 1;
-responseNoiseSd = 0.05;
+overallGain = 1;
+responseNoiseSd = 0.1;
+SPARSE = true;
 
 %% Set up luminances across trials
 theLuminances = linspace(0,1,nLuminances);
@@ -33,16 +35,27 @@ for ll = 1:nLuminances
     end
 end
 
-%% First two neurons have responses that are related to luminances
-neuron1Responses = neuron1Gain*theTrialLuminances + normrnd(0,responseNoiseSd,nTrials,1);
-neuron2Responses = neuron2Gain*theTrialLuminances + normrnd(0,responseNoiseSd,nTrials,1);
-
-%% Rest of neurons have resposnes that are pure noise
-nOtherNeurons = nNeurons-2;
-neuronOtherResponses = normrnd(0,responseNoiseSd,nTrials,nOtherNeurons);
-
-%% Neural response matrix (nTrials by nNeurons)
-neuronResponses = [neuron1Responses neuron2Responses neuronOtherResponses];
+%% Generate neural data, either sparse or dense
+if (SPARSE)
+    % First two neurons have responses that are related to luminances
+    neuron1Responses = neuron1Gain*theTrialLuminances + normrnd(0,responseNoiseSd,nTrials,1);
+    neuron2Responses = neuron2Gain*theTrialLuminances + normrnd(0,responseNoiseSd,nTrials,1);
+    
+    % Rest of neurons have resposnes that are pure noise
+    nOtherNeurons = nNeurons-2;
+    neuronOtherResponses = normrnd(0,responseNoiseSd,nTrials,nOtherNeurons);
+    
+    % Neural response matrix (nTrials by nNeurons)
+    neuronResponses = [neuron1Responses neuron2Responses neuronOtherResponses];
+else
+    % Each neuron has a gain drawn randomly from a standard normal multipled
+    % by a common overall gain.
+    neuronResponses = zeros(nTrials,nNeurons);
+    for nn = 1:nNeurons
+        neuronResponses(:,nn) = overallGain*normrnd(0,1,1,1)*theTrialLuminances;
+        neuronResponses = neuronResponses + normrnd(0,responseNoiseSd,nTrials,nNeurons);
+    end
+end
 
 %% Compute correlation coefficients between each neuron's responses and luminance
 %
@@ -107,13 +120,6 @@ for ii = 1:length(percentCrits)
     fprintf('%d%% ',reg4Percents(ii));
 end
 fprintf('\n');
-
-%% Make a histogram of the regression weights.
-nHistBins = 20;
-figure; clf;
-hist([regWeights1 regWeights1 regWeights3 regWeights4],nHistBins);
-title('Regression Weight Histogram');
-legend({'backslash','regress','robustfit','fitrlinear'},'Location','NorthEast');
 
 %% Try using Matlab's regularized regression, cross-validated lasso
 lambda = logspace(-8,-1,25);
@@ -215,6 +221,6 @@ figure; clf; hold on
 plot(sort(regWeights1),'ko','MarkerSize',8,'MarkerFaceColor','k');
 plot(sort(regWeights5),'ro','MarkerSize',8,'MarkerFaceColor','r');
 plot(sort(regWeights6),'bo','MarkerSize',8,'MarkerFaceColor','b');
-legend({'regress', 'cv lasso', 'cv rigdge'});
+legend({'regress', 'cv lasso', 'cv rigdge'},'Location','NorthWest');
 
 
