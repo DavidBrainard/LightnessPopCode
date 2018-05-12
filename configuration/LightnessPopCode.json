@@ -3,7 +3,7 @@
 		"flavor": "",
 		"hook": "",
 		"importance": "",
-		"localHookTemplate": "configuration/LightnessPopCodeLocalHookTemplate",
+		"localHookTemplate": "configuration/LightnessPopCodeLocalHookTemplate.m",
 		"name": "LightnessPopCode",
 		"pathPlacement": "append",
 		"subfolder": "toolbox",

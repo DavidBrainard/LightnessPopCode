@@ -12,9 +12,9 @@
 % 06/14/17  dhb  Wrote it.
 
 %% Get directory to fill up with the figure parts
-figureDir = getpref('LightnessPopCode','figureDir');
+figureDir = getpref('LightnessPopCode','figureDirCVLasso');
 if (~exist(figureDir,'dir'))
-    unix(['mkdir ' figureDir]);
+    mkdir(figureDir);
 end
 
 %% Analysis output base dir
@@ -57,30 +57,30 @@ unix(copyCmd);
 % paper.
 %
 % analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140424lightness0001_225px_-1cx_-80cy_g');
-% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2.pdf') ' ' fullfile(figureDirUnix,'Figure6B_MeanOnPCABoth.pdf')];
+% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCABoth1_2.pdf') ' ' fullfile(figureDir,'Figure6B_MeanOnPCABoth.pdf')];
 % unix(copyCmd);
-% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2.pdf') ' ' fullfile(figureDirUnix,'Figure6C_MeanOnPCAPaint.pdf')];
+% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAPaintOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6C_MeanOnPCAPaint.pdf')];
 % unix(copyCmd);
-% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2.pdf') ' ' fullfile(figureDirUnix,'Figure6D_MeanOnPCAShadow.pdf')];
+% copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extRMSEVersusNPCAPaintShadowMeanOnPCAShadowOnly1_2.pdf') ' ' fullfile(figureDir,'Figure6D_MeanOnPCAShadow.pdf')];
 % unix(copyCmd);
 
 % Figure 8: Decoding and neural paint/shadow effect
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','JD130904lightness0001_300px_15cx_-25cy_i');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8A_ExampleDecoding1.eps')];
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','fitrcvlasso_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','JD130904lightness0001_300px_15cx_-25cy_i');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8A_ExampleDecoding1CVLasso.eps')];
 unix(copyCmd);
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8B_ExamplePaintShadowEffect1.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8B_ExamplePaintShadowEffectCVLasso1.eps')];
 unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8C_ExampleDecoding2.eps')];
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','fitrcvlasso_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure8C_ExampleDecoding2CVLasso.eps')];
 unix(copyCmd);
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8D_ExamplePaintShadowEffect2.eps')];
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure8D_ExamplePaintShadowEffect2CVLasso.eps')];
 unix(copyCmd);
 
 % Figure 9: Envelope decoding
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure9A_SingleSessionEnvelope.eps')];
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','fitrcvlasso_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure9A_SingleSessionEnvelopeCVLasso.eps')];
 unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.eps') ' ' fullfile(figureDir,'Figure9B_PaintShadowEffectSummary.eps')];
+analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','fitrcvlasso_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
+copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE.eps') ' ' fullfile(figureDir,'Figure9B_PaintShadowEffectSummaryCVLasso.eps')];
 unix(copyCmd);
 

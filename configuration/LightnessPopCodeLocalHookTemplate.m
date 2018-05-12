@@ -43,4 +43,6 @@ setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);
 % organize the figures parts that end up in the paper.
 %
 % This is formatted so it can be passed to the linux shell.
-setpref('LightnessPopCode','figureOutputDir','"/Volumes/Users1/Dropbox (Personal)/xPapers/LightnessV4Paper1/DBFigures"');
+setpref('LightnessPopCode','figureDir','/Volumes/Users1/DropboxPersonal/xPapers/xUnderReview/LightnessV4Paper1/DBFigures');
+setpref('LightnessPopCode','figureDirCVLasso','/Volumes/Users1/DropboxPersonal/xPapers/xUnderReview/LightnessV4Paper1/DBFiguresCVLasso');
+
