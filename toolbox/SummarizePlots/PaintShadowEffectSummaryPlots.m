@@ -52,6 +52,34 @@ title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'Fon
 figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
 FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
+% Make a histogram of non-zero electrode weights
+if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
+    numNZCoefs = [paintShadowEffectDecodeBoth.numNZCoefs];
+    for ii = 1:length(numNZCoefs)
+        electrodeWeights = paintShadowEffectDecodeBoth(ii).electrodeWeights;
+        affineTerms = paintShadowEffectDecodeBoth(ii).affineTerms;
+        nElectrodes = length(electrodeWeights);
+        numNZCheck = length(find(electrodeWeights ~= 0));
+        if (numNZCoefs(ii) ~= numNZCheck)
+            fprintf('Inconsistency in number of NZ coeefs, condition %d: %d versus %d, affine term %f\n',ii,numNZCoefs(ii),numNZCheck+affineZero,affineTerms(1));
+        end
+        fractionNZCoefs(ii) = numNZCheck/nElectrodes;
+    end
+    nonZeroHistFig = figure; clf;
+    set(nonZeroHistFig,'Position',[1000 900 840 400]);
+    subplot(1,2,1);
+    hist(fractionNZCoefs,20,'k');
+    xlabel('Fraction non-zero coefficients');
+    ylabel('Count');
+    title('Cross-validated lasso regularization');
+    figFilename = fullfile(figureDir,'summaryNonZeroElectrodes','');
+    subplot(1,2,2);
+    plot(numNZCoefs,fractionNZCoefs,'ko','MarkerFaceColor','k','MarkerSize',8);
+    xlabel('Number non-zero coefficients');
+    ylabel('Fraction non-zero coefficients');
+    title('Cross-validated lasso regularization');
+    FigureSave(figFilename,nonZeroHistFig,figParams.figType);
+end
 %% Print out null RMSE over included sessions
 fprintf('Null model (guess mean) RMSE over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
 

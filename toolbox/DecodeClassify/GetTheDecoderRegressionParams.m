@@ -24,20 +24,20 @@ switch decodeInfo.type
         regFitResults = fitrlinear(X,contrasts,'FitBias',false);
         decodeInfo.b = regFitResults.Beta;
     case 'fitrcvlasso'
-        X = [responses ones(nContrasts,1)];
+        X = [responses];
         lambda = logspace(-5,1,25);
         regFitResultsCV = fitrlinear(X',contrasts, ...
             'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
             'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
-            'FitBias',false);
+            'FitBias',true);
         mseCV = kfoldLoss(regFitResultsCV);
         regFitResults = fitrlinear(X',contrasts, ...
             'ObservationsIn','columns','Lambda',lambda, ...
             'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
-            'FitBias',false);
+            'FitBias',true);
         numNZCoef = sum(regFitResults.Beta~=0);
         [~,rindex] = min(mseCV);
-        decodeInfo.b = regFitResults.Beta(:,rindex);
+        decodeInfo.b = [regFitResults.Beta(:,rindex) ; regFitResults.Bias(rindex)];
         decodeInfo.numNZCoef = numNZCoef(rindex);
 
         %{
