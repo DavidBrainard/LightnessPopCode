@@ -99,20 +99,37 @@ switch decodeInfo.type
         X = responses;
         
         % Fit the model
-        model = 'normal';
-        link = 0.6;
-        [BCV,FitInfoCV] = lassoglm(X,contrasts, model, 'Link', link,  ...
-            'NumLambda', 25, 'CV', 5);
-        rindex = FitInfoCV.IndexMinDeviance;
-        [B,FitInfo] = lassoglm(X,contrasts, model,  ...
-            'Lambda', FitInfoCV.Lambda(rindex));
+        models = {'normal' 'poisson'};
+        links = {0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6};
+        bestDev = Inf;
+        for jj = 1:length(models)
+        for ii = 1:length(links)
+            [BCV,FitInfoCV] = lassoglm(X,contrasts, models{jj}, 'Link', links{ii},  ...
+                'NumLambda', 25, 'CV', 5);
+            rindex = FitInfoCV.IndexMinDeviance;
+            if (FitInfoCV.Deviance(rindex) < bestDev)
+                bestDev = FitInfoCV.Deviance(rindex);
+                bestJj = jj;
+                bestIi = ii;
+                bestModel = models{jj};
+                bestLink = links{ii};
+                bestRindex = rindex;
+                bestBCV = BCV;
+                bestFitInfoCV = FitInfoCV;
+            end
+        end
+        end
+        [B,FitInfo] = lassoglm(X,contrasts, bestModel, 'Link', bestLink, ...
+            'Lambda', bestFitInfoCV.Lambda(bestRindex));
         
         % Save answer
         decodeInfo.b = [B ; FitInfo.Intercept];
         decodeInfo.numNZCoef = sum(B~=0);
-        decodeInfo.useLambda = FitInfoCV.Lambda(rindex);
-        decodeInfo.lambda = FitInfoCV.Lambda;
-        decodeInfo.mseCVLambda = FitInfoCV.Deviance;
+        decodeInfo.useModel = bestModel;
+        decodeInfo.useLink = bestLink;
+        decodeInfo.useLambda = bestFitInfoCV.Lambda(bestRindex);
+        decodeInfo.lambda = bestFitInfoCV.Lambda;
+        decodeInfo.mseCVLambda = bestFitInfoCV.Deviance;
 
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];
