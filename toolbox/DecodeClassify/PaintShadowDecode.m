@@ -57,7 +57,7 @@ switch (decodeInfo.decodeJoint)
         % Store the electrode weights and affine term.  The switch guarantees that there are weights
         % returned in the .b field for whatever decoding method is used.
         switch (decodeInfo.type)
-            case {'aff', 'fitrlinear', 'fitrcvlasso'}
+            case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge'}
                 decodeInfo.electrodeWeights = decodeInfo.b(1:end-1);
                 decodeInfo.affineTerms = decodeInfo.b(end)*ones(size(decodeInfo.electrodeWeights));                    
 

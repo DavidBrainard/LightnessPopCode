@@ -23,7 +23,11 @@ cd(myDir);
 % DataPreprocessRunOne(argList{:});
 % close all;
 
-argList = SetupConditionArgs('fitrcvlasso');
+% argList = SetupConditionArgs('fitrcvlasso');
+% DataPreprocessRunOne(argList{:});
+% close all;
+
+argList = SetupConditionArgs('fitrcvridge');
 DataPreprocessRunOne(argList{:});
 close all;
 

@@ -85,7 +85,7 @@ fprintf('Null model (guess mean) RMSE over included sessions (mean value over se
 
 %% We'd like to understand something about how best (non-shifted) decoder weights are distributed across electrodes
 switch(basicInfo(1).type)
-    case {'aff', 'fitrlinear', 'fitrcvlasso'}
+    case {'aff', 'fitrlinear', 'fitrcvlasso', 'ficvridge'}
         for ii = 1:length(paintShadowEffect)
             regPercents = GetRegWeightPercentiles(paintShadowEffect(ii).decodeBoth.electrodeWeights(:),[25 50 75]);
             fractionElectrodesForAreaFraction25(ii) = regPercents(1);

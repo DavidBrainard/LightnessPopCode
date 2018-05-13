@@ -19,27 +19,40 @@ switch decodeInfo.type
         S = warning('off','MATLAB:rankDeficientMatrix');
         decodeInfo.b = X\contrasts;
         warning(S.state,S.identifier);
+        
     case 'fitrlinear'
+        % This is by default a form of SVM regression
         X = [responses ones(nContrasts,1)];
         regFitResults = fitrlinear(X,contrasts,'FitBias',false);
         decodeInfo.b = regFitResults.Beta;
+        
     case 'fitrcvlasso'
-        X = [responses];
+        X = responses;
+        
+        % Cross validation step, to choose best lambda.
         lambda = logspace(-5,1,25);
         regFitResultsCV = fitrlinear(X',contrasts, ...
             'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
             'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
             'FitBias',true);
-        mseCV = kfoldLoss(regFitResultsCV);
+        mseCVLambda = kfoldLoss(regFitResultsCV);
+        [~,rindex] = min(mseCVLambda);
+        
+        % Do all the lambdas here so we can snag and return the number of
+        % non-zero coeffs for each. Costs a little time, but could be
+        % useful for diagnostics later.
         regFitResults = fitrlinear(X',contrasts, ...
             'ObservationsIn','columns','Lambda',lambda, ...
             'Learner','leastsquares','Solver','sparsa','Regularization','lasso', ...
             'FitBias',true);
         numNZCoef = sum(regFitResults.Beta~=0);
-        [~,rindex] = min(mseCV);
         decodeInfo.b = [regFitResults.Beta(:,rindex) ; regFitResults.Bias(rindex)];
         decodeInfo.numNZCoef = numNZCoef(rindex);
-
+        decodeInfo.useLambda = lambda(rindex);
+        decodeInfo.lambda = lambda;
+        decodeInfo.mseCVLambda = mseCVLambda;
+        decodeInfo.numNZCoefLambda = numNZCoef;
+        
         %{
         tempFig = figure; hold on;
         [h,hL1,hL2] = plotyy(log10(lambda),log10(mseCV),log10(lambda),log10(numNZCoef));
@@ -54,6 +67,33 @@ switch decodeInfo.type
         pause
         close(tempFig);
         %}
+        
+    case 'fitrcvridge'
+        X = responses;
+        
+        % Cross validation step, to choose best lambda.
+        lambda = logspace(-5,1,25);
+        regFitResultsCV = fitrlinear(X',contrasts, ...
+            'ObservationsIn','columns','KFold',5,'Lambda',lambda, ...
+            'Learner','leastsquares','Solver','lbfgs','Regularization','ridge', ...
+            'FitBias',true);
+        mseCVLambda = kfoldLoss(regFitResultsCV);
+        [~,rindex] = min(mseCVLambda);
+        
+        % Do all the lambdas here so we can snag and return the number of
+        % non-zero coeffs for each. Costs a little time, but could be
+        % useful for diagnostics later.
+        regFitResults = fitrlinear(X',contrasts,'Lambda',lambda, ...
+            'ObservationsIn','columns', ...
+            'Learner','leastsquares','Solver','lbfgs','Regularization','ridge', ...
+            'FitBias',true);
+        numNZCoef = sum(regFitResults.Beta~=0);
+        decodeInfo.b = [regFitResults.Beta(:,rindex) ; regFitResults.Bias(rindex)];
+        decodeInfo.numNZCoef = numNZCoef(rindex);
+        decodeInfo.useLambda = lambda(rindex);
+        decodeInfo.lambda = lambda;
+        decodeInfo.mseCVLambda = mseCVLambda;
+        decodeInfo.numNZCoefLambda = numNZCoef;
         
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];

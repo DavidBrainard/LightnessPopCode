@@ -62,11 +62,15 @@ d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
     d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
     FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
 switch (dTmp.type)
-    case {'aff', 'fitrlinear', 'fitrcvlasso'}
+    case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge'}
         d.electrodeWeights = dTmp.electrodeWeights;
         d.affineTerms = dTmp.affineTerms;
         if (isfield(dTmp,'numNZCoef'))
             d.numNZCoefs = dTmp.numNZCoef;
+            d.useLambda = dTmp.useLambda;
+            d.lambda = dTmp.lambda;
+            d.mseCVLambda = dTmp.mseCVLambda;
+            d.numNZCoefsLambda = dTmp.numNZCoefLambda;
         end
 end
 decodeSave.decodeBoth = d;

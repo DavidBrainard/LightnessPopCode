@@ -15,17 +15,18 @@ function LightnessPopCodeLocalHook
 %% Say hello
 fprintf('Running LightnessPopCode local hook\n');
 
-%% Put project toolbox onto path
-%
-% Specify project name and location
+%% Specify project name and location
 projectName = 'LightnessPopCode';
 projectBaseDir = tbLocateProject('LightnessPopCode');
+if (ispref(projectName))
+    rmpref(projectName);
+end
 
 %% Set preferences for project output
 %
 % This will need to be locally configured.
 outputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/PennOutput';
-physiologyInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/Pitt';
+physiologyInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/Pitt/Data';
 psychoInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/PennPsychoData';
 stimulusInputBaseDir = '/Users1/Users1Shared/Matlab/Experiments/LightnessV4/stimuli';
 stimulusDefInputBaseDir = fullfile(projectBaseDir,'stimuli');
