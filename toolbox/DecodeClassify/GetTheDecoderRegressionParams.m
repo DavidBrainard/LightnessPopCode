@@ -95,6 +95,25 @@ switch decodeInfo.type
         decodeInfo.mseCVLambda = mseCVLambda;
         decodeInfo.numNZCoefLambda = numNZCoef;
         
+    case 'lassoglm1'
+        X = responses;
+        
+        % Fit the model
+        model = 'normal';
+        link = 0.6;
+        [BCV,FitInfoCV] = lassoglm(X,contrasts, model, 'Link', link,  ...
+            'NumLambda', 25, 'CV', 5);
+        rindex = FitInfoCV.IndexMinDeviance;
+        [B,FitInfo] = lassoglm(X,contrasts, model,  ...
+            'Lambda', FitInfoCV.Lambda(rindex));
+        
+        % Save answer
+        decodeInfo.b = [B ; FitInfo.Intercept];
+        decodeInfo.numNZCoef = sum(B~=0);
+        decodeInfo.useLambda = FitInfoCV.Lambda(rindex);
+        decodeInfo.lambda = FitInfoCV.Lambda;
+        decodeInfo.mseCVLambda = FitInfoCV.Deviance;
+
     case {'svmreg'}
         X = [responses ones(nContrasts,1)];
         

@@ -11,13 +11,30 @@ clear; close all;
 %% Parameters
 nIntensities = 15;
 nTrialsPerLuminance = 10;
-paintShadowGain = 1.5;
+paintShadowEffectIn = 0.06;
+paintShadowGain = 1/(10^-paintShadowEffectIn);
 nNeurons = 100;
 neuron1Gain = 2;
 neuron2Gain = 1.2;
-neuron1Exp = 1;
-neuron2Exp = 1;
-responseNoiseSd = 0.2;
+neuron1Exp = 0.5;
+neuron2Exp = 0.5;
+responseNoiseSd = 0.1;
+SPARSE = true;
+
+% What to train on
+%   'both'
+%   'paint'
+%   'shadow'
+TRAIN = 'both';
+
+% Type
+%   'aff'
+%   'fitrlinear'
+%   'fitrcvlasso'
+%   'fitcvridge'
+%   'lassoglm1'
+%   'maxlikely'
+TYPE = 'lassoglm1';
 
 %% Set up luminances across trials
 theIntensities = linspace(0.2,1,nIntensities);
@@ -50,15 +67,8 @@ paintResponses = [neuron1PaintResponses neuron2PaintResponses neuronOtherPaintRe
 shadowResponses = [neuron1ShadowResponses neuron2ShadowResponses neuronOtherShadowResponses];
 
 %% Set decoding parameters
-%
-% Types
-%   'aff'
-%   'fitrlinear'
-%   'fitrcvlasso'
-%   'fitcvridge'
-%   'maxlikely'
-decodeInfo.type = 'fitrlinear';
-decodeInfo.decodeJoint = 'both';
+decodeInfo.type = TYPE;
+decodeInfo.decodeJoint = TRAIN;
 decodeInfo.decodeLOOType = 'kfold';
 decodeInfo.decodeNFolds = 10;
 decodeInfo.decodedIntensityFitType = 'betacdf';

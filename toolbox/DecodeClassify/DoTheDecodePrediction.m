@@ -10,7 +10,7 @@ function predict = DoTheDecodePrediction(decodeInfo,responses)
 
 % Build the decoder according to passed type
 switch decodeInfo.type
-    case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge'}
+    case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge', 'lassoglm1'}
         X = [responses ones(nContrasts,1)];
         predict = X*decodeInfo.b;
     case 'svmreg'

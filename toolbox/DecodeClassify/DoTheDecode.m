@@ -13,7 +13,7 @@ end
 
 % Build the decoder according to passed type
 switch decodeInfo.type
-    case {'aff' 'svmreg' 'fitrlinear' 'fitrcvlasso' 'fitrcvridge'};
+    case {'aff' 'svmreg' 'fitrlinear' 'fitrcvlasso' 'fitrcvridge' 'lassoglm1'};
         decodeInfo = GetTheDecoderRegressionParams(decodeInfo,intensities,responses);
     case {'maxlikely' 'maxlikelyfano' 'mlbayes' 'mlbayesfano' 'maxlikelymeanvar' 'mlbayesmeanvar' 'maxlikelypoiss' 'mlbayespoiss'}
         decodeInfo = GetTheDecoderMaxLikelyParams(decodeInfo,intensities,responses);       
