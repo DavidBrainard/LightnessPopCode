@@ -34,7 +34,7 @@ TRAIN = 'both';
 %   'fitcvridge'
 %   'lassoglm1'
 %   'maxlikely'
-TYPE = 'lassoglm1';
+TYPE = 'fitrcvlasso';
 
 %% Set up luminances across trials
 theIntensities = linspace(0.2,1,nIntensities);

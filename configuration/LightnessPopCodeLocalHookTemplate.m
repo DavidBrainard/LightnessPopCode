@@ -46,4 +46,5 @@ setpref('LightnessPopCode','stimulusDefInputBaseDir',stimulusDefInputBaseDir);
 % This is formatted so it can be passed to the linux shell.
 setpref('LightnessPopCode','figureDir','/Volumes/Users1/DropboxPersonal/xPapers/xUnderReview/LightnessV4Paper1/DBFigures');
 setpref('LightnessPopCode','figureDirCVLasso','/Volumes/Users1/DropboxPersonal/xPapers/xUnderReview/LightnessV4Paper1/DBFiguresCVLasso');
+setpref('LightnessPopCode','figureDirCVRidge','/Volumes/Users1/DropboxPersonal/xPapers/xUnderReview/LightnessV4Paper1/DBFiguresCVRidge');
 
