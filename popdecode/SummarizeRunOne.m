@@ -111,7 +111,6 @@ for runIndex = 1:length(theExtractedDirs)
         ClassificationVersusNPCA(runIndex) = NaN;
     end
 end
-
     
 %% Figure parameters
 figParams = SetFigParams([],'popdecode');
@@ -169,6 +168,9 @@ if (decodeInfoIn.doSummaryClassificationVersusNPCA)
     end
     ClassificationVersusNPCASummaryPlots(basicInfo,paintShadowEffect,ClassificationVersusNPCA,summaryDir,figParams)
 end
+
+%% Save the paint shadow data
+save(fullfile(summaryDir,'paintShadowEffect','paintShadowEffectStructArray'),'basicInfo','paintShadowEffect');
 
 
 

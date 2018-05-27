@@ -19,6 +19,10 @@ cd(myDir);
 % DataPreprocessRunOne(argList{:});
 % close all;
 
+argList = SetupConditionArgs('basic_shuff');
+DataPreprocessRunOne(argList{:});
+close all;
+
 % argList = SetupConditionArgs('fitrlinear');
 % DataPreprocessRunOne(argList{:});
 % close all;
@@ -27,9 +31,9 @@ cd(myDir);
 % DataPreprocessRunOne(argList{:});
 % close all;
 
-argList = SetupConditionArgs('fitrcvridge');
-DataPreprocessRunOne(argList{:});
-close all;
+% argList = SetupConditionArgs('fitrcvridge');
+% DataPreprocessRunOne(argList{:});
+% close all;
 
 % argList = SetupConditionArgs('poiss_ml');
 % DataPreprocessRunOne(argList{:});

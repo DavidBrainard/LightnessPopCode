@@ -177,11 +177,11 @@ rmseenvelopefig = figure; clf;
 %set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 if (~isempty(useIndex))
-    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
+    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'s','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',decodeInfo.markerSize-6);
     minRMSE = min(tempRMSE(useIndex));
     for kk = 1:length(useIndex)
         if (tempRMSE(useIndex(kk)) < decodeInfo.envelopeThreshold*minRMSE)
-            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'go','MarkerFaceColor','g'); %,'MarkerSize',decodeInfo.markerSize-6);
+            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
         end
     end
 end
