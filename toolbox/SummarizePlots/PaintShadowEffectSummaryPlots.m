@@ -81,6 +81,7 @@ if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
     FigureSave(figFilename,nonZeroHistFig,figParams.figType);
     exportfig(nonZeroHistFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 end
+
 %% Print out null RMSE over included sessions
 fprintf('Null model (guess mean) RMSE over included sessions (mean value over sessions): %0.2f\n',mean([paintShadowEffectDecodeBoth(booleanRMSEInclude).nullRMSE]));
 
@@ -284,6 +285,23 @@ booleanRMSE = bestRMSE <= basicInfo(1).filterMaxRMSE;
 booleanV1 = booleanSubjectBR | booleanSubjectST;
 booleanV4 = booleanSubjectJD | booleanSubjectSY;
 
+% Compute number of sessions included in summary plot for each subject
+numberSessionsBR = length(find(booleanSubjectBR));
+numberRMSEOKSessionsBR = length(find(booleanSubjectBR & booleanRMSE));
+fprintf('Subject BR: including %d of %d sessions\n',numberRMSEOKSessionsBR,numberSessionsBR);
+numberSessionsST = length(find(booleanSubjectST));
+numberRMSEOKSessionsST = length(find(booleanSubjectST & booleanRMSE));
+fprintf('Subject ST: including %d of %d sessions\n',numberRMSEOKSessionsST,numberSessionsST);
+numberSessionsJD = length(find(booleanSubjectJD));
+numberRMSEOKSessionsJD = length(find(booleanSubjectJD & booleanRMSE));
+fprintf('Subject JD: including %d of %d sessions\n',numberRMSEOKSessionsJD,numberSessionsJD);
+numberSessionsSY = length(find(booleanSubjectSY));
+numberRMSEOKSessionsSY = length(find(booleanSubjectSY & booleanRMSE));
+fprintf('Subject SY: including %d of %d sessions\n',numberRMSEOKSessionsSY,numberSessionsSY);
+fprintf('Overall: including %d of %d sessions\n', ...
+    numberRMSEOKSessionsBR+numberRMSEOKSessionsST+numberRMSEOKSessionsJD+numberRMSEOKSessionsSY, ...
+    numberSessionsBR+numberSessionsST+numberSessionsJD+numberSessionsSY);
+
 % Write out good sessions into a text file
 allFilenames = {paintShadowEffect.theDataDir};
 filenamesFilename = fullfile(figureDir,['summaryPaintShadowRMSEGood' figureSuffix '.txt'],'');
@@ -359,37 +377,37 @@ fprintf('\tSY: %0.1f, +/- %0.1f std\n',mean(numberElectrodesSY),std(numberElectr
 % to zero. Effects greater than 1 before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionStraddle = length(index1)/length(find(booleanRMSE));
-fprintf('\n%d%% of %d sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE)));
+fprintf('\n%d%% of %d sessions (%d) have p/s interval that straddle 0\n',round(100*fractionStraddle),length(index1),length(find(booleanRMSE)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionBelow = length(index2)/length(find(booleanRMSE));
-fprintf('%d%% of %d sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE)));
+fprintf('%d%% of %d sessions (%d) have p/s interval strictly less than 0\n',round(100*fractionBelow),length(index2),length(find(booleanRMSE)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE);
 fractionAbove = length(index3)/length(find(booleanRMSE));
-fprintf('%d%% of %d sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE)));
+fprintf('%d%% of %d sessions (%d) have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(index3),length(find(booleanRMSE)));
 
 % A little print out of where intervals fall, V1. Effects greater than 1
 % before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1);
 fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV1));
-fprintf('\n%d%% of %d V1 sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV1)));
+fprintf('\n%d%% of %d V1 sessions (%d) have p/s interval that straddle 0\n',round(100*fractionStraddle),length(index1),length(find(booleanRMSE & booleanV1)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV1);
 fractionBelow = length(index2)/length(find(booleanRMSE & booleanV1));
-fprintf('%d%% of %d V1 sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV1)));
+fprintf('%d%% of %d V1 sessions (%d) have p/s interval strictly less than 0\n',round(100*fractionBelow),length(index2),length(find(booleanRMSE & booleanV1)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV1);
 fractionAbove = length(index3)/length(find(booleanRMSE & booleanV1));
-fprintf('%d%% of %d V1 sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV1)));
+fprintf('%d%% of %d V1 sessions (%d) have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(index3),length(find(booleanRMSE & booleanV1)));
 
 % A little print out of where intervals fall, V4.  Effects greater than 1
 % before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4);
 fractionStraddle = length(index1)/length(find(booleanRMSE & booleanV4));
-fprintf('\n%d%% of %d V4 sessions have p/s interval that straddle 0\n',round(100*fractionStraddle),length(find(booleanRMSE & booleanV4)));
+fprintf('\n%d%% of %d V4 sessions (%d) have p/s interval that straddle 0\n',round(100*fractionStraddle),length(index1),length(find(booleanRMSE & booleanV4)));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE & booleanV4);
 fractionBelow = length(index2)/length(find(booleanRMSE & booleanV4));
-fprintf('%d%% of %d V4 sessions have p/s interval strictly less than 0\n',round(100*fractionBelow),length(find(booleanRMSE & booleanV4)));
+fprintf('%d%% of %d V4 sessions (%d) have p/s interval strictly less than 0\n',round(100*fractionBelow),length(index2),length(find(booleanRMSE & booleanV4)));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE & booleanV4);
 fractionAbove = length(index3)/length(find(booleanRMSE & booleanV4));
-fprintf('%d%% of %d V4 sessions have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(find(booleanRMSE & booleanV4)));
+fprintf('%d%% of %d V4 sessions (%d) have p/s interval strictly greater than 0\n',round(100*fractionAbove),length(index3),length(find(booleanRMSE & booleanV4)));
 
 % A little print out of where intervals fall, JD. Effects greater than 1
 % before taking the -log10 are less than 0.
@@ -464,21 +482,29 @@ index1 = find(booleanRMSE & booleanV4);
 psRange = mean(log10(maxPaintShadowEffect(index1)) - log10(minPaintShadowEffect(index1)));
 fprintf('Mean V4 p/s effect range %0.3f\n',psRange);
 
-% Figure version 1.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
+% Figure version 1.
+%
+% Function errorbar plots neg errorbar first and pos errorbar second.
+%
+% The "max" and "min" in the range of paint shadow effects refer to the
+% old convention where numbers greater than 1 were opposite the
+% psychophysics and numbers less than one were in the same direction.
+%
+% So the "max" is the negative end of the range.  Didn't explicitly
+% multiply both terms by -1 in computation of error bar length since
+% there is an abs around the whole thing.
+%
+% Did change sign of psychophysical effect by hand.
 paintShadowEnvelopeVsRMSEFig = figure; clf; hold on;
-%set(gcf,'Position',figParams.position);
-%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV1index = booleanV1 & booleanRMSE & booleanSessionOK;
 plotV4index = booleanV4 & booleanRMSE & booleanSessionOK;
 errorbar(bestRMSE(plotV1index),-log10(bestPaintShadowEffect(plotV1index)),...
-    abs(log10(minPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     abs(log10(maxPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
+    abs(log10(minPaintShadowEffect(plotV1index))-log10(meanPaintShadowEffect(plotV1index))),...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV4index),-log10(bestPaintShadowEffect(plotV4index)),...
-    abs(log10(minPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     abs(log10(maxPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
+    abs(log10(minPaintShadowEffect(plotV4index))-log10(meanPaintShadowEffect(plotV4index))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
@@ -496,21 +522,17 @@ figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffi
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
 exportfig(paintShadowEnvelopeVsRMSEFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-% Figure version 1, V1 only.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
+% Figure version 1, V1 only.  
 paintShadowEnvelopeVsRMSEFig_V1 = figure; clf; hold on;
-%set(gcf,'Position',figParams.position);
-%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV1_BRindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectBR;
 plotV1_STindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectST;
 errorbar(bestRMSE(plotV1_BRindex),-log10(bestPaintShadowEffect(plotV1_BRindex)),...
-    abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
     abs(log10(maxPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
+    abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV1_STindex),-log10(bestPaintShadowEffect(plotV1_STindex)),...
-    abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
     abs(log10(maxPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
+    abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
@@ -528,21 +550,26 @@ figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE_V1' figureSu
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V1,figParams.figType);
 exportfig(paintShadowEnvelopeVsRMSEFig_V1,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
+%% Check by hand one red point
+% basicInfo(35).theDataDir
+% errorbar(bestRMSE(35),-log10(bestPaintShadowEffect(35)),...
+%     abs(log10(maxPaintShadowEffect(35))-log10(meanPaintShadowEffect(35))),...
+%     abs(log10(minPaintShadowEffect(35))-log10(meanPaintShadowEffect(35))),...
+%     'o','Color',[1 0 0],'MarkerFaceColor',[1 0 0]); %,'MarkerSize',4);
+
 % Figure version 1, V4 only.  Didn't change signs in error bars,
 % since the abs() takes care of that.  Did change sign
 % of psychophysical effect by hand.
 paintShadowEnvelopeVsRMSEFig_V4 = figure; clf; hold on;
-%set(gcf,'Position',figParams.position);
-%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV4_JDindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectJD;
 plotV4_SYindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectSY;
 errorbar(bestRMSE(plotV4_JDindex),-log10(bestPaintShadowEffect(plotV4_JDindex)),...
-    abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
     abs(log10(maxPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
+    abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV4_SYindex),-log10(bestPaintShadowEffect(plotV4_SYindex)),...
-    abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
     abs(log10(maxPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
+    abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
@@ -564,17 +591,15 @@ exportfig(paintShadowEnvelopeVsRMSEFig_V4,[figFilename '.eps'],'Format','eps','W
 % since the abs() takes care of that.  Did change sign
 % of psychophysical effect by hand.
 paintShadowEnvelopeVsRMSEFig_V1_AllRMSE = figure; clf; hold on;
-%set(gcf,'Position',figParams.position);
-%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV1_BRindex = booleanV1 & booleanSessionOK & booleanSubjectBR;
 plotV1_STindex = booleanV1 & booleanSessionOK & booleanSubjectST;
 errorbar(bestRMSE(plotV1_BRindex),-log10(bestPaintShadowEffect(plotV1_BRindex)),...
-    abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
     abs(log10(maxPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
+    abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(meanPaintShadowEffect(plotV1_BRindex))),...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV1_STindex),-log10(bestPaintShadowEffect(plotV1_STindex)),...
-    abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
     abs(log10(maxPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
+    abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(meanPaintShadowEffect(plotV1_STindex))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
 plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
@@ -596,17 +621,15 @@ exportfig(paintShadowEnvelopeVsRMSEFig_V1_AllRMSE,[figFilename '.eps'],'Format',
 % since the abs() takes care of that.  Did change sign
 % of psychophysical effect by hand.
 paintShadowEnvelopeVsRMSEFig_V4_AllRMSE = figure; clf; hold on;
-%set(gcf,'Position',figParams.position);
-%set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
 plotV4_JDindex = booleanV4 & booleanSessionOK & booleanSubjectJD;
 plotV4_SYindex = booleanV4 & booleanSessionOK & booleanSubjectSY;
 errorbar(bestRMSE(plotV4_JDindex),-log10(bestPaintShadowEffect(plotV4_JDindex)),...
-    abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
     abs(log10(maxPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
+    abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(meanPaintShadowEffect(plotV4_JDindex))),...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
 errorbar(bestRMSE(plotV4_SYindex),-log10(bestPaintShadowEffect(plotV4_SYindex)),...
-    abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
     abs(log10(maxPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
+    abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(meanPaintShadowEffect(plotV4_SYindex))),...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
 plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
