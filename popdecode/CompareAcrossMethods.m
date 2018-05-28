@@ -38,9 +38,12 @@ data2 = load(fullfile(directory2,'paintShadowEffectStructArray'));
 paintShadowEffect1 = [data1.paintShadowEffect(:)];
 decodeBoth1 = [paintShadowEffect1(:).decodeBoth];
 rmse1 = [decodeBoth1(:).theRMSE];
+decodeShift1 =  [paintShadowEffect1(:).decodeShift];
+
 paintShadowEffect2 = [data2.paintShadowEffect(:)];
 decodeBoth2 = [paintShadowEffect2(:).decodeBoth];
 rmse2 = [decodeBoth2(:).theRMSE];
+decodeShift2 = [paintShadowEffect2(:).decodeShift];
 
 %% Plot RMSE versus RMSE
 rmseCompareFig = figure; clf; hold on;
