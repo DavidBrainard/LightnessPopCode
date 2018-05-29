@@ -85,7 +85,7 @@ if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
     
     useLambda = [paintShadowEffectDecodeBoth.useLambda];
     useLambdaFig = figure; clf;
-    hist(useLambda,20,'k');
+    hist(log10(useLambda),20,'k');
 end
 
 %% Print out null RMSE over included sessions
