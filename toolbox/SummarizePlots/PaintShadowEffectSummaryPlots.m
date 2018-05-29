@@ -31,7 +31,7 @@ end
 if (basicInfo(1).filterMaxRMSE ~= 0.2)
     error('Check that you really want filterMaxRMSE set to something other than its paper value of 0.2');
 end
-%basicInfo(1).filterMaxRMSE = 0.25;
+%basicInfo(1).filterMaxRMSE = 0.24;
 
 %% PLOT: Envelope summaries in their multiple version glory
 booleanShiftedRMSEInclude = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
@@ -80,9 +80,12 @@ if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
     plot(numNZCoefs,fractionNZCoefs,'ko','MarkerFaceColor','k','MarkerSize',8);
     xlabel('Number non-zero coefficients');
     ylabel('Fraction non-zero coefficients');
-    title('Cross-validated lasso regularization');
     FigureSave(figFilename,nonZeroHistFig,figParams.figType);
     exportfig(nonZeroHistFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
+    
+    useLambda = [paintShadowEffectDecodeBoth.useLambda];
+    useLambdaFig = figure; clf;
+    hist(useLambda,20,'k');
 end
 
 %% Print out null RMSE over included sessions
