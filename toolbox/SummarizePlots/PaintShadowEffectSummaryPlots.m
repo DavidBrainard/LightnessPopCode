@@ -83,6 +83,7 @@ if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
     FigureSave(figFilename,nonZeroHistFig,figParams.figType);
     exportfig(nonZeroHistFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
     
+    useLambdaFig = figure; clf;
     useLambda = [paintShadowEffectDecodeBoth.useLambda];
     useLambdaFig = figure; clf;
     hist(log10(useLambda),20,'k');
