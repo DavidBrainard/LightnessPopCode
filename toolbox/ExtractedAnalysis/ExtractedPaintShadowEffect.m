@@ -19,7 +19,6 @@ end
 
 %% Shuffle just once in this whole function, if desired
 %
-%
 % With the 'none' options as set here, this does nothing, just returns
 % the passed intensities and responses.
 %
@@ -37,7 +36,7 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
-decodeInfoTemp.decodeJoint = 'both';
+decodeInfoTemp.decodeJoint = decodeInfo.decodeJoint;
 decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
@@ -147,7 +146,8 @@ FigureSave(figName,predmatchfig,decodeInfo.figType);
 exportfig(predmatchfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
 %% Build shifted decoder on both with shadow intensity shifts, no PCA
-shadowShiftInValues = linspace(sqrt(0.7), sqrt(1.3), 20);
+%shadowShiftInValues = linspace(sqrt(0.7), sqrt(1.3), 20);
+shadowShiftInValues = linspace(0.79433, 1.2589, 20);
 decodeSave.decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'none',[]);
 
 % PLOT: Envelope of p/s effect across the shifted decodings
