@@ -8,33 +8,48 @@
 %% Clear and close
 clear; close all;
 
-%% Parameters
+%% Stimulus parameters
 nIntensities = 15;
-nTrialsPerLuminance = 10;
-paintShadowEffectIn = 0.06;
-paintShadowGain = 1/(10^-paintShadowEffectIn);
-nNeurons = 100;
-neuron1Gain = 2;
-neuron2Gain = 1.2;
-neuron1Exp = 0.5;
-neuron2Exp = 0.5;
-responseNoiseSd = 0.1;
-SPARSE = true;
+nTrialsPerLuminance = 5;
 
-% What to train on
+%% Neural parameters
+%
+% Converstion between gain and p/s effect
+%    psGain = 1/(10^-psEffect)
+%    psEffect = -log10(1/psGain)
+paintShadowEffectLow = 0.04;
+paintShadowEffectHigh = 0.08;
+paintShadowGainLow = 1/(10^-paintShadowEffectLow);
+paintShadowGainHigh = 1/(10^-paintShadowEffectHigh);
+nNeuronsModulatedByDiskAndContext = 50;
+nNeuronsModulatedByDiskOnly = 1;
+nNeuronsModulatedByContextOnly = 1;
+nNeuronsNotModulated = 1;
+
+% Multiplicative fraction that sets simulatd noise sd as a function
+% of simulated mean response.
+responseNoiseSdFraction = 0.3;
+
+% If not sparse, give ranges for a uniform draw
+neuronGainLow = 0.2;
+neuronGainHigh = 5;
+neuronExpLow = 0.3;
+neuronExpHigh = 0.7;
+
+%% What to train on
 %   'both'
 %   'paint'
 %   'shadow'
 TRAIN = 'both';
 
-% Type
+%% Type of regression
 %   'aff'
 %   'fitrlinear'
 %   'fitrcvlasso'
 %   'fitcvridge'
 %   'lassoglm1'
 %   'maxlikely'
-TYPE = 'fitrcvlasso';
+TYPE = 'aff';
 
 %% Set up luminances across trials
 theIntensities = linspace(0.2,1,nIntensities);
@@ -51,20 +66,66 @@ for ll = 1:nIntensities
     end
 end
 
-%% First two neurons have responses that are related to luminances
-neuron1PaintResponses = (neuron1Gain*paintIntensities).^neuron1Exp + normrnd(0,responseNoiseSd,nPaintTrials,1);
-neuron2PaintResponses = (neuron2Gain*paintIntensities).^neuron2Exp + normrnd(0,responseNoiseSd,nPaintTrials,1);
-neuron1ShadowResponses = (paintShadowGain*neuron1Gain*shadowIntensities).^neuron1Exp + normrnd(0,responseNoiseSd,nShadowTrials,1);
-neuron2ShadowResponses = (paintShadowGain*neuron2Gain*shadowIntensities).^neuron2Exp  + normrnd(0,responseNoiseSd,nShadowTrials,1);
+%% Generate simulated neural data
 
-%% Rest of neurons have responses that are pure noise
-nOtherNeurons = nNeurons-2;
-neuronOtherPaintResponses = normrnd(0,responseNoiseSd,nPaintTrials,nOtherNeurons);
-neuronOtherShadowResponses = normrnd(0,responseNoiseSd,nShadowTrials,nOtherNeurons);
+% Some neurons are modulated by the disk intensity
+neuronIndex = 1;
+for nn = 1:nNeuronsModulatedByDiskAndContext
+    neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
+    neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
+    paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*paintIntensities).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (paintShadowGain(neuronIndex)*neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
 
-%% Neural response matrix (nTrials by nNeurons for paint and shadow)
-paintResponses = [neuron1PaintResponses neuron2PaintResponses neuronOtherPaintResponses];
-shadowResponses = [neuron1ShadowResponses neuron2ShadowResponses neuronOtherShadowResponses];
+    paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
+    shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
+    
+    neuronIndex = neuronIndex + 1;
+end
+
+% Some by disk only
+for nn = 1:nNeuronsModulatedByDiskOnly
+    neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
+    neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
+    paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
+    paintResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*paintIntensities).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
+
+    paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
+    shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
+    
+    neuronIndex = neuronIndex + 1;
+end
+
+% Some by context only
+for nn = nNeuronsModulatedByContextOnly
+    neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
+    neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
+    paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (paintShadowGain(neuronIndex)*neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
+
+    paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
+    shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
+    
+    neuronIndex = neuronIndex + 1;
+
+end
+
+% And some are not modulated ata all
+for nn = nNeuronsNotModulated
+    neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
+    neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
+    paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
+    paintResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*mean(shadowIntensities)).^neuronExp(neuronIndex);
+
+    paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
+    shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
+    
+    neuronIndex = neuronIndex + 1;
+
+end
 
 %% Set decoding parameters
 decodeInfo.type = TYPE;
@@ -83,7 +144,7 @@ decodeInfo.intensityTicks = [0.0 0.25 0.5 0.75 1.0];
 decodeInfo.intensityTickLabels = {'0.00' '0.25' '0.50' '0.75' '1.00'};
 decodeInfo.intensityYTickLabels = {'0.00 ' '0.25 ' '0.50 ' '0.75 ' '1.00 '};
 
-%% Our standard decoding and digesting block of code (rom
+%% Our standard decoding and digesting block of code (from
 % ExtractedPaintShadowEffect)
 [~,~,d.paintPreds,d.shadowPreds,dTmp] = PaintShadowDecode(decodeInfo, ...
     paintIntensities,paintResponses,shadowIntensities,shadowResponses);
