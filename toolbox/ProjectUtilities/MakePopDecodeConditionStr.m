@@ -21,9 +21,9 @@ switch (decodeInfo.classifyType)
         classifyStr = decodeInfo.classifyType;
 end
 
-condStr = [decodeInfo.type '_' 'cls-' classifyStr '_' 'pca-' decodeInfo.pcaType pcaKeepStr '_' ...
+condStr = [decodeInfo.type '_' decodeInfo.decodeJoint '_' 'cls-' classifyStr '_' 'pca-' decodeInfo.pcaType pcaKeepStr '_' ...
     decodeInfo.trialShuffleType '_' decodeInfo.paintShadowShuffleType '_' decodeInfo.excludeSYelectrodes '_' 'ft-' decodeInfo.paintShadowFitType ...
-    '_' num2str(decodeInfo.shadowCondition) '_' num2str(decodeInfo.paintCondition)];
+    '_' num2str(decodeInfo.shadowCondition) '_' num2str(decodeInfo.paintCondition) ];
 
 % Size location string if possible
 if (isfield(decodeInfo,'theCheckerboardSizePixels'))

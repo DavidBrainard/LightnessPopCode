@@ -15,13 +15,21 @@ myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
 %% Original paint/shadow
-% argList = SetupConditionArgs('basic');
-% DataPreprocessRunOne(argList{:});
-% close all;
-
-argList = SetupConditionArgs('basic_shuff');
+argList = SetupConditionArgs('basic');
 DataPreprocessRunOne(argList{:});
 close all;
+
+argList = SetupConditionArgs('basicpaint');
+DataPreprocessRunOne(argList{:});
+close all;
+
+argList = SetupConditionArgs('basicshadow');
+DataPreprocessRunOne(argList{:});
+close all;
+
+% argList = SetupConditionArgs('basic_shuff');
+% DataPreprocessRunOne(argList{:});
+% close all;
 
 % argList = SetupConditionArgs('fitrlinear');
 % DataPreprocessRunOne(argList{:});
