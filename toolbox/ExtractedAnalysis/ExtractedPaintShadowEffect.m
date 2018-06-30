@@ -62,14 +62,16 @@ d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
     FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
 switch (dTmp.type)
     case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge'}
-        d.electrodeWeights = dTmp.electrodeWeights;
-        d.affineTerms = dTmp.affineTerms;
-        if (isfield(dTmp,'numNZCoef'))
-            d.numNZCoefs = dTmp.numNZCoef;
-            d.useLambda = dTmp.useLambda;
-            d.lambda = dTmp.lambda;
-            d.mseCVLambda = dTmp.mseCVLambda;
-            d.numNZCoefsLambda = dTmp.numNZCoefLambda;
+        if (strcmp(dTmp.decodeJoint,'both'))
+            d.electrodeWeights = dTmp.electrodeWeights;
+            d.affineTerms = dTmp.affineTerms;
+            if (isfield(dTmp,'numNZCoef'))
+                d.numNZCoefs = dTmp.numNZCoef;
+                d.useLambda = dTmp.useLambda;
+                d.lambda = dTmp.lambda;
+                d.mseCVLambda = dTmp.mseCVLambda;
+                d.numNZCoefsLambda = dTmp.numNZCoefLambda;
+            end
         end
 end
 decodeSave.decodeBoth = d;
@@ -147,7 +149,7 @@ exportfig(predmatchfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'Fon
 
 %% Build shifted decoder on both with shadow intensity shifts, no PCA
 %shadowShiftInValues = linspace(sqrt(0.7), sqrt(1.3), 20);
-shadowShiftInValues = linspace(0.79433, 1.2589, 20);
+shadowShiftInValues = linspace(0.79433, 1.2589, 30);
 decodeSave.decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'none',[]);
 
 % PLOT: Envelope of p/s effect across the shifted decodings

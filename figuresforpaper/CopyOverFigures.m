@@ -65,34 +65,27 @@ unix(copyCmd);
 % unix(copyCmd);
 
 % Figure 7: Decoding and neural paint/shadow effect
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','JD130904lightness0001_300px_15cx_-25cy_i');
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_both_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','JD130904lightness0001_300px_15cx_-25cy_i');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure7A_ExampleDecoding1.eps')];
 unix(copyCmd);
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure7B_ExamplePaintShadowEffect1.eps')];
 unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_both_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothDecoding.eps') ' ' fullfile(figureDir,'Figure7C_ExampleDecoding2.eps')];
 unix(copyCmd);
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectDecodeBothInferredMatches.eps') ' ' fullfile(figureDir,'Figure7D_ExamplePaintShadowEffect2.eps')];
 unix(copyCmd);
 
 % Figure 8: Envelope decoding
-analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
+analysisOutputFigDir = fullfile(outputBaseDir,'xExtractedPlots','aff_both_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','ST140703lightness0001_115px_-15cx_-72cy_g/');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'Fig_extPaintShadowEffectRMSEEnvelope.eps') ' ' fullfile(figureDir,'Figure8A_SingleSessionEnvelope.eps')];
 unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
+analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_both_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE_V1.eps') ' ' fullfile(figureDir,'Figure8B_PaintShadowEffectSummary.eps')];
 unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
+analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_both_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
 copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE_V4.eps') ' ' fullfile(figureDir,'Figure8C_PaintShadowEffectSummary.eps')];
 unix(copyCmd);
 
-% Figure 8, reviewer version with all RMSE
-analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE_V1_AllRMSE.eps') ' ' fullfile(figureDir,'Figure8B_ReviewerAllRMSE_PaintShadowEffectSummary.eps')];
-unix(copyCmd);
-analysisOutputFigDir = fullfile(outputBaseDir,'xSummary','aff_cls-mvmaSMO_pca-no_notshf_nopsshf_sykp_ft-gain_2_1','PaintShadowEffect');
-copyCmd = ['cp ' fullfile(analysisOutputFigDir,'summaryPaintShadowEnvelopeVsRMSE_V4_AllRMSE.eps') ' ' fullfile(figureDir,'Figure8C_ReviewerAllRMSE_PaintShadowEffectSummary.eps')];
-unix(copyCmd);
 
 

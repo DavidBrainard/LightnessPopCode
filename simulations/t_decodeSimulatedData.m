@@ -17,24 +17,24 @@ nTrialsPerLuminance = 5;
 % Converstion between gain and p/s effect
 %    psGain = 1/(10^-psEffect)
 %    psEffect = -log10(1/psGain)
-paintShadowEffectLow = 0.04;
-paintShadowEffectHigh = 0.08;
+paintShadowEffectLow = -0.02;
+paintShadowEffectHigh = 0.02;
 paintShadowGainLow = 1/(10^-paintShadowEffectLow);
 paintShadowGainHigh = 1/(10^-paintShadowEffectHigh);
-nNeuronsModulatedByDiskAndContext = 50;
-nNeuronsModulatedByDiskOnly = 1;
-nNeuronsModulatedByContextOnly = 1;
-nNeuronsNotModulated = 1;
+nNeuronsModulatedByDiskAndContext = 0;
+nNeuronsModulatedByDiskOnly = 25;
+nNeuronsModulatedByContextOnly = 25;
+nNeuronsNotModulated = 0;
 
-% Multiplicative fraction that sets simulatd noise sd as a function
-% of simulated mean response.
-responseNoiseSdFraction = 0.3;
-
-% If not sparse, give ranges for a uniform draw
+% Ranges for uniform draw of neuron gains and exponents.
 neuronGainLow = 0.2;
 neuronGainHigh = 5;
 neuronExpLow = 0.3;
 neuronExpHigh = 0.7;
+
+% Multiplicative fraction that sets simulatd noise sd as a function
+% of simulated mean response.
+responseNoiseSdFraction = 0.7;
 
 %% What to train on
 %   'both'
@@ -224,3 +224,60 @@ drawnow;
 % figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothInferredMatches'];
 % FigureSave(figName,predmatchfig,decodeInfo.figType);
 % exportfig(predmatchfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
+
+%% Shifted decoders
+shadowShiftInValues = linspace(0.79433, 1.2589, 30);
+decodeInfo.uniqueIntensities = unique([paintIntensities ; shadowIntensities]);
+decodeInfo.nUnits = size(paintResponses,2);
+decodeInfo.nRandomVectorRepeats = 5;
+decodeInfo.envelopeThreshold = 1.05;
+decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'none',[]);
+
+% PLOT: Envelope of p/s effect across the shifted decodings
+
+% Set envelope threshold for coloring.
+% This value should match the value for the same variable that is also
+% coded into routine PaintShadowEffectSummaryPlots. That one determines which
+% points are used to determine the envelope range.
+if (decodeInfo.envelopeThreshold ~= 1.05)
+    error('Check that you really want envelopeThreshold set to something other than its paper value of 1.05');
+end
+temp = decodeShift;
+tempPaintShadowEffect = [temp.paintShadowEffect];
+tempRMSE = [temp.theRMSE];
+clear useIndex tempPaintShadowEffect
+inIndex = 1;
+useIndex = [];
+for kk = 1:length(temp)
+    if ~isempty(temp(kk).paintShadowEffect)
+        useIndex(inIndex) = kk; 
+        tempPaintShadowEffect(inIndex) = temp(kk).paintShadowEffect;
+        inIndex = inIndex + 1;
+    end
+end
+rmseenvelopefig = figure; clf;
+%set(gcf,'Position',decodeInfo.sqPosition);
+%set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
+hold on;
+if (~isempty(useIndex))
+    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'s','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',decodeInfo.markerSize-6);
+    minRMSE = min(tempRMSE(useIndex));
+    for kk = 1:length(useIndex)
+        if (tempRMSE(useIndex(kk)) < decodeInfo.envelopeThreshold*minRMSE)
+            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
+        end
+    end
+end
+xlabel('Decoding RMSE'); %,'FontSize',decodeInfo.labelFontSize);
+ylabel('Paint-Shadow Effect'); %,'FontSize',decodeInfo.labelFontSize);
+xlim([0 0.2]);
+ylim([-0.15 0.15]);
+set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
+axis('square');
+box off
+% figName = [decodeInfo.figNameRoot '_extPaintShadowEffectRMSEEnvelope'];
+% FigureSave(figName,rmseenvelopefig,decodeInfo.figType);
+% exportfig(rmseenvelopefig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
