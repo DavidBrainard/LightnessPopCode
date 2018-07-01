@@ -32,7 +32,7 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 [paintIntensities,paintResponses,shadowIntensities,shadowResponses] = ...
     PaintShadowShuffle(decodeInfo,theData.paintIntensities,theData.paintResponses,theData.shadowIntensities,theData.shadowResponses);
 
-%% Build decoder on both
+%% Build decoder accoding to decodeJoint field ('both', 'paint', or 'shadow')
 clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
@@ -74,6 +74,18 @@ switch (dTmp.type)
             end
         end
 end
+
+% Bootstrap p/s effect
+% d.paintPreds contains the LOO paint predictions
+% d.shadowPreds contains the LOO shadow predictionss
+nBootstraps = 100;
+paintShadowEffects = zeros(nBootstraps,1);
+for ii = 1:nBootstraps
+    
+end
+
+% Save the analsis.  Field decodeBoth might really contain decode on pait
+% or shadow, depending on setting of decodeJoint field.
 decodeSave.decodeBoth = d;
 
 % PLOT: decoded intensities
