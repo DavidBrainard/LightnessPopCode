@@ -15,7 +15,19 @@ myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
 %% Original paint/shadow
-% argList = SetupConditionArgs('basic');
+argList = SetupConditionArgs('basic');
+DataPreprocessRunOne(argList{:});
+close all;
+
+argList = SetupConditionArgs('basicpaint');
+DataPreprocessRunOne(argList{:});
+close all;
+
+argList = SetupConditionArgs('basicshadow');
+DataPreprocessRunOne(argList{:});
+close all;
+
+% argList = SetupConditionArgs('basic_shuff');
 % DataPreprocessRunOne(argList{:});
 % close all;
 
@@ -27,9 +39,9 @@ cd(myDir);
 % DataPreprocessRunOne(argList{:});
 % close all;
 
-argList = SetupConditionArgs('fitrcvridge');
-DataPreprocessRunOne(argList{:});
-close all;
+% argList = SetupConditionArgs('fitrcvridge');
+% DataPreprocessRunOne(argList{:});
+% close all;
 
 % argList = SetupConditionArgs('poiss_ml');
 % DataPreprocessRunOne(argList{:});

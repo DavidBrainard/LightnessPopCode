@@ -19,7 +19,6 @@ end
 
 %% Shuffle just once in this whole function, if desired
 %
-%
 % With the 'none' options as set here, this does nothing, just returns
 % the passed intensities and responses.
 %
@@ -37,7 +36,7 @@ decodeInfoTemp.paintShadowShuffleType = 'none';
 clear decodeInfoTemp d
 decodeInfoTemp.nUnits = decodeInfo.nUnits;
 decodeInfoTemp.nRandomVectorRepeats = decodeInfo.nRandomVectorRepeats;
-decodeInfoTemp.decodeJoint = 'both';
+decodeInfoTemp.decodeJoint = decodeInfo.decodeJoint;
 decodeInfoTemp.type = decodeInfo.type;
 decodeInfoTemp.decodeLOOType = decodeInfo.decodeLOOType;
 decodeInfoTemp.decodeNFolds = decodeInfo.decodeNFolds;
@@ -63,14 +62,16 @@ d.shadowMinusPaintMean = mean(d.shadowPreds(:))-mean(d.paintPreds(:));
     FindPaintShadowEffect(decodeInfoTemp,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
 switch (dTmp.type)
     case {'aff', 'fitrlinear', 'fitrcvlasso', 'fitrcvridge'}
-        d.electrodeWeights = dTmp.electrodeWeights;
-        d.affineTerms = dTmp.affineTerms;
-        if (isfield(dTmp,'numNZCoef'))
-            d.numNZCoefs = dTmp.numNZCoef;
-            d.useLambda = dTmp.useLambda;
-            d.lambda = dTmp.lambda;
-            d.mseCVLambda = dTmp.mseCVLambda;
-            d.numNZCoefsLambda = dTmp.numNZCoefLambda;
+        if (strcmp(dTmp.decodeJoint,'both'))
+            d.electrodeWeights = dTmp.electrodeWeights;
+            d.affineTerms = dTmp.affineTerms;
+            if (isfield(dTmp,'numNZCoef'))
+                d.numNZCoefs = dTmp.numNZCoef;
+                d.useLambda = dTmp.useLambda;
+                d.lambda = dTmp.lambda;
+                d.mseCVLambda = dTmp.mseCVLambda;
+                d.numNZCoefsLambda = dTmp.numNZCoefLambda;
+            end
         end
 end
 decodeSave.decodeBoth = d;
@@ -147,7 +148,8 @@ FigureSave(figName,predmatchfig,decodeInfo.figType);
 exportfig(predmatchfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
 %% Build shifted decoder on both with shadow intensity shifts, no PCA
-shadowShiftInValues = linspace(sqrt(0.7), sqrt(1.3), 20);
+%shadowShiftInValues = linspace(sqrt(0.7), sqrt(1.3), 20);
+shadowShiftInValues = linspace(0.79433, 1.2589, 30);
 decodeSave.decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'none',[]);
 
 % PLOT: Envelope of p/s effect across the shifted decodings
@@ -177,11 +179,11 @@ rmseenvelopefig = figure; clf;
 %set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
 hold on;
 if (~isempty(useIndex))
-    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
+    plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'s','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',decodeInfo.markerSize-6);
     minRMSE = min(tempRMSE(useIndex));
     for kk = 1:length(useIndex)
         if (tempRMSE(useIndex(kk)) < decodeInfo.envelopeThreshold*minRMSE)
-            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'go','MarkerFaceColor','g'); %,'MarkerSize',decodeInfo.markerSize-6);
+            plot(tempRMSE(useIndex(kk)),-log10(tempPaintShadowEffect(kk)),'ko','MarkerFaceColor','k'); %,'MarkerSize',decodeInfo.markerSize-6);
         end
     end
 end

@@ -48,7 +48,7 @@ if (SPARSE)
     % Neural response matrix (nTrials by nNeurons)
     neuronResponses = [neuron1Responses neuron2Responses neuronOtherResponses];
 else
-    % Each neuron has a gain drawn randomly from a standard normal multipled
+    % Each neuron has a gain drawn randomly from a standard normal multiplied
     % by a common overall gain.
     neuronResponses = zeros(nTrials,nNeurons);
     for nn = 1:nNeurons
