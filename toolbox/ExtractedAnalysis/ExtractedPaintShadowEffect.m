@@ -82,7 +82,49 @@ nBootstraps = 100;
 paintShadowEffects = zeros(nBootstraps,1);
 for ii = 1:nBootstraps
     
+    % Sample paint data with replacement, respecting independent variable
+    bUniquePaintIntensities = unique(paintIntensities);
+    bPaintIntensities = [];
+    bPaintResponses = [];
+    for kk = 1:length(bUniquePaintIntensities)
+        thisPaintIntensityIndices = find(paintIntensities == bUniquePaintIntensities(kk));
+        randomPaintIndices = randi(length(thisPaintIntensityIndices),length(thisPaintIntensityIndices),1);
+        tempPaintIntensities = paintIntensities(thisPaintIntensityIndices(randomPaintIndices));
+        tempPaintResponses = paintResponses(thisPaintIntensityIndices(randomPaintIndices),:);
+        bPaintIntensities = [bPaintIntensities ; tempPaintIntensities];
+        bPaintResponses = [bPaintResponses ; tempPaintResponses];
+    end       
+        
+    % Sample shadow data with replacement, respecting independent variable
+    bUniqueShadowIntensities = unique(shadowIntensities);
+    bShadowIntensities = [];
+    bShadowResponses = [];
+    for kk = 1:length(bUniqueShadowIntensities)
+        thisShadowIntensityIndices = find(shadowIntensities == bUniqueShadowIntensities(kk));
+        randomShadowIndices = randi(length(thisShadowIntensityIndices),length(thisShadowIntensityIndices),1);
+        tempShadowIntensities = shadowIntensities(thisShadowIntensityIndices(randomShadowIndices));
+        tempShadowResponses = shadowResponses(thisShadowIntensityIndices(randomShadowIndices),:);
+        bShadowIntensities = [bShadowIntensities ; tempShadowIntensities];
+        bShadowResponses = [bShadowResponses ; tempShadowResponses];
+    end
+    
+    bTheIntensities = [bPaintIntensities ; bShadowIntensities];
+    bTheResponses = [bPaintResponses ; bShadowResponses];
+    bDecodeInfo = DoTheDecode(decodeInfo,bTheIntensities,bTheResponses);
+    bPaintPreds = DoTheDecodePrediction(bDecodeInfo,bPaintResponses);
+    bShadowPreds = DoTheDecodePrediction(bDecodeInfo,bShadowResponses);
+    
+    [b.paintMeans,b.paintSEMs,~,~,~,b.paintGroupedIntensities] = ...
+        sortbyx(bPaintIntensities,bPaintPreds);
+    [b.shadowMeans,b.shadowSEMs,~,~,~,b.shadowGroupedIntensities] = ...
+        sortbyx(bShadowIntensities,bShadowPreds);
+    temp = FindPaintShadowEffect(bDecodeInfo,b.paintGroupedIntensities,b.shadowGroupedIntensities,b.paintMeans,b.shadowMeans);
+    if (isempty(temp))
+        temp = NaN;
+    end
+    [bPaintShadowEffect(ii)] = temp;        
 end
+d.pPaintShadowEffect = bPaintShadowEffect;
 
 % Save the analsis.  Field decodeBoth might really contain decode on pait
 % or shadow, depending on setting of decodeJoint field.

@@ -703,13 +703,16 @@ for ii = 1:length(paintShadowEffect)
     inIndex = 1;
     thePaintShadowEffects = [];
     theRMSEs = [];
+    thePSEffectBootstrapSEMs = [];
     for kk = 1:length(paintShadowEffect)
         if ~isempty(paintShadowEffect(kk).paintShadowEffect)
             thePaintShadowEffects(inIndex) = paintShadowEffect(kk).paintShadowEffect;
             theRMSEs(inIndex) = paintShadowEffect(kk).theRMSE;
+            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).pPaintShadowEffect);
         else
             thePaintShadowEffects(inIndex) = NaN;
             theRMSEs(inIndex) = NaN;
+            thePSEffectBootstrapSEMs(inIndex) = NaN;
         end
         inIndex = inIndex + 1;
     end
@@ -725,13 +728,13 @@ booleanRMSE = theRMSEs <= basicInfo(1).filterMaxRMSE;
 booleanV1 = booleanSubjectBR | booleanSubjectST;
 booleanV4 = booleanSubjectJD | booleanSubjectSY;
 
-% Figure version 1, V1 only.  
+% Figure V1 only.  
 paintShadowEffectVsRMSEFig_V1 = figure; clf; hold on;
 plotV1_BRindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectBR;
 plotV1_STindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectST;
-plot(theRMSEs(plotV1_BRindex),-log10(thePaintShadowEffects(plotV1_BRindex)),...
+errorbar(theRMSEs(plotV1_BRindex),-log10(thePaintShadowEffects(plotV1_BRindex)),thePSEffectBootstrapSEMs(plotV1_BRindex), ...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
-plot(theRMSEs(plotV1_STindex),-log10(thePaintShadowEffects(plotV1_STindex)),...
+errorbar(theRMSEs(plotV1_STindex),-log10(thePaintShadowEffects(plotV1_STindex)),thePSEffectBootstrapSEMs(plotV1_STindex), ...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
@@ -749,15 +752,13 @@ figFilename = fullfile(figureDir,['summaryPaintShadowEffectVsRMSE_V1'],'');
 FigureSave(figFilename,paintShadowEffectVsRMSEFig_V1,figParams.figType);
 exportfig(paintShadowEffectVsRMSEFig_V1,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-% Figure version 1, V4 only.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
+% FigureV4 only.
 paintShadowEffectVsRMSEFig_V4 = figure; clf; hold on;
 plotV4_JDindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectJD;
 plotV4_SYindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectSY;
-plot(theRMSEs(plotV4_JDindex),-log10(thePaintShadowEffects(plotV4_JDindex)),...
+errorbar(theRMSEs(plotV4_JDindex),-log10(thePaintShadowEffects(plotV4_JDindex)),thePSEffectBootstrapSEMs(plotV4_JDindex), ...
     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
-plot(theRMSEs(plotV4_SYindex),-log10(thePaintShadowEffects(plotV4_SYindex)),...
+errorbar(theRMSEs(plotV4_SYindex),-log10(thePaintShadowEffects(plotV4_SYindex)),thePSEffectBootstrapSEMs(plotV4_SYindex), ...
     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
 plot([0 basicInfo(1).filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
 plot([0 basicInfo(1).filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
