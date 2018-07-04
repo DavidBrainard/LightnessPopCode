@@ -247,8 +247,11 @@ if (envelopeThreshold ~= 1.05)
     error('Check that you really want envelopeThreshold set to something other than its paper value of 1.05');
 end
 
- % Change this to plot unshifted or shifted RMSE
-plotUnshifted = true;
+% Change this to plot unshifted or shifted RMSE
+% There was a moment when I thought this might be
+% a useful thing to plot, but in the end I didn't
+% think so.
+plotUnshifted = false;
 
 % Go through each session and extract the range.
 for ii = 1:length(paintShadowEffect)
@@ -280,7 +283,7 @@ for ii = 1:length(paintShadowEffect)
     
     % If there was at least one paint-shadow effect that wasn't empty,
     % analyze and accumulate.
-    if (~isempty(envelopeRMSEs))
+    if (exist('envelopeRMSEs','var'))
         [bestRMSE(ii),bestIndex] = min(envelopeRMSEs);
         normEnvelopeRMSEs = envelopeRMSEs/bestRMSE(ii);
         index = find(normEnvelopeRMSEs < envelopeThreshold);
@@ -718,7 +721,7 @@ for ii = 1:length(paintShadowEffect)
         if ~isempty(paintShadowEffect(kk).paintShadowEffect)
             thePaintShadowEffects(inIndex) = paintShadowEffect(kk).paintShadowEffect;
             theRMSEs(inIndex) = paintShadowEffect(kk).theRMSE;
-            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).pPaintShadowEffect);
+            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).bPaintShadowEffect);
         else
             thePaintShadowEffects(inIndex) = NaN;
             theRMSEs(inIndex) = NaN;
