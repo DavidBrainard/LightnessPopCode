@@ -10,27 +10,27 @@ clear; close all;
 
 %% Stimulus parameters
 nIntensities = 15;
-nTrialsPerLuminance = 5;
+nTrialsPerLuminance = 10;
 
 %% Neural parameters
 %
 % Converstion between gain and p/s effect
 %    psGain = 1/(10^-psEffect)
 %    psEffect = -log10(1/psGain)
-paintShadowEffectLow = -0.02;
-paintShadowEffectHigh = 0.02;
+paintShadowEffectLow = -0.00;
+paintShadowEffectHigh = 0.00;
 paintShadowGainLow = 1/(10^-paintShadowEffectLow);
 paintShadowGainHigh = 1/(10^-paintShadowEffectHigh);
-nNeuronsModulatedByDiskAndContext = 0;
-nNeuronsModulatedByDiskOnly = 25;
-nNeuronsModulatedByContextOnly = 25;
+nNeuronsModulatedByDiskAndContext = 50;
+nNeuronsModulatedByDiskOnly = 0;
+nNeuronsModulatedByContextOnly = 0;
 nNeuronsNotModulated = 0;
 
 % Ranges for uniform draw of neuron gains and exponents.
 neuronGainLow = 0.2;
 neuronGainHigh = 5;
 neuronExpLow = 0.3;
-neuronExpHigh = 0.7;
+neuronExpHigh = 0.3;
 
 % Multiplicative fraction that sets simulatd noise sd as a function
 % of simulated mean response.
@@ -74,8 +74,8 @@ for nn = 1:nNeuronsModulatedByDiskAndContext
     neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
     neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
     paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
-    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*paintIntensities).^neuronExp(neuronIndex);
-    shadowResponsesRaw(:,neuronIndex) = (paintShadowGain(neuronIndex)*neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*paintIntensities/sqrt(paintShadowGain(neuronIndex))).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (sqrt(paintShadowGain(neuronIndex))*neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
 
     paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
     shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
@@ -88,8 +88,8 @@ for nn = 1:nNeuronsModulatedByDiskOnly
     neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
     neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
     paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
-    paintResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*paintIntensities).^neuronExp(neuronIndex);
-    shadowResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*paintIntensities).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*shadowIntensities).^neuronExp(neuronIndex);
 
     paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
     shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
@@ -102,8 +102,8 @@ for nn = nNeuronsModulatedByContextOnly
     neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
     neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
     paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
-    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
-    shadowResponsesRaw(:,neuronIndex) = (paintShadowGain(neuronIndex)*neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*mean(paintIntensities)/sqrt(paintShadowGain(neuronIndex))).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (sqrt(paintShadowGain(neuronIndex))*neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
 
     paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
     shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
@@ -117,8 +117,8 @@ for nn = nNeuronsNotModulated
     neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
     neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
     paintShadowGain(neuronIndex) = unifrnd(paintShadowGainLow,paintShadowGainHigh);
-    paintResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
-    shadowResponsesRaw(:,neuronIndex) = (mean([1 paintShadowGain(neuronIndex)])*neuronGain(neuronIndex)*mean(shadowIntensities)).^neuronExp(neuronIndex);
+    paintResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*mean(paintIntensities)).^neuronExp(neuronIndex);
+    shadowResponsesRaw(:,neuronIndex) = (neuronGain(neuronIndex)*mean(shadowIntensities)).^neuronExp(neuronIndex);
 
     paintResponses(:,neuronIndex) = paintResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*paintResponsesRaw(:,neuronIndex));
     shadowResponses(:,neuronIndex) = shadowResponsesRaw(:,neuronIndex) + normrnd(0,responseNoiseSdFraction*shadowResponsesRaw(:,neuronIndex));
