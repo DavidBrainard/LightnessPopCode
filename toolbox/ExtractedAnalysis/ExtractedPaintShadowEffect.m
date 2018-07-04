@@ -80,55 +80,58 @@ end
 % d.shadowPreds contains the LOO shadow predictions
 
 % Because we want to reproduce old data, save and restore rng seed around
-% this block
-rseed = rng;
-nBootstraps = 100;
-for ii = 1:nBootstraps
-    
-    % Sample paint data with replacement, respecting independent variable
-    b.UniquePaintIntensities = unique(paintIntensities);
-    b.PaintIntensities = [];
-    b.PaintResponses = [];
-    for bb = 1:length(b.UniquePaintIntensities)
-        b.thisPaintIntensityIndices = find(paintIntensities == b.UniquePaintIntensities(bb));
-        b.randomPaintIndices = randi(length(b.thisPaintIntensityIndices),length(b.thisPaintIntensityIndices),1);
-        b.tempPaintIntensities = paintIntensities(b.thisPaintIntensityIndices(b.randomPaintIndices));
-        b.tempPaintResponses = paintResponses(b.thisPaintIntensityIndices(b.randomPaintIndices),:);
-        b.PaintIntensities = [b.PaintIntensities ; b.tempPaintIntensities];
-        b.PaintResponses = [b.PaintResponses ; b.tempPaintResponses];
-    end       
+% this block.  Also, this s slow and we only do it for the case we care
+% about.
+if (strcmp(decodeInfo.type,'aff') & strcmp(decodeInfo.decodeJoint,'both'))
+    rseed = rng;
+    nBootstraps = 100;
+    for ii = 1:nBootstraps
         
-    % Sample shadow data with replacement, respecting independent variable
-    b.UniqueShadowIntensities = unique(shadowIntensities);
-    b.ShadowIntensities = [];
-    b.ShadowResponses = [];
-    for bb = 1:length(b.UniqueShadowIntensities)
-        b.thisShadowIntensityIndices = find(shadowIntensities == b.UniqueShadowIntensities(bb));
-        b.randomShadowIndices = randi(length(b.thisShadowIntensityIndices),length(b.thisShadowIntensityIndices),1);
-        b.tempShadowIntensities = shadowIntensities(b.thisShadowIntensityIndices(b.randomShadowIndices));
-        b.tempShadowResponses = shadowResponses(b.thisShadowIntensityIndices(b.randomShadowIndices),:);
-        b.ShadowIntensities = [b.ShadowIntensities ; b.tempShadowIntensities];
-        b.ShadowResponses = [b.ShadowResponses ; b.tempShadowResponses];
+        % Sample paint data with replacement, respecting independent variable
+        b.UniquePaintIntensities = unique(paintIntensities);
+        b.PaintIntensities = [];
+        b.PaintResponses = [];
+        for bb = 1:length(b.UniquePaintIntensities)
+            b.thisPaintIntensityIndices = find(paintIntensities == b.UniquePaintIntensities(bb));
+            b.randomPaintIndices = randi(length(b.thisPaintIntensityIndices),length(b.thisPaintIntensityIndices),1);
+            b.tempPaintIntensities = paintIntensities(b.thisPaintIntensityIndices(b.randomPaintIndices));
+            b.tempPaintResponses = paintResponses(b.thisPaintIntensityIndices(b.randomPaintIndices),:);
+            b.PaintIntensities = [b.PaintIntensities ; b.tempPaintIntensities];
+            b.PaintResponses = [b.PaintResponses ; b.tempPaintResponses];
+        end
+        
+        % Sample shadow data with replacement, respecting independent variable
+        b.UniqueShadowIntensities = unique(shadowIntensities);
+        b.ShadowIntensities = [];
+        b.ShadowResponses = [];
+        for bb = 1:length(b.UniqueShadowIntensities)
+            b.thisShadowIntensityIndices = find(shadowIntensities == b.UniqueShadowIntensities(bb));
+            b.randomShadowIndices = randi(length(b.thisShadowIntensityIndices),length(b.thisShadowIntensityIndices),1);
+            b.tempShadowIntensities = shadowIntensities(b.thisShadowIntensityIndices(b.randomShadowIndices));
+            b.tempShadowResponses = shadowResponses(b.thisShadowIntensityIndices(b.randomShadowIndices),:);
+            b.ShadowIntensities = [b.ShadowIntensities ; b.tempShadowIntensities];
+            b.ShadowResponses = [b.ShadowResponses ; b.tempShadowResponses];
+        end
+        
+        b.TheIntensities = [b.PaintIntensities ; b.ShadowIntensities];
+        b.TheResponses = [b.PaintResponses ; b.ShadowResponses];
+        b.DecodeInfo = DoTheDecode(decodeInfo,b.TheIntensities,b.TheResponses);
+        b.PaintPreds = DoTheDecodePrediction(b.DecodeInfo,b.PaintResponses);
+        b.ShadowPreds = DoTheDecodePrediction(b.DecodeInfo,b.ShadowResponses);
+        
+        [b.paintMeans,b.paintSEMs,~,~,~,b.paintGroupedIntensities] = ...
+            sortbyx(b.PaintIntensities,b.PaintPreds);
+        [b.shadowMeans,b.shadowSEMs,~,~,~,b.shadowGroupedIntensities] = ...
+            sortbyx(b.ShadowIntensities,b.ShadowPreds);
+        temp = FindPaintShadowEffect(b.DecodeInfo,b.paintGroupedIntensities,b.shadowGroupedIntensities,b.paintMeans,b.shadowMeans);
+        if (isempty(temp))
+            temp = NaN;
+        end
+        [b.PaintShadowEffect(ii)] = temp;
     end
-     
-    b.TheIntensities = [b.PaintIntensities ; b.ShadowIntensities];
-    b.TheResponses = [b.PaintResponses ; b.ShadowResponses];
-    b.DecodeInfo = DoTheDecode(decodeInfo,b.TheIntensities,b.TheResponses);
-    b.PaintPreds = DoTheDecodePrediction(b.DecodeInfo,b.PaintResponses);
-    b.ShadowPreds = DoTheDecodePrediction(b.DecodeInfo,b.ShadowResponses);
-    
-    [b.paintMeans,b.paintSEMs,~,~,~,b.paintGroupedIntensities] = ...
-        sortbyx(b.PaintIntensities,b.PaintPreds);
-    [b.shadowMeans,b.shadowSEMs,~,~,~,b.shadowGroupedIntensities] = ...
-        sortbyx(b.ShadowIntensities,b.ShadowPreds);
-    temp = FindPaintShadowEffect(b.DecodeInfo,b.paintGroupedIntensities,b.shadowGroupedIntensities,b.paintMeans,b.shadowMeans);
-    if (isempty(temp))
-        temp = NaN;
-    end
-    [b.PaintShadowEffect(ii)] = temp;        
+    d.bPaintShadowEffect = b.PaintShadowEffect;
+    rng(rseed);
 end
-d.bPaintShadowEffect = b.PaintShadowEffect;
-rng(rseed);
 
 % Save the analsis.  Field decodeBoth might really contain decode on pait
 % or shadow, depending on setting of decodeJoint field.
