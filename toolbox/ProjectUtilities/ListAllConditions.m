@@ -39,6 +39,21 @@ end
 % outIndex = outIndex + 1;
 % return
 
+%% Uncomment this block to get a quick test for JD data.
+% 
+% This produces Figure 8A in directory ST140703lightness0001_115px_-15cx_-72cy_g
+% theFiles{outIndex} = ['ST140703' insertFilenameStr '0001'];
+% theRFFiles{outIndex} = [''];
+% decodeInfoInRun{outIndex} = decodeInfoIn;
+% decodeInfoInRun{outIndex}.titleInfoStr = 'V1';
+% decodeInfoInRun{outIndex}.subjectStr = 'JD';
+% decodeInfoInRun{outIndex}.rfInfoLocation = [];
+% decodeInfoInRun{outIndex}.doIndElectrodeRFPlots = decodeInfoIn.doIndElectrodeRFPlots;
+% decodeInfoInRun{outIndex}.normIndexLocation = [];
+% decodeInfoInRun{outIndex}.sameDayRF = true;
+% outIndex = outIndex + 1;
+% return
+
 %% Uncomment this block to get a quicker test case.
 % % This crashes at the end because there isn't enough
 % % summary data, but is fine for testing the core session
@@ -68,6 +83,8 @@ end
 % outIndex = outIndex + 1;
 % 
 % return;
+
+
 
 % ST data
 theFiles{outIndex} = ['ST140422' insertFilenameStr '0001'];
