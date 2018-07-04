@@ -66,6 +66,7 @@ for ii = 1:length(shadowShiftInValues)
     d.paintRMSE = sqrt(mean((paintIntensities(:)/decodeInfoTemp.shadowShiftIn-d.paintPreds(:)).^2));
     d.shadowRMSE = sqrt(mean((shadowIntensities(:)*decodeInfoTemp.shadowShiftIn-d.shadowPreds(:)).^2));
     d.theRMSE = sqrt(mean(([paintIntensities(:)/decodeInfoTemp.shadowShiftIn ; shadowIntensities(:)*decodeInfoTemp.shadowShiftIn]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
+    d.unshiftedRMSE = sqrt(mean(([paintIntensities(:) ; shadowIntensities(:)]-[d.paintPreds(:) ; d.shadowPreds(:)]).^2));
     d.nullRMSE = sqrt(mean(([paintIntensities(:)/decodeInfoTemp.shadowShiftIn ; shadowIntensities(:)*decodeInfoTemp.shadowShiftIn]- ...
         mean([paintIntensities(:)/decodeInfoTemp.shadowShiftIn ; shadowIntensities(:)*decodeInfoTemp.shadowShiftIn])).^2));
     d.paintMean = mean(d.paintPreds(:));

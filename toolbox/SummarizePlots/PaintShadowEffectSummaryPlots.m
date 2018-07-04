@@ -247,6 +247,9 @@ if (envelopeThreshold ~= 1.05)
     error('Check that you really want envelopeThreshold set to something other than its paper value of 1.05');
 end
 
+ % Change this to plot unshifted or shifted RMSE
+plotUnshifted = true;
+
 % Go through each session and extract the range.
 for ii = 1:length(paintShadowEffect)
     % Get the decode shift structure from that session
@@ -255,12 +258,19 @@ for ii = 1:length(paintShadowEffect)
     % Find all cases where the paint-shadow effect isn't empty and
     % collect them up along with corresponding RMSEs.
     inIndex = 1;
-    envelopePaintShadowEffects = [];
-    envelopeRMSEs = [];
+    clear envelopePaintShadowEffects envelopeRMSEs envelopeShiftedRMSEs envelopeUnshiftedRMSEs;
     for kk = 1:length(temp)
         if ~isempty(temp(kk).paintShadowEffect)
             envelopePaintShadowEffects(inIndex) = temp(kk).paintShadowEffect;
-            envelopeRMSEs(inIndex) = temp(kk).theRMSE;
+            if (plotUnshifted)
+                envelopeRMSEs(inIndex) = temp(kk).unshiftedRMSE;
+            else
+                envelopeRMSEs(inIndex) = temp(kk).theRMSE;
+            end
+            
+            envelopeShiftedRMSEs(inIndex) = temp(kk).theRMSE;
+            envelopeUnshiftedRMSEs(inIndex) = temp(kk).unshiftedRMSE;
+            
             inIndex = inIndex + 1;
         else
             %envelopePaintShadowEffects = [];
