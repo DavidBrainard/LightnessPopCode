@@ -84,8 +84,6 @@ end
 % 
 % return;
 
-
-
 % ST data
 theFiles{outIndex} = ['ST140422' insertFilenameStr '0001'];
 theRFFiles{outIndex} = ['ST140422RFmap0001_reduceddata'];
