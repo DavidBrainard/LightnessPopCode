@@ -721,7 +721,11 @@ for ii = 1:length(paintShadowEffect)
         if ~isempty(paintShadowEffect(kk).paintShadowEffect)
             thePaintShadowEffects(inIndex) = paintShadowEffect(kk).paintShadowEffect;
             theRMSEs(inIndex) = paintShadowEffect(kk).theRMSE;
-            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).bPaintShadowEffect);
+            if (isfield(paintShadowEffect(kk),'bPaintShadowEffect'))
+                thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).bPaintShadowEffect);
+            else
+                thePSEffectBootstrapSEMs(inIndex) = NaN;
+            end
         else
             thePaintShadowEffects(inIndex) = NaN;
             theRMSEs(inIndex) = NaN;
