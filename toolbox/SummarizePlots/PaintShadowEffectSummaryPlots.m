@@ -36,7 +36,6 @@ end
 %% PLOT: Envelope summaries in their multiple version glory
 booleanShiftedRMSEInclude = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
 
-
 %% PLOT: Paint/shadow effect from decoding on both paint and shadow
 %
 % Get the decode both results from the top level structure, and also get
@@ -58,7 +57,6 @@ figure(paintShadowEffectDecodeBothFig);
 title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
 figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
 FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
-
 
 % Make a histogram of non-zero electrode weights
 if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
@@ -796,5 +794,6 @@ exportfig(paintShadowEffectVsRMSEFig_V4,[figFilename '.eps'],'Format','eps','Wid
 
 end
 
-
+summaryDir = '/Users/dhb/Desktop/temp');
+PaintShadowEffectSummaryPlots(decodeInfo,paintShadowEffect,summaryDir,figParams)
 
