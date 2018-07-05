@@ -15,7 +15,7 @@ myDir = fileparts(mfilename('fullpath'));
 cd(myDir);
 
 %% Original paint/shadow
-%
+% 
 % This can do lots of analyses that we did not end up using,
 % calls to those routines set to false here to save time and
 % clutter.
@@ -44,7 +44,7 @@ close all
 %     };
 % [paintShadowEffectAff,repSimAff,RMSEAnalysisAff,RMSEVersusNUnitsAff,RMSEVersusNPCAAff,ClassificationVersusNUnitsAff,ClassificationVersusNPCAff] = SummarizeRunOne(argList{:});
 % close all
-% 
+
 % argList = SetupConditionArgs('basicshadow');
 % argList = {argList{:}, ...
 %     'doSummaryPaintShadowEffect',true, ...

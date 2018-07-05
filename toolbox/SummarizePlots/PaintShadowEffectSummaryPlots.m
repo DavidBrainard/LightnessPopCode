@@ -33,30 +33,37 @@ if (basicInfo(1).filterMaxRMSE ~= 0.2)
 end
 %basicInfo(1).filterMaxRMSE = 0.24;
 
-%% PLOT: Envelope summaries in their multiple version glory
-booleanShiftedRMSEInclude = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
+%% Envelope summaries in their multiple version glory
+[booleanShiftedRMSEInclude,psEffectRange,booleanShiftedSessionOKAndRMSE] = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,'decodeShift','');
 
-%% PLOT: Paint/shadow effect from decoding on both paint and shadow
+%% Paint/shadow effect
 %
 % Get the decode both results from the top level structure, and also get
 % the boolean for inclusion based on decoded RMSE.
+%
+% Sometimes this is overloaded to plot decodings based on paint or shadow
+% rather than both.
 paintShadowEffectDecodeBoth = SubstructArrayFromStructArray(paintShadowEffect,'decodeBoth');
+
+% Get Boolean
 if (length(basicInfo) ~= length(paintShadowEffectDecodeBoth))
     error('Length mismatch on struct arrays that should be the same');
 end
 [~,booleanRMSEInclude] = GetFilteringIndex(paintShadowEffectDecodeBoth,{'paintRMSE' 'shadowRMSE'},{basicInfo(1).filterMaxRMSE basicInfo(1).filterMaxRMSE}, {'<=' '<='});
 
-% Make the figure
-paintShadowEffectDecodeBothFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeBoth,booleanRMSEInclude,figParams);
+% Make the figure. Don't use this anymore, commented out.
+% paintShadowEffectDecodeBothFig = PaintShadowEffectFigure(basicInfo,paintShadowEffectDecodeBoth,booleanRMSEInclude,figParams);
+% figure(paintShadowEffectDecodeBothFig);
+% title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+% figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
+% FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
 
-% Another version
-DoThePSEffectVersusPlot(basicInfo,paintShadowEffectDecodeBoth,figParams,figureDir);
+% This is the useful version.
+[thePSEffectBootstrapSEMs,booleanUnshiftedSessionOKAndRMSE] = DoThePSEffectVersusPlot(basicInfo,paintShadowEffectDecodeBoth,figParams,figureDir);
 
-% Add title and save
-figure(paintShadowEffectDecodeBothFig);
-title({'Paint/Shadow Effect, Decode On Both'},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,'summaryPaintShadowEffectDecodeBoth','');
-FigureSave(figFilename,paintShadowEffectDecodeBothFig,figParams.figType);
+% Get ratios of range to SEMs
+psRangeSEMRatio = psEffectRange ./ thePSEffectBootstrapSEMs;
+fprintf('Mean ratio of p/s effect range to SEM is %0.1f\n',mean(psRangeSEMRatio(booleanShiftedSessionOKAndRMSE))); 
 
 % Make a histogram of non-zero electrode weights
 if (isfield(paintShadowEffectDecodeBoth,'numNZCoefs'))
@@ -114,11 +121,13 @@ switch(basicInfo(1).type)
             fprintf('Mean fraction of electrodes for 0.75 of absolute total no-shift decoding weight: %0.2f; standard dev: %0.2f\n', ...
                 mean(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)),std(fractionElectrodesForAreaFraction75(booleanShiftedRMSEInclude)));
         end
+    otherwise
+        % Do nothing
 end
 
 end
 
-%% Function to actually make the figure
+%% Function to make basic figure.  Also returns needed Boolean
 function [theFigure,booleanRMSE] = PaintShadowEffectFigure(basicInfo,paintShadowEffectIn,booleanRMSE,figParams)
 
 % Open figure
@@ -229,7 +238,7 @@ ylabel('Paint/Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.
 end
 
 %% Function to do the envelope summary plot
-function booleanRMSE = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,shiftName,figureSuffix)
+function [booleanRMSE,paintShadowEffectRange,booleanSessionOKAndRMSE] = DoTheShiftedPlot(basicInfo,paintShadowEffect,figParams,figureDir,shiftName,figureSuffix)
 
 % This makes plots that try to summarize how much we can move the
 % paint-shadow effect around without much of a hit in terms of RMSE.
@@ -298,9 +307,15 @@ for ii = 1:length(paintShadowEffect)
     end
 end
 
+% Get paint/shadow effect range. Max and min are expressed as slope, so
+% really min and max. But p/s effect involves negative log, so this really
+% does compute the range.
+paintShadowEffectRange = log10(maxPaintShadowEffect) - log10(minPaintShadowEffect);
+
 % Figure out V1 versus V4
 booleanSessionOK = ~isnan(bestRMSE);
 booleanRMSE = bestRMSE <= basicInfo(1).filterMaxRMSE;
+booleanSessionOKAndRMSE = booleanSessionOK & booleanRMSE;
 [~,booleanSubjectBR] = GetFilteringIndex(basicInfo,{'subjectStr'},{'BR'});
 [~,booleanSubjectST] = GetFilteringIndex(basicInfo,{'subjectStr'},{'ST'});
 [~,booleanSubjectJD] = GetFilteringIndex(basicInfo,{'subjectStr'},{'JD'});
@@ -400,13 +415,13 @@ fprintf('\tSY: %0.1f, +/- %0.1f std\n',mean(numberElectrodesSY),std(numberElectr
 % to zero. Effects greater than 1 before taking the -log10 are less than 0.
 index1 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionStraddle = length(index1)/length(find(booleanRMSE));
-fprintf('\n%0.1f%% of %d sessions (%d) have p/s interval that straddle 0\n',round(1000*fractionStraddle)/10,length(index1),length(find(booleanRMSE)));
+fprintf('\n%0.1f%% of %d sessions (%d) have p/s interval that straddle 0\n',round(1000*fractionStraddle)/10,length(find(booleanRMSE)),length(index1));
 index2 = find(minPaintShadowEffect > 1 & maxPaintShadowEffect > 1 & booleanRMSE);
 fractionBelow = length(index2)/length(find(booleanRMSE));
-fprintf('%0.1f%% of %d sessions (%d) have p/s interval strictly less than 0\n',round(1000*fractionBelow)/10,length(index2),length(find(booleanRMSE)));
+fprintf('%0.1f%% of %d sessions (%d) have p/s interval strictly less than 0\n',round(1000*fractionBelow)/10,length(find(booleanRMSE)),length(index2));
 index3 = find(minPaintShadowEffect < 1 & maxPaintShadowEffect < 1 & booleanRMSE);
 fractionAbove = length(index3)/length(find(booleanRMSE));
-fprintf('%0.1f%% of %d sessions (%d) have p/s interval strictly greater than 0\n',round(1000*fractionAbove)/10,length(index3),length(find(booleanRMSE)));
+fprintf('%0.1f%% of %d sessions (%d) have p/s interval strictly greater than 0\n',round(1000*fractionAbove)/10,length(find(booleanRMSE)),length(index3));
 
 % A little print out of where intervals fall, V1. Effects greater than 1
 % before taking the -log10 are less than 0.
@@ -494,7 +509,8 @@ fractionBestUnder = length(index1)/length(find(booleanRMSE & booleanV4));
 fprintf('%0.1f%% of %d V4 sessions have best p/s effect less than 0\n',round(100*fractionBestUnder),length(find(booleanRMSE & booleanV4)));
 
 % And range.  Didn't change sign in computation of range, since it doesn't
-% matter.
+% matter.  That is, don't multiply the two logs by -1 and then switch the
+% order of subtraction.
 index1 = find(booleanRMSE);
 psRange = mean(log10(maxPaintShadowEffect(index1)) - log10(minPaintShadowEffect(index1)));
 fprintf('\nMean p/s effect range %0.3f\n',psRange);
@@ -505,7 +521,8 @@ index1 = find(booleanRMSE & booleanV4);
 psRange = mean(log10(maxPaintShadowEffect(index1)) - log10(minPaintShadowEffect(index1)));
 fprintf('Mean V4 p/s effect range %0.3f\n',psRange);
 
-% Figure version 1.
+% Figure of range versus best RMSE.  This combines data from all four
+% monkeys, separating V1 and V4.
 %
 % Function errorbar plots neg errorbar first and pos errorbar second.
 %
@@ -545,7 +562,7 @@ figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE' figureSuffi
 FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig,figParams.figType);
 exportfig(paintShadowEnvelopeVsRMSEFig,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-% Figure version 1, V1 only.  
+% Figure of range versus best RMSE, V1 only.  
 paintShadowEnvelopeVsRMSEFig_V1 = figure; clf; hold on;
 plotV1_BRindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectBR;
 plotV1_STindex = booleanV1 & booleanRMSE & booleanSessionOK & booleanSubjectST;
@@ -581,9 +598,7 @@ fprintf('Mean size of V1 range bars: %0.3f\n',mean(abs(log10(maxPaintShadowEffec
 %     abs(log10(minPaintShadowEffect(35))-log10(bestPaintShadowEffect(35))),...
 %     'o','Color',[1 0 0],'MarkerFaceColor',[1 0 0]); %,'MarkerSize',4);
 
-% Figure version 1, V4 only.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
+% Figure of range versus best RMSE, V4 only.
 paintShadowEnvelopeVsRMSEFig_V4 = figure; clf; hold on;
 plotV4_JDindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectJD;
 plotV4_SYindex = booleanV4 & booleanRMSE & booleanSessionOK & booleanSubjectSY;
@@ -612,130 +627,129 @@ FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V4,figParams.figType);
 exportfig(paintShadowEnvelopeVsRMSEFig_V4,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 fprintf('Mean size of V4 range bars: %0.3f\n',mean(abs(log10(maxPaintShadowEffect([plotV4_JDindex | plotV4_SYindex]))-log10(minPaintShadowEffect([plotV4_JDindex | plotV4_SYindex])))));
 
-% Figure version 1, V1 only, no RMSE exclusion.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
-paintShadowEnvelopeVsRMSEFig_V1_AllRMSE = figure; clf; hold on;
-plotV1_BRindex = booleanV1 & booleanSessionOK & booleanSubjectBR;
-plotV1_STindex = booleanV1 & booleanSessionOK & booleanSubjectST;
-errorbar(bestRMSE(plotV1_BRindex),-log10(bestPaintShadowEffect(plotV1_BRindex)),...
-    abs(log10(maxPaintShadowEffect(plotV1_BRindex))-log10(bestPaintShadowEffect(plotV1_BRindex))),...
-    abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(bestPaintShadowEffect(plotV1_BRindex))),...
-    's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
-errorbar(bestRMSE(plotV1_STindex),-log10(bestPaintShadowEffect(plotV1_STindex)),...
-    abs(log10(maxPaintShadowEffect(plotV1_STindex))-log10(bestPaintShadowEffect(plotV1_STindex))),...
-    abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(bestPaintShadowEffect(plotV1_STindex))),...
-    'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
-plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
-plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
-xlim([0.0 0.3]);
-ylim([-0.5 0.5]);
-set(gca,'YTick',[-0.5 -0.4 -0.3 -.2 -.10 0 .1 .2 0.3 0.4 0.5],'YTickLabel',{'-0.50 ' '-0.40 ' '-0.30 ' '-0.20 ' '-0.10 ' '0.00 ' '0.10 ' '0.20 ' '0.30 ' '0.4 ' '0.50 '});
-ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-xlabel('Minimum Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-a=get(gca,'ticklength');
-set(gca,'ticklength',[a(1)*2,a(2)*2]);
-set(gca,'tickdir','out');
-box off
-legend({'V1, BR', 'V1, ST'},'Location','NorthWest');
-figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE_V1_AllRMSE' figureSuffix],'');
-FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V1_AllRMSE,figParams.figType);
-exportfig(paintShadowEnvelopeVsRMSEFig_V1_AllRMSE,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
-
-% Figure version 1, V4 only, no RMSE exclusion.  Didn't change signs in error bars,
-% since the abs() takes care of that.  Did change sign
-% of psychophysical effect by hand.
-paintShadowEnvelopeVsRMSEFig_V4_AllRMSE = figure; clf; hold on;
-plotV4_JDindex = booleanV4 & booleanSessionOK & booleanSubjectJD;
-plotV4_SYindex = booleanV4 & booleanSessionOK & booleanSubjectSY;
-errorbar(bestRMSE(plotV4_JDindex),-log10(bestPaintShadowEffect(plotV4_JDindex)),...
-    abs(log10(maxPaintShadowEffect(plotV4_JDindex))-log10(bestPaintShadowEffect(plotV4_JDindex))),...
-    abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(bestPaintShadowEffect(plotV4_JDindex))),...
-    's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
-errorbar(bestRMSE(plotV4_SYindex),-log10(bestPaintShadowEffect(plotV4_SYindex)),...
-    abs(log10(maxPaintShadowEffect(plotV4_SYindex))-log10(bestPaintShadowEffect(plotV4_SYindex))),...
-    abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(bestPaintShadowEffect(plotV4_SYindex))),...
-    'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
-plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
-plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
-xlim([0.0  0.3]);
-ylim([-0.5 0.5]);
-set(gca,'YTick',[-0.5 -0.4 -0.3 -.2 -.10 0 .1 .2 0.3 0.4 0.5],'YTickLabel',{'-0.50 ' '-0.40 ' '-0.30 ' '-0.20 ' '-0.10 ' '0.00 ' '0.10 ' '0.20 ' '0.30 ' '0.4 ' '0.50 '});
-ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-xlabel('Minimum Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-a=get(gca,'ticklength');
-set(gca,'ticklength',[a(1)*2,a(2)*2]);
-set(gca,'tickdir','out');
-box off
-legend({'V4, JD', 'V4, SY'},'Location','NorthWest');
-figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE_V4_AllRMSE' figureSuffix],'');
-FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V4_AllRMSE,figParams.figType);
-exportfig(paintShadowEnvelopeVsRMSEFig_V4_AllRMSE,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
-
-% Figure version 2
-paintShadowEnvelopeSortedFig = figure; clf;
-tempPosition = figParams.position;
-tempPosition(3) = 1000;
-set(gcf,'Position',tempPosition);
-set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
-subplot(1,2,1); hold on
-[~,index] = sort(minPaintShadowEffect,'ascend');
-plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
-plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
-plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
-ylim([-0.6 0.6]);
-xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-title({'Sorted by Lower Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-
-subplot(1,2,2); hold on
-[~,index] = sort(maxPaintShadowEffect,'descend');
-plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
-plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
-plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
-ylim([-0.6 0.6]);
-xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
-title({'Sorted by Upper Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
-figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeSorted' figureSuffix],'');
-FigureSave(figFilename,paintShadowEnvelopeSortedFig,figParams.figType);
+%% These make figures we ended up not using.
+% % Figure version 1, V1 only, no RMSE exclusion.  Didn't change signs in error bars,
+% % since the abs() takes care of that.  Did change sign
+% % of psychophysical effect by hand.
+% paintShadowEnvelopeVsRMSEFig_V1_AllRMSE = figure; clf; hold on;
+% plotV1_BRindex = booleanV1 & booleanSessionOK & booleanSubjectBR;
+% plotV1_STindex = booleanV1 & booleanSessionOK & booleanSubjectST;
+% errorbar(bestRMSE(plotV1_BRindex),-log10(bestPaintShadowEffect(plotV1_BRindex)),...
+%     abs(log10(maxPaintShadowEffect(plotV1_BRindex))-log10(bestPaintShadowEffect(plotV1_BRindex))),...
+%     abs(log10(minPaintShadowEffect(plotV1_BRindex))-log10(bestPaintShadowEffect(plotV1_BRindex))),...
+%     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
+% errorbar(bestRMSE(plotV1_STindex),-log10(bestPaintShadowEffect(plotV1_STindex)),...
+%     abs(log10(maxPaintShadowEffect(plotV1_STindex))-log10(bestPaintShadowEffect(plotV1_STindex))),...
+%     abs(log10(minPaintShadowEffect(plotV1_STindex))-log10(bestPaintShadowEffect(plotV1_STindex))),...
+%     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
+% plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
+% plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
+% xlim([0.0 0.3]);
+% ylim([-0.5 0.5]);
+% set(gca,'YTick',[-0.5 -0.4 -0.3 -.2 -.10 0 .1 .2 0.3 0.4 0.5],'YTickLabel',{'-0.50 ' '-0.40 ' '-0.30 ' '-0.20 ' '-0.10 ' '0.00 ' '0.10 ' '0.20 ' '0.30 ' '0.4 ' '0.50 '});
+% ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% xlabel('Minimum Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% a=get(gca,'ticklength');
+% set(gca,'ticklength',[a(1)*2,a(2)*2]);
+% set(gca,'tickdir','out');
+% box off
+% legend({'V1, BR', 'V1, ST'},'Location','NorthWest');
+% figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE_V1_AllRMSE' figureSuffix],'');
+% FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V1_AllRMSE,figParams.figType);
+% exportfig(paintShadowEnvelopeVsRMSEFig_V1_AllRMSE,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
+% 
+% % Figure version 1, V4 only, no RMSE exclusion.  Didn't change signs in error bars,
+% % since the abs() takes care of that.  Did change sign
+% % of psychophysical effect by hand.
+% paintShadowEnvelopeVsRMSEFig_V4_AllRMSE = figure; clf; hold on;
+% plotV4_JDindex = booleanV4 & booleanSessionOK & booleanSubjectJD;
+% plotV4_SYindex = booleanV4 & booleanSessionOK & booleanSubjectSY;
+% errorbar(bestRMSE(plotV4_JDindex),-log10(bestPaintShadowEffect(plotV4_JDindex)),...
+%     abs(log10(maxPaintShadowEffect(plotV4_JDindex))-log10(bestPaintShadowEffect(plotV4_JDindex))),...
+%     abs(log10(minPaintShadowEffect(plotV4_JDindex))-log10(bestPaintShadowEffect(plotV4_JDindex))),...
+%     's','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',4);
+% errorbar(bestRMSE(plotV4_SYindex),-log10(bestPaintShadowEffect(plotV4_SYindex)),...
+%     abs(log10(maxPaintShadowEffect(plotV4_SYindex))-log10(bestPaintShadowEffect(plotV4_SYindex))),...
+%     abs(log10(minPaintShadowEffect(plotV4_SYindex))-log10(bestPaintShadowEffect(plotV4_SYindex))),...
+%     'o','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
+% plot([0 0.3],[0 0],'k:'); %,'LineWidth',1);
+% plot([0 0.3],[0.064 0.064],'k'); %,'LineWidth',1);
+% xlim([0.0  0.3]);
+% ylim([-0.5 0.5]);
+% set(gca,'YTick',[-0.5 -0.4 -0.3 -.2 -.10 0 .1 .2 0.3 0.4 0.5],'YTickLabel',{'-0.50 ' '-0.40 ' '-0.30 ' '-0.20 ' '-0.10 ' '0.00 ' '0.10 ' '0.20 ' '0.30 ' '0.4 ' '0.50 '});
+% ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% xlabel('Minimum Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% a=get(gca,'ticklength');
+% set(gca,'ticklength',[a(1)*2,a(2)*2]);
+% set(gca,'tickdir','out');
+% box off
+% legend({'V4, JD', 'V4, SY'},'Location','NorthWest');
+% figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeVsRMSE_V4_AllRMSE' figureSuffix],'');
+% FigureSave(figFilename,paintShadowEnvelopeVsRMSEFig_V4_AllRMSE,figParams.figType);
+% exportfig(paintShadowEnvelopeVsRMSEFig_V4_AllRMSE,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
+% 
+% % Figure version 2
+% paintShadowEnvelopeSortedFig = figure; clf;
+% tempPosition = figParams.position;
+% tempPosition(3) = 1000;
+% set(gcf,'Position',tempPosition);
+% set(gca,'FontName',figParams.fontName,'FontSize',figParams.axisFontSize,'LineWidth',figParams.axisLineWidth);
+% subplot(1,2,1); hold on
+% [~,index] = sort(minPaintShadowEffect,'ascend');
+% plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+% plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+% plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
+% ylim([-0.6 0.6]);
+% xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% title({'Sorted by Lower Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+% 
+% subplot(1,2,2); hold on
+% [~,index] = sort(maxPaintShadowEffect,'descend');
+% plot(-log10(minPaintShadowEffect(index)),'r','LineWidth',2);
+% plot(-log10(maxPaintShadowEffect(index)),'b','LineWidth',2);
+% plot(0*ones(size(minPaintShadowEffect)),'k:','LineWidth',1);
+% ylim([-0.6 0.6]);
+% xlabel('Sorted Session Index','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% ylabel('Paint-Shadow Effect','FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+% title({'Sorted by Upper Limit' ; ''},'FontName',figParams.fontName,'FontSize',figParams.titleFontSize);
+% figFilename = fullfile(figureDir,['summaryPaintShadowEnvelopeSorted' figureSuffix],'');
+% FigureSave(figFilename,paintShadowEnvelopeSortedFig,figParams.figType);
 
 end
 
 %% Function to do p/s effect versus RMSE
-function DoThePSEffectVersusPlot(basicInfo,paintShadowEffect,figParams,figureDir)
+function [thePSEffectBootstrapSEMs,booleanSessionOKAndRMSE] = DoThePSEffectVersusPlot(basicInfo,paintShadowEffect,figParams,figureDir)
 
 % This makes plots of p/s effect from single decoding versus RMSE
-
+inIndex = 1;
+thePaintShadowEffects = [];
+theRMSEs = [];
+thePSEffectBootstrapSEMs = [];
 for ii = 1:length(paintShadowEffect)
     
     % Find all cases where the paint-shadow effect isn't empty and
     % collect them up along with corresponding RMSEs.
-    inIndex = 1;
-    thePaintShadowEffects = [];
-    theRMSEs = [];
-    thePSEffectBootstrapSEMs = [];
-    for kk = 1:length(paintShadowEffect)
-        if ~isempty(paintShadowEffect(kk).paintShadowEffect)
-            thePaintShadowEffects(inIndex) = paintShadowEffect(kk).paintShadowEffect;
-            theRMSEs(inIndex) = paintShadowEffect(kk).theRMSE;
-            if (isfield(paintShadowEffect(kk),'bPaintShadowEffect'))
-                thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(kk).bPaintShadowEffect);
-            else
-                thePSEffectBootstrapSEMs(inIndex) = NaN;
-            end
+    if ~isempty(paintShadowEffect(ii).paintShadowEffect)
+        thePaintShadowEffects(inIndex) = paintShadowEffect(ii).paintShadowEffect;
+        theRMSEs(inIndex) = paintShadowEffect(ii).theRMSE;
+        if (isfield(paintShadowEffect(ii),'bPaintShadowEffect'))
+            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(ii).bPaintShadowEffect);
         else
-            thePaintShadowEffects(inIndex) = NaN;
-            theRMSEs(inIndex) = NaN;
             thePSEffectBootstrapSEMs(inIndex) = NaN;
         end
-        inIndex = inIndex + 1;
+    else
+        thePaintShadowEffects(inIndex) = NaN;
+        theRMSEs(inIndex) = NaN;
+        thePSEffectBootstrapSEMs(inIndex) = NaN;
     end
+    inIndex = inIndex + 1;
 end
 
 % Figure out V1 versus V4
 booleanSessionOK = ~isnan(theRMSEs);
 booleanRMSE = theRMSEs <= basicInfo(1).filterMaxRMSE;
+booleanSessionOKAndRMSE = booleanSessionOK & booleanRMSE;
 [~,booleanSubjectBR] = GetFilteringIndex(basicInfo,{'subjectStr'},{'BR'});
 [~,booleanSubjectST] = GetFilteringIndex(basicInfo,{'subjectStr'},{'ST'});
 [~,booleanSubjectJD] = GetFilteringIndex(basicInfo,{'subjectStr'},{'JD'});
@@ -791,9 +805,6 @@ figFilename = fullfile(figureDir,['summaryPaintShadowEffecVsRMSE_V4'],'');
 FigureSave(figFilename,paintShadowEffectVsRMSEFig_V4,figParams.figType);
 exportfig(paintShadowEffectVsRMSEFig_V4,[figFilename '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
 
-
 end
 
-summaryDir = '/Users/dhb/Desktop/temp');
-PaintShadowEffectSummaryPlots(decodeInfo,paintShadowEffect,summaryDir,figParams)
 

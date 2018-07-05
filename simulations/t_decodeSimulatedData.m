@@ -21,23 +21,25 @@ paintShadowEffectLow = 0.04;
 paintShadowEffectHigh = 0.08;
 paintShadowGainLow = 1/(10^-paintShadowEffectLow);
 paintShadowGainHigh = 1/(10^-paintShadowEffectHigh);
-nNeuronsModulatedByDiskAndContext = 50;
-nNeuronsModulatedByDiskOnly = 0;
-nNeuronsModulatedByContextOnly = 0;
+nNeuronsModulatedByDiskAndContext = 20;
+nNeuronsModulatedByDiskOnly = 20;
+nNeuronsModulatedByContextOnly = 20;
 nNeuronsNotModulated = 0;
 
 % Ranges for uniform draw of neuron gains and exponents.
 neuronGainLow = 0.8;
 neuronGainHigh = 1.2;
 neuronExpLow = 0.3;
-neuronExpHigh = 0.3;
+neuronExpHigh = 0.5;
 
 % Multiplicative fraction that sets simulatd noise sd as a function
 % of simulated mean response.
-responseNoiseSdFraction = 0.7;
+responseNoiseSdFraction = 0.5;
 
-%% Number of simulations
-nSimulations = 10;
+%% Number of simulations, etc.
+nSimulations = 20;
+doBootstrap = false;
+nBootstraps = 25;
 
 %% What to train on
 %   'both'
@@ -56,8 +58,10 @@ TYPE = 'aff';
 
 %% Loop over simulations
 for ss = 1:nSimulations
+    % Close up any figures
+    close all
     
-    %% Set up luminances across trials
+    % Set up luminances across trials
     theIntensities = linspace(0.2,1,nIntensities);
     nPaintTrials = nIntensities*nTrialsPerLuminance;
     nShadowTrials = nPaintTrials;
@@ -72,9 +76,9 @@ for ss = 1:nSimulations
         end
     end
     
-    %% Generate simulated neural data
-    
-    % Some neurons are modulated by the disk intensity
+    % Generate simulated neural data
+    %
+    % Some neurons are modulated by the disk intensity and context
     neuronIndex = 1;
     for nn = 1:nNeuronsModulatedByDiskAndContext
         neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
@@ -89,7 +93,7 @@ for ss = 1:nSimulations
         neuronIndex = neuronIndex + 1;
     end
     
-    % Some by disk only
+    % Some by disk intensity only
     for nn = 1:nNeuronsModulatedByDiskOnly
         neuronGain(neuronIndex) = unifrnd(neuronGainLow,neuronGainHigh);
         neuronExp(neuronIndex) = unifrnd(neuronExpLow,neuronExpHigh);
@@ -133,7 +137,7 @@ for ss = 1:nSimulations
         
     end
     
-    %% Set decoding parameters
+    % Set decoding parameters
     decodeInfo.type = TYPE;
     decodeInfo.decodeJoint = TRAIN;
     decodeInfo.decodeLOOType = 'kfold';
@@ -150,8 +154,7 @@ for ss = 1:nSimulations
     decodeInfo.intensityTickLabels = {'0.00' '0.25' '0.50' '0.75' '1.00'};
     decodeInfo.intensityYTickLabels = {'0.00 ' '0.25 ' '0.50 ' '0.75 ' '1.00 '};
     
-    %% Our standard decoding and digesting block of code (from
-    % ExtractedPaintShadowEffect)
+    % Standard decoding and digesting block of code (from ExtractedPaintShadowEffect)
     [~,~,d.paintPreds,d.shadowPreds,dTmp] = PaintShadowDecode(decodeInfo, ...
         paintIntensities,paintResponses,shadowIntensities,shadowResponses);
     d.paintRMSE = sqrt(mean((paintIntensities(:)-d.paintPreds(:)).^2));
@@ -169,7 +172,7 @@ for ss = 1:nSimulations
         d.paintMatchesDiscrete,d.shadowMatchesDiscrete,d.shadowMatchesDiscretePred,d.fineSpacedIntensities] = ...
         FindPaintShadowEffect(decodeInfo,d.paintGroupedIntensities,d.shadowGroupedIntensities,d.paintMeans,d.shadowMeans);
     
-    %% PLOT: decoded intensities
+    % Plot decoded intensities in from of Figure 7A.
     decodingfig = figure; clf;
     hold on;
     h=plot(d.fineSpacedIntensities(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),d.paintSmooth(d.fineSpacedIntensities > decodeInfo.minFineGrainedIntensities),'r');
@@ -194,9 +197,8 @@ for ss = 1:nSimulations
     drawnow;
     % figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothDecoding'];
     % FigureSave(figName,decodingfig,decodeInfo.figType);
-    % exportfig(decodingfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
     
-    %% PLOT: Inferred matches with a fit line
+    % Plot inferred matches in form of Figure 7B.
     predmatchfig = figure; clf;
     hold on;
     if (~isempty(d.paintMatchesDiscrete) & ~isempty(d.shadowMatchesDiscrete))
@@ -229,9 +231,57 @@ for ss = 1:nSimulations
     drawnow;
     % figName = [decodeInfo.figNameRoot '_extPaintShadowEffectDecodeBothInferredMatches'];
     % FigureSave(figName,predmatchfig,decodeInfo.figType);
-    % exportfig(predmatchfig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
     
-    %% Shifted decoders
+    % Bootstrap
+    if (doBootstrap)
+        for ii = 1:nBootstraps
+            
+            % Sample paint data with replacement, respecting independent variable
+            b.UniquePaintIntensities = unique(paintIntensities);
+            b.PaintIntensities = [];
+            b.PaintResponses = [];
+            for bb = 1:length(b.UniquePaintIntensities)
+                b.thisPaintIntensityIndices = find(paintIntensities == b.UniquePaintIntensities(bb));
+                b.randomPaintIndices = randi(length(b.thisPaintIntensityIndices),length(b.thisPaintIntensityIndices),1);
+                b.tempPaintIntensities = paintIntensities(b.thisPaintIntensityIndices(b.randomPaintIndices));
+                b.tempPaintResponses = paintResponses(b.thisPaintIntensityIndices(b.randomPaintIndices),:);
+                b.PaintIntensities = [b.PaintIntensities ; b.tempPaintIntensities];
+                b.PaintResponses = [b.PaintResponses ; b.tempPaintResponses];
+            end
+            
+            % Sample shadow data with replacement, respecting independent variable
+            b.UniqueShadowIntensities = unique(shadowIntensities);
+            b.ShadowIntensities = [];
+            b.ShadowResponses = [];
+            for bb = 1:length(b.UniqueShadowIntensities)
+                b.thisShadowIntensityIndices = find(shadowIntensities == b.UniqueShadowIntensities(bb));
+                b.randomShadowIndices = randi(length(b.thisShadowIntensityIndices),length(b.thisShadowIntensityIndices),1);
+                b.tempShadowIntensities = shadowIntensities(b.thisShadowIntensityIndices(b.randomShadowIndices));
+                b.tempShadowResponses = shadowResponses(b.thisShadowIntensityIndices(b.randomShadowIndices),:);
+                b.ShadowIntensities = [b.ShadowIntensities ; b.tempShadowIntensities];
+                b.ShadowResponses = [b.ShadowResponses ; b.tempShadowResponses];
+            end
+            
+            b.TheIntensities = [b.PaintIntensities ; b.ShadowIntensities];
+            b.TheResponses = [b.PaintResponses ; b.ShadowResponses];
+            b.DecodeInfo = DoTheDecode(decodeInfo,b.TheIntensities,b.TheResponses);
+            b.PaintPreds = DoTheDecodePrediction(b.DecodeInfo,b.PaintResponses);
+            b.ShadowPreds = DoTheDecodePrediction(b.DecodeInfo,b.ShadowResponses);
+            
+            [b.paintMeans,b.paintSEMs,~,~,~,b.paintGroupedIntensities] = ...
+                sortbyx(b.PaintIntensities,b.PaintPreds);
+            [b.shadowMeans,b.shadowSEMs,~,~,~,b.shadowGroupedIntensities] = ...
+                sortbyx(b.ShadowIntensities,b.ShadowPreds);
+            temp = FindPaintShadowEffect(b.DecodeInfo,b.paintGroupedIntensities,b.shadowGroupedIntensities,b.paintMeans,b.shadowMeans);
+            if (isempty(temp))
+                temp = NaN;
+            end
+            [b.PaintShadowEffect(ii)] = temp;
+        end
+        d.bPaintShadowEffect = b.PaintShadowEffect;
+    end
+    
+    % Shifted decoders
     shadowShiftInValues = linspace(0.79433, 1.2589, 30);
     decodeInfo.uniqueIntensities = unique([paintIntensities ; shadowIntensities]);
     decodeInfo.nUnits = size(paintResponses,2);
@@ -239,8 +289,9 @@ for ss = 1:nSimulations
     decodeInfo.envelopeThreshold = 1.05;
     decodeShift = DoShiftedDecodings(decodeInfo,paintIntensities,shadowIntensities,paintResponses,shadowResponses,shadowShiftInValues,'none',[]);
     
-    % PLOT: Envelope of p/s effect across the shifted decodings
-    
+    % Plot envelope of p/s effect across the shifted decodings in form of
+    % 8A.
+    %
     % Set envelope threshold for coloring.
     % This value should match the value for the same variable that is also
     % coded into routine PaintShadowEffectSummaryPlots. That one determines which
@@ -262,8 +313,6 @@ for ss = 1:nSimulations
         end
     end
     rmseenvelopefig = figure; clf;
-    %set(gcf,'Position',decodeInfo.sqPosition);
-    %set(gca,'FontName',decodeInfo.fontName,'FontSize',decodeInfo.axisFontSize,'LineWidth',decodeInfo.axisLineWidth);
     hold on;
     if (~isempty(useIndex))
         plot(tempRMSE(useIndex),-log10(tempPaintShadowEffect),'s','Color',[0.7 0.7 0.7],'MarkerFaceColor',[0.7 0.7 0.7]); %,'MarkerSize',decodeInfo.markerSize-6);
@@ -286,14 +335,13 @@ for ss = 1:nSimulations
     box off
     % figName = [decodeInfo.figNameRoot '_extPaintShadowEffectRMSEEnvelope'];
     % FigureSave(figName,rmseenvelopefig,decodeInfo.figType);
-    % exportfig(rmseenvelopefig,[figName '.eps'],'Format','eps','Width',4,'Height',4,'FontMode','fixed','FontSize',10,'color','cmyk');
     
     paintShadowEffect(ss).decodeBoth = d;
     paintShadowEffect(ss).decodeShift = decodeShift;
     
 end
 
-%% Go through each session and extract the range.
+% Go through each session and extract the range.
 envelopeThreshold = 1.05;
 plotUnshifted = false;
 for ii = 1:length(paintShadowEffect)
@@ -338,10 +386,63 @@ for ii = 1:length(paintShadowEffect)
         meanPaintShadowEffect(ii) = NaN;
         bestPaintShadowEffect(ii) = NaN;
     end
+    
 end
 
-% Figure out sessions to plot
+%% Plot of luminance targeted decoding
+%
+% This makes plots of p/s effect from single decoding versus RMSE
 filterMaxRMSE = 0.20;
+inIndex = 1;
+thePaintShadowEffects = [];
+theRMSEs = [];
+thePSEffectBootstrapSEMs = [];
+for ii = 1:length(paintShadowEffect)
+    
+    % Find all cases where the paint-shadow effect isn't empty and
+    % collect them up along with corresponding RMSEs.
+    if ~isempty(paintShadowEffect(ii).decodeBoth.paintShadowEffect)
+        thePaintShadowEffects(inIndex) = paintShadowEffect(ii).decodeBoth.paintShadowEffect;
+        theRMSEs(inIndex) = paintShadowEffect(ii).decodeBoth.theRMSE;
+        if (isfield(paintShadowEffect(ii).decodeBoth,'bPaintShadowEffect'))
+            thePSEffectBootstrapSEMs(inIndex) = nanstd(paintShadowEffect(ii).decodeBoth.bPaintShadowEffect);
+        else
+            thePSEffectBootstrapSEMs(inIndex) = NaN;
+        end
+    else
+        thePaintShadowEffects(inIndex) = NaN;
+        theRMSEs(inIndex) = NaN;
+        thePSEffectBootstrapSEMs(inIndex) = NaN;
+    end
+    inIndex = inIndex + 1;
+end
+
+% Figure out which to plot
+booleanSessionOK = ~isnan(theRMSEs);
+booleanRMSE = theRMSEs <= filterMaxRMSE;
+
+% Figure
+paintShadowEffectVsRMSEFig = figure; clf; hold on;
+plotIndex = booleanRMSE & booleanSessionOK;
+errorbar(theRMSEs(plotIndex),-log10(thePaintShadowEffects(plotIndex)),thePSEffectBootstrapSEMs(plotIndex), ...
+    's','Color',[0 0 0],'MarkerFaceColor',[0 0 0]); %,'MarkerSize',4);
+plot([0 filterMaxRMSE],[0 0],'k:'); %,'LineWidth',1);
+plot([0 filterMaxRMSE],[0.064 0.064],'k'); %,'LineWidth',1);
+xlim([0.05 filterMaxRMSE]);
+ylim([-0.15 0.15]);
+set(gca,'YTick',[-.15 -.10 -.05 0 .05 .1 .15],'YTickLabel',{'-0.15 ' '-0.10 ' '-0.05  ' '0.00 ' '0.05 ' '0.10 ' '0.15 '});
+ylabel('Paint-Shadow Effect'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+xlabel('Decoding RMSE'); %,'FontName',figParams.fontName,'FontSize',figParams.labelFontSize);
+a=get(gca,'ticklength');
+set(gca,'ticklength',[a(1)*2,a(2)*2]);
+set(gca,'tickdir','out');
+box off
+% figFilename = fullfile(figureDir,['summaryPaintShadowEffectVsRMSE_V1'],'');
+% FigureSave(figFilename,paintShadowEffectVsRMSEFig,figParams.figType);
+
+%% Plot of shifted analysis
+%
+% Figure out sessions to plot
 booleanSessionOK = ~isnan(bestRMSE);
 booleanRMSE = bestRMSE <= filterMaxRMSE;
 plotIndex = booleanRMSE & booleanSessionOK;
