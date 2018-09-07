@@ -80,46 +80,46 @@ regWeights1 = neuronResponses\theTrialLuminances;
 predTrialLuminances = neuronResponses * regWeights1;
 
 % Compute our statistic
-reg1Percents = GetRegWeightPercentiles(regWeights1,percentCrits);
-fprintf('backslash (percentCrits) (25, 50, 75): ');
-for ii = 1:length(percentCrits)
-    fprintf('%d%% ',reg1Percents(ii));
-end
-fprintf('\n');
+% reg1Percents = GetRegWeightPercentiles(regWeights1,percentCrits);
+% fprintf('backslash (percentCrits) (25, 50, 75): ');
+% for ii = 1:length(percentCrits)
+%     fprintf('%d%% ',reg1Percents(ii));
+% end
+% fprintf('\n');
 
 %% Try regression using regress, which "sets maximum number of weights to zero"
 regWeights2 = regress(theTrialLuminances,neuronResponses);
 
 % Compute our statistic
-reg2Percents = GetRegWeightPercentiles(regWeights2,percentCrits);
-fprintf('regress percentiles (25, 50, 75): ');
-for ii = 1:length(percentCrits)
-    fprintf('%d%% ',reg2Percents(ii));
-end
-fprintf('\n');
+% reg2Percents = GetRegWeightPercentiles(regWeights2,percentCrits);
+% fprintf('regress percentiles (25, 50, 75): ');
+% for ii = 1:length(percentCrits)
+%     fprintf('%d%% ',reg2Percents(ii));
+% end
+% fprintf('\n');
 
 %% And using robustfit. This tries to ignore outliers
 regWeights3 = robustfit(neuronResponses,theTrialLuminances,[],[],'off');
 
 % Compute our statistic
-reg3Percents = GetRegWeightPercentiles(regWeights3,percentCrits);
-fprintf('robust percentiles (25, 50, 75): ');
-for ii = 1:length(percentCrits)
-    fprintf('%d%% ',reg3Percents(ii));
-end
-fprintf('\n');
+% reg3Percents = GetRegWeightPercentiles(regWeights3,percentCrits);
+% fprintf('robust percentiles (25, 50, 75): ');
+% for ii = 1:length(percentCrits)
+%     fprintf('%d%% ',reg3Percents(ii));
+% end
+% fprintf('\n');
 
 %% Try using Matlab's regularized regression, default params
 regFitResults = fitrlinear(neuronResponses,theTrialLuminances,'FitBias',false);
 regWeights4 = regFitResults.Beta;
 
 % Compute our statistic
-reg4Percents = GetRegWeightPercentiles(regWeights4,percentCrits);
-fprintf('fitrlinear percentiles (25, 50, 75): ')
-for ii = 1:length(percentCrits)
-    fprintf('%d%% ',reg4Percents(ii));
-end
-fprintf('\n');
+% reg4Percents = GetRegWeightPercentiles(regWeights4,percentCrits);
+% fprintf('fitrlinear percentiles (25, 50, 75): ')
+% for ii = 1:length(percentCrits)
+%     fprintf('%d%% ',reg4Percents(ii));
+% end
+% fprintf('\n');
 
 %% Try using Matlab's regularized regression, cross-validated lasso
 lambda = logspace(-8,-1,25);
